@@ -161,12 +161,12 @@ function parse_comments(data, textStatus, jqXHR) {
      $("#wrapper").append(head);
            
    //  handle_title_comment(data[0].data.children[0], current_comment_count++, head); //set siteTable to hold the original post
-    var current_list = $("#"+comment_id );
+    
     //handle each comment
     var i = 0;
     while (current_comment_count < COMMENTS_IN_PAGE - 1)
     {
-        handle_comment( data[1].data.children[i], 1, current_list);
+        handle_comment( data[1].data.children[i], 1, head);
         i++;
     }
         
