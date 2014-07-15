@@ -160,7 +160,7 @@ function parse_comments(data, textStatus, jqXHR) {
     var head = $('<div id="'+ comment_id + '" class="sitetable nestedlisting"></div>');
      $("#wrapper").append(head);
            
-     handle_title_comment(data[0].data.children[0], current_comment_count++ ); //set siteTable to hold the original post
+   //  handle_title_comment(data[0].data.children[0], current_comment_count++, head); //set siteTable to hold the original post
     var current_list = $("#"+comment_id );
     //handle each comment
     var i = 0;
@@ -273,7 +273,7 @@ function handle_comment( article, level, curret_list_node ) {
     
 }
 
-function handle_title_comment(article_data, index)
+function handle_title_comment(article_data, index, head)
 {
 	alert("handle title comment");
 	info = article_data.data;
@@ -281,10 +281,8 @@ function handle_title_comment(article_data, index)
         
     // Create new article
     var article = $('<div id="comment'+index+'" class="thing link" uid="'+info.id+'"></div>');
-    //$("#siteTable.CommentScene").append('<div id="comment'+index+'" class="thing link" uid="'+info.id+'"></div>');
-    //$("#siteTable.CommentScene").append(article)
-    $("#wrapper").append(article);
-//    article = $('#comment'+index);
+    head.append(article);
+
            
     // Add the score + voting buttons
     arr = [];
@@ -322,8 +320,8 @@ function handle_title_comment(article_data, index)
     arr.push('<div class="clearleft"></div>');
     arr.push('</div>');
     article.append(arr.join(''));
-     $("#siteTable").append('<div class="clearleft"></div>');
-    return true;
+     //$("#wrapper").append('<div class="clearleft"></div>');
+    return article;
     
 }
 
