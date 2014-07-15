@@ -154,12 +154,13 @@ function parse_comments(data, textStatus, jqXHR) {
     //$("#subredditName").text(articleName);
     
     current_comment_count = 0;
-    handle_title_comment(data[0].data.children[0], current_comment_count++ ); //set siteTable to hold the original post
+    
     comment_id = "siteTable_"+ data[0].data.children[0].data.name;
      
-     $("#wrapper").append(
-             '<div id="'+ comment_id + '" class="sitetable nestedlisting"></div>');
-    
+    var head = $('<div id="'+ comment_id + '" class="sitetable nestedlisting"></div>');
+     $("#wrapper").append(head);
+           
+     handle_title_comment(data[0].data.children[0], current_comment_count++ ); //set siteTable to hold the original post
     var current_list = $("#"+comment_id );
     //handle each comment
     var i = 0;
