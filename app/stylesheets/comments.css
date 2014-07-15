@@ -1,0 +1,45 @@
+#Scenecomments {
+	position : absolute;
+	left : 0px;
+	top : 0px;
+	width : 1280px;
+	height : 720px;
+	background-color : #ffffff;
+	background-image : url('');
+}
+
+
+#header * {
+	z-index : 100;
+
+}
+
+.commentarea * {
+	z-index: 1;
+	
+}
+
+
+#wrapper {
+	position: absolute;
+	z-index: 1;
+	top: 60px;
+	bottom: 48px;
+	left: 0;
+	width: 100%;	
+	overflow: hidden;
+}
+
+.usertext-body {
+	/*font-size: large;*/
+}
+
+/* Font size for comments body */ 
+.md {
+	font-size: 30PX;
+}
+
+.current_comment_count * {
+	z-index : 100;
+	}
+}}

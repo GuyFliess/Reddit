@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.2/notation" xmlns:tv.samsung.sdk="http://www.samsung.com/tvsdk">
+  <tv.samsung.sdk:VisualScene xmi:id="_2ieUoORMEeGc3-aXEl7Rpg" sId="Scene1" sName="" sType="0" sBgImage="" sBgClr="#ffffff" sWidth="1280" sHeight="720">
+    <sComponents xmi:type="tv.samsung.sdk:VisualCtrlComponent" xmi:id="_FDDZoAxFEeSLltloVHYA6A" sWidth="400.0" sHeight="153.0" sBgImage="" sId="loginPrompt" sCaption="" sResizeOpt="ResizeOption_None" sUserCodeIncludeJs="" sUserCodeInit="" sUserCodeDestroy="" sUserLibJs="" sUserLibImgDir="" sUserLibCss="" sType="popup" sFunctionName="sfPopup" sLockCaption="true" sLockLeft="true" sLockTop="true" sLockWidth="true" sLockHeight="true" sLockBgImage="true">
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDDZoQxFEeSLltloVHYA6A" sName="text" sValue="Currently logged out. Would you like to login to reddit?"/>
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDDZogxFEeSLltloVHYA6A" sName="num" sValue="2" sType="NUMBER"/>
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDDZowxFEeSLltloVHYA6A" sName="buttons" sValue="'YES','NO'" sType="ARRAY"/>
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDDZpAxFEeSLltloVHYA6A" sName="callback" sValue="doLogin" sType="FUNCTION"/>
+    </sComponents>
+    <sComponents xmi:type="tv.samsung.sdk:VisualCtrlComponent" xmi:id="_FDEAsQxFEeSLltloVHYA6A" sWidth="400.0" sHeight="153.0" sBgImage="" sId="loginFailurePrompt" sCaption="" sResizeOpt="ResizeOption_None" sUserCodeIncludeJs="" sUserCodeInit="" sUserCodeDestroy="" sUserLibJs="" sUserLibImgDir="" sUserLibCss="" sType="popup" sFunctionName="sfPopup" sLockCaption="true" sLockLeft="true" sLockTop="true" sLockWidth="true" sLockHeight="true" sLockBgImage="true">
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDEAsgxFEeSLltloVHYA6A" sName="text" sValue="Login failed"/>
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDEAswxFEeSLltloVHYA6A" sName="num" sValue="1" sType="NUMBER"/>
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDEAtAxFEeSLltloVHYA6A" sName="buttons" sValue="'OK'" sType="ARRAY"/>
+    </sComponents>
+    <sComponents xmi:type="tv.samsung.sdk:VisualCtrlComponent" xmi:id="_FDEAuAxFEeSLltloVHYA6A" sWidth="400.0" sHeight="153.0" sBgImage="" sId="needLoginPrompt" sCaption="" sResizeOpt="ResizeOption_None" sUserCodeIncludeJs="" sUserCodeInit="" sUserCodeDestroy="" sUserLibJs="" sUserLibImgDir="" sUserLibCss="" sType="popup" sFunctionName="sfPopup" sLockCaption="true" sLockLeft="true" sLockTop="true" sLockWidth="true" sLockHeight="true" sLockBgImage="true">
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDEAuQxFEeSLltloVHYA6A" sName="text" sValue="In order to upvote/downvote, you must be logged in"/>
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDEAugxFEeSLltloVHYA6A" sName="num" sValue="1" sType="NUMBER"/>
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDEAuwxFEeSLltloVHYA6A" sName="buttons" sValue="'OK'" sType="ARRAY"/>
+    </sComponents>
+    <sComponents xmi:type="tv.samsung.sdk:VisualCtrlComponent" xmi:id="_FDEAvwxFEeSLltloVHYA6A" sWidth="400.0" sHeight="153.0" sBgImage="" sId="cantEditSubredditPrompt" sCaption="" sResizeOpt="ResizeOption_None" sUserCodeIncludeJs="" sUserCodeInit="" sUserCodeDestroy="" sUserLibJs="" sUserLibImgDir="" sUserLibCss="" sType="popup" sFunctionName="sfPopup" sLockCaption="true" sLockLeft="true" sLockTop="true" sLockWidth="true" sLockHeight="true" sLockBgImage="true">
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDEAwAxFEeSLltloVHYA6A" sName="text" sValue="Can't edit the first subreddit entry (FRONTPAGE)"/>
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDEAwQxFEeSLltloVHYA6A" sName="num" sValue="1" sType="NUMBER"/>
+      <sParams xmi:type="tv.samsung.sdk:ParamStruct" xmi:id="_FDEAwgxFEeSLltloVHYA6A" sName="buttons" sValue="'OK'" sType="ARRAY"/>
+    </sComponents>
+  </tv.samsung.sdk:VisualScene>
+  <notation:Diagram xmi:id="_2ieUoeRMEeGc3-aXEl7Rpg" type="VisualScene" element="_2ieUoORMEeGc3-aXEl7Rpg" name="Scene1.scene" measurementUnit="Pixel">
+    <children xmi:type="notation:Shape" xmi:id="_FDDZpQxFEeSLltloVHYA6A" type="2001" element="_FDDZoAxFEeSLltloVHYA6A" fontName="Segoe UI">
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_FDEAsAxFEeSLltloVHYA6A" width="400" height="153"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_FDEAtQxFEeSLltloVHYA6A" type="2001" element="_FDEAsQxFEeSLltloVHYA6A" fontName="Segoe UI">
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_FDEAtwxFEeSLltloVHYA6A" width="400" height="153"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_FDEAvAxFEeSLltloVHYA6A" type="2001" element="_FDEAuAxFEeSLltloVHYA6A" fontName="Segoe UI">
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_FDEAvgxFEeSLltloVHYA6A" width="400" height="153"/>
+    </children>
+    <children xmi:type="notation:Shape" xmi:id="_FDEAwwxFEeSLltloVHYA6A" type="2001" element="_FDEAvwxFEeSLltloVHYA6A" fontName="Segoe UI">
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_FDEAxQxFEeSLltloVHYA6A" width="400" height="153"/>
+    </children>
+    <styles xmi:type="notation:DiagramStyle" xmi:id="_2ieUouRMEeGc3-aXEl7Rpg"/>
+  </notation:Diagram>
+</xmi:XMI>
