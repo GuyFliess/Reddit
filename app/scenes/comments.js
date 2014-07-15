@@ -156,7 +156,7 @@ function parse_comments(data, textStatus, jqXHR) {
     current_comment_count = 0;
     
     comment_id = "siteTable_"+ data[0].data.children[0].data.name;
-     
+     //testing
     var head = $('<div id="'+ comment_id + '" class="sitetable nestedlisting"></div>');
      $("#wrapper").append(head);
            
