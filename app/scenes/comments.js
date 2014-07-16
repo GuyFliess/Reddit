@@ -154,7 +154,7 @@ function parse_comments(data, textStatus, jqXHR) {
     //$("#subredditName").text(articleName);
     
     current_comment_count = 0;
-    
+
     comment_id = "siteTable_"+ data[0].data.children[0].data.name;
      //testing
     var head = $('<div id="'+ comment_id + '" class="sitetable nestedlisting"></div>');
@@ -162,11 +162,16 @@ function parse_comments(data, textStatus, jqXHR) {
            
    //  handle_title_comment(data[0].data.children[0], current_comment_count++, head); //set siteTable to hold the original post
     
+
+    var current_list = $("#"+comment_id );
+    
+    current_list = handle_title_comment(data[0].data.children[0], current_comment_count++, current_list ); //set siteTable to hold the original post
+
     //handle each comment
     var i = 0;
     while (current_comment_count < COMMENTS_IN_PAGE - 1)
     {
-        handle_comment( data[1].data.children[i], 1, head);
+        handle_comment( data[1].data.children[i], 1, current_list);
         i++;
     }
         
@@ -281,6 +286,7 @@ function handle_title_comment(article_data, index, head)
         
     // Create new article
     var article = $('<div id="comment'+index+'" class="thing link" uid="'+info.id+'"></div>');
+
     head.append(article);
 
            
@@ -320,9 +326,10 @@ function handle_title_comment(article_data, index, head)
     arr.push('<div class="clearleft"></div>');
     arr.push('</div>');
     article.append(arr.join(''));
-     //$("#wrapper").append('<div class="clearleft"></div>');
-    return article;
-    
+
+    head.append('<div class="clearleft"></div>');
+    return head;
+  
 }
 
 

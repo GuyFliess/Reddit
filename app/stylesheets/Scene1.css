@@ -60,7 +60,7 @@ q:before, q:after {
 }
 body {
     background-color: #FFFFFF;
-    font: x-small verdana,arial,helvetica,sans-serif;
+    font: large verdana,arial,helvetica,sans-serif;
     min-height: 100%;
     z-index: 1;
 }

@@ -23,23 +23,10 @@
 #wrapper {
 	position: absolute;
 	z-index: 1;
-	top: 60px;
+	top: 45px;
 	bottom: 48px;
 	left: 0;
 	width: 100%;	
 	overflow: hidden;
 }
 
-.usertext-body {
-	/*font-size: large;*/
-}
-
-/* Font size for comments body */ 
-.md {
-	font-size: 30PX;
-}
-
-.current_comment_count * {
-	z-index : 100;
-	}
-}}

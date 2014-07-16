@@ -398,7 +398,7 @@ function markSelector(x) {
     x.css("background-color", "#FFFF99");
     x.css("border-color", "#FF6666");
     font_size = parseInt(x.find(".title").css("font-size"));
- //   x.find(".title").css("font-size", font_size+5+"px");
+    x.find(".title").css("font-size", font_size+5+"px");
 } 
 
 function unmarkSelector(x) {
@@ -406,7 +406,7 @@ function unmarkSelector(x) {
         x.css("background-color", "");
         x.css("border-color", "");
         font_size = parseInt(x.find(".title").css("font-size"));
-   //     x.find(".title").css("font-size", font_size-5+"px");
+        x.find(".title").css("font-size", font_size-5+"px");
     }
 }
 
