@@ -15,6 +15,25 @@ COMMENTS_IN_PAGE = 50;
 DEFUALT_SCROLL_OFFSET = 20;
 
 
+comment_legend_items_1 = {
+		'UPDOWN':'Scroll comments',
+		'LEFTRIGHT':'Move between siblings',
+		'GREEN':'Add comment',
+		'RETURN':'Articles',
+		'FF':'Upvote',
+		'STOP':'Downvote',
+		'BLUE':'More Keys'
+};
+
+comment_legend_items_2 = {
+		'FF':'Upvote',
+		'STOP':'Downvote',
+		'YELLOW':'Split Screen View',
+		'GREEN':'Edit Subreddit (When in Subreddits menu)',
+		'BLUE':'More Keys'
+};
+
+
 
 function Scenecomments() {
 
@@ -122,7 +141,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		break;
 		
 	case sf.key.RED:
-	
+		menuToggleCommentLegend();
 		break;
 		
 	case sf.key.GREEN: 
@@ -373,4 +392,40 @@ Scenecomments.prototype.Scroll = function (offset) {
 //}
 ;
 
+
+function menuToggleCommentLegend() {
+	// Toggle the legend
+	if (config_params.legend_shown) {		
+		config_params.legend_shown = 0;
+	}
+	else {		
+		config_params.legend_shown = 1;			
+	}	
+	updateConfig();
+}
+
+function UpdateCommentLegend()
+{
+	if (config_params.legend_shown) {
+		$('#CommentsLegend').sfKeyHelp('hide');
+	}
+	else {
+		$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);	
+		$('#CommentsLegend').sfKeyHelp('show');		
+	}
+}
+
+function toggleCommentLegendItems() {
+	if (config_params.legend_shown == 1) {
+		$('#CommentsLegend').sfKeyHelp(comment_legend_items_2);
+		config_params.legend_shown = 2;
+	}
+	else if (config_params.legend_shown == 2) {
+		$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
+		config_params.legend_shown = 1;
+	} 
+}
+
 //TODO unite shared code base
+
+
