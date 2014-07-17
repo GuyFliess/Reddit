@@ -161,6 +161,78 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	case sf.key.TOOLS: // OPEN MENU
 	    // TODO
 	    break;
+	    
+	case sf.key.FF: // UPVOTE
+		// Check that user is logged in
+		if (config_params.username == "") {
+			$('#needLoginPrompt').sfPopup('show');
+			break;
+		}
+		
+		art = $('#comment'+cur_comment);
+		uid = art.attr("uid"); // uniquen id
+		
+		// Handle midcol
+		midcol = art.find(".midcol");
+		midcol.removeClass("dislikes");
+		midcol.toggleClass("unvoted likes");
+		
+		// Handle arrows
+		arrow = art.find(".arrow.up");
+		arrow_up = art.find(".arrow.upmod");
+		arrow_downmod = art.find(".arrow.downmod");
+		
+		if (arrow.length) { // if arrow exists 
+		    // UPVOTE
+		    arrow.toggleClass("up upmod"); // switch between up upmod
+		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "1"}); // 1 - upvote
+		}
+		else if (arrow_up.length) {
+		    // REVERT UPVOTE
+		    arrow_up.toggleClass("up upmod");
+		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+		}
+		
+		if (arrow_downmod.length) {
+		    arrow_downmod.toggleClass("downmod down");
+		}
+		break;
+    
+	case sf.key.STOP: // DOWNVOTE
+		// Check that user is logged in
+		if (config_params.username == "") {
+			$('#needLoginPrompt').sfPopup('show');
+			break;
+		}
+		
+        art = $('#article'+ cur_article);
+        uid = art.attr("uid");
+	
+		// Handle midcol
+		midcol = art.find(".midcol");
+		midcol.removeClass("likes");
+		midcol.toggleClass("unvoted dislikes");
+		
+		// Handle arrows
+		arrow = art.find(".arrow.down");
+		arrow_down = art.find(".arrow.downmod");
+		arrow_upmod = art.find(".arrow.upmod");
+		
+		if (arrow.length) {
+		    // DOWNVOTE
+		    arrow.toggleClass("down downmod");
+		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "-1"});
+		}
+		else if (arrow_down.length) {
+		    // REVERT DOWNVOTE
+		    arrow_down.toggleClass("down downmod");
+		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+		}
+		
+		if (arrow_upmod.length) {
+		    arrow_upmod.toggleClass("upmod up");
+		}
+		break;
     	
 	default:
 		alert("handle default key event, key code(" + keyCode + ")");
@@ -361,17 +433,45 @@ function handle_title_comment(article_data, index, head)
 }
 
 
-function markCommentSelector(x) {
-	x = x.children(".entry");
+
+function markCommentSelector(el) {
+	x = el.children(".entry");
     x.css("background-color", "#FFFF99");
     x.css("border-color", "#FF6666");
 //    x.find(".usertext-body").children().each(function (i) {
 //        $(this).css('font-size','40px');  
 //        });
 //    
-       
+    scrollToMarkedComment(el);
    //commentsScroll.scrollToElement(x);
 } 
+
+function scrollToMarkedComment(x){ 
+//	alert("height of windows: " +commentsScroll.scrollerHeight);
+	
+	//var pos = offset(x);
+	var pos = x.position();
+	
+	alert(x.position());
+	alert("pos.top " + x.position().top);
+	alert("commentsScroll.y " + commentsScroll.y);
+	alert("$( window ).height() " + $( window ).height());
+	
+	if (pos.top < 0)
+	{
+		commentsScroll.scrollToElement('#comment'+cur_comment, "1s");
+	}
+	
+	if (pos.top > ($( window ).height() - 200)) {
+		comment = $('#comment'+cur_comment).children('.entry').first()
+		alert(comment.height());
+		Scenecomments.prototype.Scroll(-(comment.height() + 15));
+		//commentsScroll.scrollToElement('#comment'+cur_comment, "1s",0 , $( window ).height());
+	}
+	
+	
+
+}
 
 
 function unmarkCommentSelector(x) {
@@ -389,6 +489,7 @@ function unmarkCommentSelector(x) {
 Scenecomments.prototype.Scroll = function (offset) {
 	alert("y coordinates: " + commentsScroll.y);
 	alert("height of windows: " + $( window ).height());
+
  	if (commentsScroll.y + offset <= 0)  // scrolling is negative, i.e we scroll down to negative y coord
  		{
  			commentsScroll.scrollBy(0, offset);
