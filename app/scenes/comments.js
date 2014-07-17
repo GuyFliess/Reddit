@@ -12,7 +12,7 @@ var commentsScroll;
 
 //Constants
 COMMENTS_IN_PAGE = 50;
-DEFUALT_SCROLL_OFFSET = 20;
+DEFUALT_SCROLL_OFFSET = 40;
 
 
 comment_legend_items_1 = {
@@ -52,8 +52,9 @@ Scenecomments.prototype.handleShow = function (data) {
 	alert(data.Url);
 	articleName = data.Url;
 	//$('#subredditsList').sfList({data:subredditsList.displaynames, index:0});
-	
+	UpdateCommentLegend();
 	alert(data.Url + ".json");
+	
 	$.getJSON(data.Url + ".json", parse_comments);
 	// this function will be called when the scene manager show this scene
 };
@@ -61,6 +62,11 @@ Scenecomments.prototype.handleShow = function (data) {
 Scenecomments.prototype.handleHide = function () {
 	alert("Scenecomments.handleHide()");
 	// this function will be called when the scene manager hide this scene
+	commentsScroll.destroy();
+	commentsScroll = null;
+	 $("#siteTable").text("");
+	 $('#wrapper').text("");
+	
 };
 
 Scenecomments.prototype.handleFocus = function () {
@@ -99,7 +105,8 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
         	unmarkCommentSelector($('#comment'+cur_comment));
             cur_comment--;
             markCommentSelector($('#comment'+cur_comment));
-            Scenecomments.prototype.Scroll(DEFUALT_SCROLL_OFFSET);
+        //    commentsScroll.scrollToElement('#comment'+cur_comment, "1s");
+            //Scenecomments.prototype.Scroll(DEFUALT_SCROLL_OFFSET);
             
         }
         break;
@@ -109,7 +116,8 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
         	unmarkCommentSelector($('#comment'+cur_comment));
         	cur_comment++;
             markCommentSelector($('#comment'+cur_comment));
-            Scenecomments.prototype.Scroll(-DEFUALT_SCROLL_OFFSET);            
+         //   commentsScroll.scrollToElement('#comment'+cur_comment, "1s");
+//            Scenecomments.prototype.Scroll(-DEFUALT_SCROLL_OFFSET);            
         }
         break;
     
@@ -170,6 +178,7 @@ function parse_comments(data, textStatus, jqXHR) {
 //    after = data.data.after;
 
     $("#siteTable").text("");
+    $('#wrapper').text("");
     //$("#subredditName").text(articleName);
     
     current_comment_count = 0;
@@ -379,6 +388,7 @@ function unmarkCommentSelector(x) {
 
 Scenecomments.prototype.Scroll = function (offset) {
 	alert("y coordinates: " + commentsScroll.y);
+	alert("height of windows: " + $( window ).height());
  	if (commentsScroll.y + offset <= 0)  // scrolling is negative, i.e we scroll down to negative y coord
  		{
  			commentsScroll.scrollBy(0, offset);
@@ -395,13 +405,15 @@ Scenecomments.prototype.Scroll = function (offset) {
 
 function menuToggleCommentLegend() {
 	// Toggle the legend
-	if (config_params.legend_shown) {		
+	if (config_params.legend_shown) {
+		alert("Turrnoff legegend");
 		config_params.legend_shown = 0;
 	}
 	else {		
 		config_params.legend_shown = 1;			
 	}	
 	updateConfig();
+	UpdateCommentLegend();
 }
 
 function UpdateCommentLegend()

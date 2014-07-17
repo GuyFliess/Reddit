@@ -557,7 +557,7 @@ function handleArticlesKeydown(keyCode) {
 			}
 			
 			art = $('#article'+ cur_article);
-			uid = art.attr("uid");
+			uid = art.attr("uid"); // uniquen id
 			
 			// Handle midcol
 			midcol = art.find(".midcol");
@@ -569,10 +569,10 @@ function handleArticlesKeydown(keyCode) {
 			arrow_up = art.find(".arrow.upmod");
 			arrow_downmod = art.find(".arrow.downmod");
 			
-			if (arrow.length) {
+			if (arrow.length) { // if arrow exists 
 			    // UPVOTE
-			    arrow.toggleClass("up upmod");
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "1"});
+			    arrow.toggleClass("up upmod"); // switch between up upmod
+			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "1"}); // 1 - upvote
 			}
 			else if (arrow_up.length) {
 			    // REVERT UPVOTE
