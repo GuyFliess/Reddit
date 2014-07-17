@@ -2,7 +2,7 @@ alert('Scenecomments.js loaded');
 
 //Globals
 cur_comment = 0;
-
+submit_comment_box = null;
 
 
 current_comment_count = 0;
@@ -13,7 +13,7 @@ var commentsScroll;
 //Constants
 COMMENTS_IN_PAGE = 50;
 DEFUALT_SCROLL_OFFSET = 40;
-
+REDDIT_COMMENT_URL = "http://www.reddit.com/api/comment";
 
 comment_legend_items_1 = {
 		'UPDOWN':'Scroll comments',
@@ -45,6 +45,19 @@ Scenecomments.prototype.initialize = function () {
 	// initialize the scene controls and styles, and initialize your variables here
 	// scene HTML and CSS will be loaded before this function is called
 	setTimeout(fadeSplash, SPLASH_FADE_TIME);
+	
+	$('#needLoginPromptComment').sfPopup({
+		text:'In order to upvote/downvote, you must be logged in',
+		num:1,
+		buttons:['OK']
+	});
+	
+	// Init IME boxes
+	submit_comment_box = new IMEShell_Common();
+	submit_comment_box.inputboxID = "commentText";
+	submit_comment_box.inputTitle = "Add comment";
+	submit_comment_box.onKeyPressFunc = onCommentSubmit;
+	submit_comment_box.context = this;
 };
 
 Scenecomments.prototype.handleShow = function (data) {
@@ -154,7 +167,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		
 	case sf.key.GREEN: 
         // TODO
-		
+		postComment();
 	
     	break;
     	
@@ -165,12 +178,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	case sf.key.FF: // UPVOTE
 		// Check that user is logged in
 		if (config_params.username == "") {
-			$('#needLoginPrompt').sfPopup('show');
+			$('#needLoginPromptComment').sfPopup('show');
 			break;
 		}
 		
 		art = $('#comment'+cur_comment);
-		uid = art.attr("uid"); // uniquen id
+		uid = art.attr("uid"); // unique id
 		
 		// Handle midcol
 		midcol = art.find(".midcol");
@@ -201,11 +214,11 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	case sf.key.STOP: // DOWNVOTE
 		// Check that user is logged in
 		if (config_params.username == "") {
-			$('#needLoginPrompt').sfPopup('show');
+			$('#needLoginPromptComment').sfPopup('show');
 			break;
 		}
 		
-        art = $('#article'+ cur_article);
+		art = $('#comment'+cur_comment);
         uid = art.attr("uid");
 	
 		// Handle midcol
@@ -537,6 +550,37 @@ function toggleCommentLegendItems() {
 		$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
 		config_params.legend_shown = 1;
 	} 
+}
+
+function postComment()
+{
+	// Check that user is logged in
+	if (config_params.username == "") {
+		$('#needLoginPromptComment').sfPopup('show');
+		return;
+	}
+	
+	art = $('#comment'+cur_comment);
+	uid = art.attr("uid"); // unique id
+	
+	password_box.onShow();
+	$('#passwordText').focus();
+	
+       
+		
+}
+
+function onCommentSubmit(userAction, userString, id) {
+	switch (userAction) {
+    	case 29443:	// Enter Key
+    	    $.post(REDDIT_VOTE_URL,{api_type: "json", id: uid, text: "Test comment"});
+        	break;
+    	case 88: 	// return
+    	case 45:   	//exit
+    	default:
+    		// Do nothing
+    		break;
+	}	
 }
 
 //TODO unite shared code base

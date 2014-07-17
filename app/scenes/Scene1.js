@@ -67,8 +67,8 @@ menu_items = {
 // These are the default config params (After initial run, they will be read from the config file each time)
 config_params = {
 	legend_shown: 1, // Controls which legend items are currently shown. 0 = Don't show
-	username: "",
-	password: "",
+	username: "SmartTVUser",
+	password: "Password1",
 	subreddits_list: ["FRONTPAGE", "ALL", "PICS", "FUNNY", "GAMING", "WORLDNEWS"]
 };
 
@@ -282,6 +282,8 @@ function verifyLogin(data, textStatus, jqXHR) {
 		$("#userName").text("logged in as: " + config_params.username);
 	}
 	else {
+		alert("loging failed:");
+		alert(data.json.errors[0]);
 		// Login failed, remove creds
 		config_params.username = "";
 		config_params.password = "";
@@ -638,6 +640,8 @@ function handleArticlesKeydown(keyCode) {
 	    	break;
 	    	
 		case sf.key.YELLOW: // GOTO SLIDESHOW
+			//temp
+		
 			// TODO
 			break;
 			
@@ -877,9 +881,17 @@ SceneScene1.prototype.initialize = function () {
 	sf.service.VideoPlayer.setKeyHandler(sf.key.RETURN, function () {
 	    sf.service.VideoPlayer.stop();
 	});
-		
+
+	config_params.username = "silvertounge24";
+	config_params.password =  "leghlegh";
+	config_params.subreddits_list = ["FRONTPAGEasdsad", "ALL", "PICS", "FUNNY", "GAMING", "WORLDNEWS"];		
+	
+	updateConfig();
+	
 	// If we have saved credentials - try to login
 	if (config_params.username != "") {
+		alert("trying to login, user: " + config_params.username);
+		alert("password: " + config_params.password);
 		$.post("http://www.reddit.com/api/login", {api_type:"json", user:config_params.username, password:config_params.password, rem:false}, verifyLogin);
 	}	
 };
