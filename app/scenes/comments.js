@@ -47,7 +47,7 @@ Scenecomments.prototype.initialize = function () {
 	setTimeout(fadeSplash, SPLASH_FADE_TIME);
 	
 	$('#needLoginPromptComment').sfPopup({
-		text:'In order to upvote/downvote, you must be logged in',
+		text:'In order to do this action, you must be logged in',
 		num:1,
 		buttons:['OK']
 	});
@@ -555,16 +555,16 @@ function toggleCommentLegendItems() {
 function postComment()
 {
 	// Check that user is logged in
-	if (config_params.username == "") {
-		$('#needLoginPromptComment').sfPopup('show');
-		return;
-	}
+//	if (config_params.username == "") {
+//		$('#needLoginPromptComment').sfPopup('show');
+//		return;
+//	}
 	
 	art = $('#comment'+cur_comment);
 	uid = art.attr("uid"); // unique id
 	
-	password_box.onShow();
-	$('#passwordText').focus();
+	submit_comment_box.onShow();
+	$('#id="commentText"').focus();
 	
        
 		
@@ -573,7 +573,9 @@ function postComment()
 function onCommentSubmit(userAction, userString, id) {
 	switch (userAction) {
     	case 29443:	// Enter Key
-    	    $.post(REDDIT_VOTE_URL,{api_type: "json", id: uid, text: "Test comment"});
+    		
+    	    $.post(REDDIT_VOTE_URL,{api_type: "json", id: uid, text: userString});
+    	    
         	break;
     	case 88: 	// return
     	case 45:   	//exit
