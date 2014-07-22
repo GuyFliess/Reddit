@@ -311,6 +311,7 @@ function verifyLogin(data, textStatus, jqXHR) {
 		config_params.username = "";
 		config_params.password = "";
 		$('#loginFailurePrompt').sfPopup('show');
+		alert(data.json.errors[0]);
 		$("#userName").text("");
 	}
 	
@@ -593,12 +594,12 @@ function handleArticlesKeydown(keyCode) {
 			if (arrow.length) {
 			    // UPVOTE
 			    arrow.toggleClass("up upmod");
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "1"});
+			    $.post(REDDIT_VOTE_URL,{id: uid, dir: "1"});
 			}
 			else if (arrow_up.length) {
 			    // REVERT UPVOTE
 			    arrow_up.toggleClass("up upmod");
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+			    $.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
 			}
 			
 			if (arrow_downmod.length) {
@@ -629,12 +630,12 @@ function handleArticlesKeydown(keyCode) {
 			if (arrow.length) {
 			    // DOWNVOTE
 			    arrow.toggleClass("down downmod");
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "-1"});
+			    $.post(REDDIT_VOTE_URL,{id: uid, dir: "-1"});
 			}
 			else if (arrow_down.length) {
 			    // REVERT DOWNVOTE
 			    arrow_down.toggleClass("down downmod");
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+			    $.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
 			}
 			
 			if (arrow_upmod.length) {
@@ -959,6 +960,8 @@ SceneScene1.prototype.initialize = function () {
 	if (config_params.clean_start) {
 		cur_url = "http://www.reddit.com"+subreddit+"/.json";
 		// If we have saved credentials - try to login (will get the front page)
+		config_params.username = "SmartTVUser";
+		config_params.password = "Password1";
 		if (config_params.username != "") {
 			$.post("http://www.reddit.com/api/login", {api_type:"json", user:config_params.username, passwd:config_params.password, rem:false}, verifyLogin);
 		}

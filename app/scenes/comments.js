@@ -199,12 +199,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		if (arrow.length) { // if arrow exists 
 		    // UPVOTE
 		    arrow.toggleClass("up upmod"); // switch between up upmod
-		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "1"}); // 1 - upvote
+		    $.post(REDDIT_VOTE_URL,{id: uid, dir: "1"}); // 1 - upvote
 		}
 		else if (arrow_up.length) {
 		    // REVERT UPVOTE
 		    arrow_up.toggleClass("up upmod");
-		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+		    $.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
 		}
 		
 		if (arrow_downmod.length) {
@@ -235,12 +235,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		if (arrow.length) {
 		    // DOWNVOTE
 		    arrow.toggleClass("down downmod");
-		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "-1"});
+		    $.post(REDDIT_VOTE_URL,{id: uid, dir: "-1"});
 		}
 		else if (arrow_down.length) {
 		    // REVERT DOWNVOTE
 		    arrow_down.toggleClass("down downmod");
-		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+		    $.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
 		}
 		
 		if (arrow_upmod.length) {
@@ -562,19 +562,18 @@ function postComment()
 	art = $('#comment'+cur_comment);
 	uid = art.attr("uid"); // unique id
 	
-	submit_comment_box.onShow();
-	$('#id="commentText"').focus();
+	//submit_comment_box.onShow();
+	//$('#id="commentText"').focus();
 	
-       
+	// DEBUG
+	$.post(REDDIT_VOTE_URL,{api_type: "json", id: uid, text: "That's right"});
 		
 }
 
 function onCommentSubmit(userAction, userString, id) {
 	switch (userAction) {
     	case 29443:	// Enter Key
-    		
     	    $.post(REDDIT_VOTE_URL,{api_type: "json", id: uid, text: userString});
-    	    
         	break;
     	case 88: 	// return
     	case 45:   	//exit
