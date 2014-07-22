@@ -515,6 +515,7 @@ Scenecomments.prototype.Scroll = function (offset) {
 
 
 function menuToggleCommentLegend() {
+	/*
 	// Toggle the legend
 	if (config_params.legend_shown) {
 //		alert("Turrnoff legegend");
@@ -525,6 +526,7 @@ function menuToggleCommentLegend() {
 	}	
 	updateConfig();
 	UpdateCommentLegend();
+	*/
 }
 
 function UpdateCommentLegend()

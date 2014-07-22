@@ -37,7 +37,7 @@ legend_items_1 = {
 legend_items_2 = {
 		'FF':'Upvote',
 		'STOP':'Downvote',
-		'YELLOW':'Slideshow View',
+		//'YELLOW':'Slideshow View',
 		'GREEN':'Edit Subreddit (When in Subreddits menu)',
 		'BLUE':'More Keys'
 };
