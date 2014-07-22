@@ -79,7 +79,6 @@ Scenecomments.prototype.handleHide = function () {
 		commentsScroll.destroy();
 		commentsScroll = null;
 	}
-	 $("#siteTable").text("");
 	 $('#wrapper').text("");
 	
 };
@@ -264,7 +263,6 @@ function parse_comments(data, textStatus, jqXHR) {
 //    before = data.data.before;
 //    after = data.data.after;
 
-    $("#siteTable").text("");
     $('#wrapper').text("");
     //$("#subredditName").text(articleName);
     

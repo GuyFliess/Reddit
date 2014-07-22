@@ -1,4 +1,4 @@
-dwidgetAPI = new Common.API.Widget();
+widgetAPI = new Common.API.Widget();
 pluginAPI = new Common.API.Plugin();
 
 /********************************
@@ -986,7 +986,6 @@ SceneScene1.prototype.initialize = function () {
 
 SceneScene1.prototype.handleShow = function (data) {
 	alert("SceneScene1.handleShow()");
-	refreshPage();
 };
 
 function onUnload() {
