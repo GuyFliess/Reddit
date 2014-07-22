@@ -7,7 +7,7 @@ submit_comment_box = null;
 
 current_comment_count = 0;
 
-var commentsScroll;
+commentsScroll = null;
 
 
 //Constants
@@ -62,11 +62,11 @@ Scenecomments.prototype.initialize = function () {
 
 Scenecomments.prototype.handleShow = function (data) {
 	alert("Scenecomments.handleShow()");
-	alert(data.Url);
+//	alert(data.Url);
 	articleName = data.Url;
 	//$('#subredditsList').sfList({data:subredditsList.displaynames, index:0});
 	UpdateCommentLegend();
-	alert(data.Url + ".json");
+//	alert(data.Url + ".json");
 	
 	$.getJSON(data.Url + ".json", parse_comments);
 	// this function will be called when the scene manager show this scene
@@ -75,8 +75,10 @@ Scenecomments.prototype.handleShow = function (data) {
 Scenecomments.prototype.handleHide = function () {
 	alert("Scenecomments.handleHide()");
 	// this function will be called when the scene manager hide this scene
-	commentsScroll.destroy();
-	commentsScroll = null;
+	if (commentsScroll != null) {
+		commentsScroll.destroy();
+		commentsScroll = null;
+	}
 	 $("#siteTable").text("");
 	 $('#wrapper').text("");
 	
@@ -142,7 +144,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 //	    $('#loadingId').sfLoading('show');
 	    break;
 	    
-	case sf.key.RETURN: // BACK TO Articles
+	case sf.key.RETURN: // Back to articles
 
 		alert("back to articles");
 		sf.scene.hide('comments');
@@ -288,9 +290,7 @@ function parse_comments(data, textStatus, jqXHR) {
         i++;
     }
         
-    
-  
-
+   
     commentsScroll = new IScroll('#wrapper', { mouseWheel: true, scrollbars: true });
 
 
@@ -367,11 +367,10 @@ function handle_comment( article, level, curret_list_node ) {
     arr.push('</div>');
     comment.append(arr.join(''));
     var child_list = $("#" + comment_id);
-    alert("replies "+ typeof info.replies);
-    alert("replies.data "+ typeof info.replies + " " + info.replies);  
+     
     try 
     {
-    alert("replies.data.childern "+ typeof info.replies.data["children"] + " " + info.replies.data["children"]);
+   
     if (typeof info.replies !== undefined && typeof info.replies.data !==  undefined && typeof  info.replies.data["children"] !== undefined)
     if (current_comment_count < COMMENTS_IN_PAGE ){    	
 
@@ -465,19 +464,19 @@ function scrollToMarkedComment(x){
 	//var pos = offset(x);
 	var pos = x.position();
 	
-	alert(x.position());
-	alert("pos.top " + x.position().top);
-	alert("commentsScroll.y " + commentsScroll.y);
-	alert("$( window ).height() " + $( window ).height());
+	//alert(x.position());
+	//alert("pos.top " + x.position().top);
+	//alert("commentsScroll.y " + commentsScroll.y);
+	//alert("$( window ).height() " + $( window ).height());
 	
 	if (pos.top < 0)
 	{
 		commentsScroll.scrollToElement('#comment'+cur_comment, "1s");
 	}
 	
-	if (pos.top > ($( window ).height() - 200)) {
-		comment = $('#comment'+cur_comment).children('.entry').first()
-		alert(comment.height());
+	if (pos.top > ($( window ).height() - 150)) {
+		comment = $('#comment'+cur_comment).children('.entry').first();
+		//alert(comment.height());
 		Scenecomments.prototype.Scroll(-(comment.height() + 15));
 		//commentsScroll.scrollToElement('#comment'+cur_comment, "1s",0 , $( window ).height());
 	}
@@ -500,8 +499,8 @@ function unmarkCommentSelector(x) {
 }
 
 Scenecomments.prototype.Scroll = function (offset) {
-	alert("y coordinates: " + commentsScroll.y);
-	alert("height of windows: " + $( window ).height());
+	//alert("y coordinates: " + commentsScroll.y);
+//	alert("height of windows: " + $( window ).height());
 
  	if (commentsScroll.y + offset <= 0)  // scrolling is negative, i.e we scroll down to negative y coord
  		{
@@ -520,7 +519,7 @@ Scenecomments.prototype.Scroll = function (offset) {
 function menuToggleCommentLegend() {
 	// Toggle the legend
 	if (config_params.legend_shown) {
-		alert("Turrnoff legegend");
+//		alert("Turrnoff legegend");
 		config_params.legend_shown = 0;
 	}
 	else {		

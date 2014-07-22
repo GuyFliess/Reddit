@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<widget xmlns="http://www.samsung.com/">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><widget>
 <cpname> </cpname>
 <cplogo> </cplogo>
 <cpauthjs> </cpauthjs>
@@ -18,7 +17,7 @@
 <childlock>n</childlock>
 <videomute>n</videomute>
 <dcont>y</dcont>
-<widgetname>Example</widgetname>
+<widgetname>RedditTV</widgetname>
 <description> </description>
 <width>1280</width>
 <height>720</height>

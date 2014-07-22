@@ -1,4 +1,4 @@
-widgetAPI = new Common.API.Widget();
+dwidgetAPI = new Common.API.Widget();
 pluginAPI = new Common.API.Plugin();
 
 /********************************
@@ -7,7 +7,7 @@ pluginAPI = new Common.API.Plugin();
 ARTICLES_IN_PAGE = 6;
 REDDIT_VOTE_URL = "http://www.reddit.com/api/vote";
 SPLASH_FADE_TIME = 1000;
-COMMENTS_REGEX = /http:\/\/www\.reddit\.com\/r\/[^\/]*\/comments\/.*/i;
+//COMMENTS_REGEX = /http:\/\/www\.reddit\.com\/r\/[^\/]*\/comments\/.*/i;
 
 // Title char count used to fit text to page
 MIN_CHARS_PER_PAGE = 300;
@@ -19,7 +19,9 @@ SUBREDDITS_AUTOCOMPLETE = ["announcements","blog","funny","pics","reddit.com","w
 keystates = {
 		MAIN:0,
 		SUBREDDITS:1,
-		MENU:2
+		MENU:2,
+		IMAGE:3,
+		VIDEO:4
 };
 
 legend_items_1 = {
@@ -27,7 +29,7 @@ legend_items_1 = {
 		'LEFTRIGHT':'Scroll Page',
 		'ENTER':'View Article',
 		'GREEN':'View Comments',
-		'RETURN':'Close Article',
+		'RETURN':'Close Image/Video',
 		'TOOLS':'Menu',
 		'RED':'Subreddits',
 		'BLUE':'More Keys'
@@ -48,28 +50,36 @@ fs = new FileSystem();
 cur_url = "";
 cur_article = 0;
 before = "";
+old_after = "";
 after = "";
 page_number = 0;
 subreddit = "";
 key_state = keystates.MAIN;
-keys_disabled = false; // If true - disables all keys except "RETURN"
 
 search_box = null;
 username_box = null;
 password_box = null;
 subreddit_box = null;
 
+var vidplayer;
+
 menu_items = {
-	displaynames: ['Login/Logout',		'Goto Subreddit',	'Search',		'Show/Hide Legend'],
-	actions: [		menuDoLoginLogout,	menuGotoSubreddit, menuOpenSearch,	menuToggleLegend]
+	displaynames: ['Login/Logout',		'Goto Subreddit',	'Search',		'Open In Browser',	'Show/Hide Legend'],
+	actions: [		menuLoginLogout,	menuGotoSubreddit, menuOpenSearch,	menuOpenInBrowser,	menuToggleLegend]
 };
 
 // These are the default config params (After initial run, they will be read from the config file each time)
 config_params = {
 	legend_shown: 1, // Controls which legend items are currently shown. 0 = Don't show
-	username: "SmartTVUser",
-	password: "Password1",
-	subreddits_list: ["FRONTPAGE", "ALL", "PICS", "FUNNY", "GAMING", "WORLDNEWS"]
+	username: "",
+	password: "",
+	subreddits_list: ["FRONTPAGE", "ALL", "PICS", "FUNNY", "GAMING", "WORLDNEWS"],
+	
+	// Params for user session restore (when coming back from browser)
+	clean_start: true,
+	saved_page: 0,
+	saved_subreddit: "",
+	saved_after: ""
 };
 
 /********************************
@@ -87,6 +97,17 @@ function SceneScene1() {
 };
 
 
+function launchExternalBrowser(url) {
+	// Save user session 
+	config_params.clean_start = false;
+	config_params.saved_page = page_number;
+	config_params.saved_subreddit = subreddit;
+	config_params.saved_after = old_after;
+	updateConfig();
+	
+	// Launch fullscreen browser
+	widgetAPI.runSearchWidget('29_fullbrowser', url);
+}
 
 function doLogin(userAction) {
 	if (0 != userAction) {
@@ -114,10 +135,10 @@ function doLogout(userAction) {
 }
 
 
-function menuDoLoginLogout() {
+function menuLoginLogout() {
 	if (config_params.username == "") {
 		// Ask for login
-		$('#loginPrompt').sfPopup('show');
+		$('#loginPrompt').sfPopup('show');					
 	}
 	else {
 		// Ask for logout (must update logged in username)
@@ -133,7 +154,6 @@ function menuDoLoginLogout() {
 
 function menuGotoSubreddit() {
 	// Show the subreddit chooser
-	subreddit_box.onKeyPressFunc = onSubredditGotoSubmit;
 	subreddit_box.onShow();
 	$('#subredditText').focus();	
 }
@@ -141,6 +161,11 @@ function menuGotoSubreddit() {
 function menuOpenSearch() {
 	search_box.onShow();
 	$('#searchText').focus();
+}
+
+function menuOpenInBrowser() {
+	// Open the current subreddit in the external browser
+	launchExternalBrowser("http://www.reddit.com"+subreddit);
 }
 
 function menuToggleLegend() {
@@ -175,7 +200,7 @@ function onSearchSubmit(userAction, userString, id) {
 	switch (userAction) {
     	case 29443:	// Enter Key
     		page_number = 0;
-    		cur_url = "http://www.reddit.com/search/.json?q=userString";
+    		cur_url = "http://www.reddit.com/search/.json?q="+userString;
         	updatePage(true);
         	break;
     	case 88: 	// return
@@ -209,7 +234,7 @@ function onPasswordSubmit(userAction, userString, id) {
     	case 29443:	// Enter Key
     		// Try to login
     		config_params.password = userString;
-    		$.post("http://www.reddit.com/api/login", {api_type:"json", user:config_params.username, password:config_params.password, rem:false}, verifyLogin);
+    		$.post("http://www.reddit.com/api/login", {api_type:"json", user:config_params.username, passwd:config_params.password, rem:false}, verifyLogin);
     		break;
     	case 88: 	// return
     	case 45:   	//exit
@@ -282,14 +307,15 @@ function verifyLogin(data, textStatus, jqXHR) {
 		$("#userName").text("logged in as: " + config_params.username);
 	}
 	else {
-		alert("loging failed:");
-		alert(data.json.errors[0]);
 		// Login failed, remove creds
 		config_params.username = "";
 		config_params.password = "";
 		$('#loginFailurePrompt').sfPopup('show');
 		$("#userName").text("");
 	}
+	
+	// Anyways, do a page refresh
+	refreshPage();
 }
 
 function handle_article(index, article ) {
@@ -297,7 +323,7 @@ function handle_article(index, article ) {
     var arr;
         
     // Create new article
-    $("#siteTable").append('<div id="article'+index+'" class="thing link" uid="'+info.id+'"></div>');
+    $("#siteTable").append('<div id="article'+index+'" class="thing link" uid="'+info.id+'" isself="'+info.is_self+'"></div>');
     article = $('#article'+index);
        
     // Add the rank
@@ -325,7 +351,8 @@ function handle_article(index, article ) {
         article.append('<a class="thumbnail default"></a>');
     }
     
-    //add permalink to comments
+    // Add permalink to comments
+    // TODO: Maybe add using the "reddit API" method (add "/comments/<uid>/.json")
     article.append('<a class="comments" href="http://www.reddit.com' + info.permalink +'"> </a>');
     
     // Add the entry
@@ -347,16 +374,35 @@ function handle_article(index, article ) {
     
 }
 
+function ajaxErrorHandler(jqXHR, textStatus, errorThrown) {
+	$('#timeoutPrompt').sfPopup('show');
+}
+
+function getJsonWrapper(url, data, success) {
+	$.ajax({url:url, dataType:"json", data:data, success:success, error:ajaxErrorHandler, timeout: 8000});
+}
+
+function refreshPage() {
+	if (page_number == 0) { 
+		getJsonWrapper(cur_url, {limit: ARTICLES_IN_PAGE}, parseReddit);
+		
+		
+	}
+	else {
+		getJsonWrapper(cur_url, {count:page_number*ARTICLES_IN_PAGE, after:old_after, limit: ARTICLES_IN_PAGE}, parseReddit);
+	}
+}
+
 function updatePage(move_forward) {
 	if (page_number == 0) { 
-		$.getJSON(cur_url, {limit: ARTICLES_IN_PAGE}, parseReddit);
+		getJsonWrapper(cur_url, {limit: ARTICLES_IN_PAGE}, parseReddit);
 	}
 	else {
 		if (move_forward) {
-			$.getJSON(cur_url, {count:page_number*ARTICLES_IN_PAGE, after:after, limit: ARTICLES_IN_PAGE}, parseReddit);
+			getJsonWrapper(cur_url, {count:page_number*ARTICLES_IN_PAGE, after:after, limit: ARTICLES_IN_PAGE}, parseReddit);
 		}
 		else {
-			$.getJSON(cur_url, {count:page_number*ARTICLES_IN_PAGE, before:before, limit: ARTICLES_IN_PAGE}, parseReddit);
+			getJsonWrapper(cur_url, {count:((page_number+1)*ARTICLES_IN_PAGE)+1, before:before, limit: ARTICLES_IN_PAGE}, parseReddit);
 		}
 		
 	}
@@ -368,6 +414,7 @@ function parseReddit(data, textStatus, jqXHR) {
     
     // Handle the user-specified amount of articles
     before = data.data.before;
+    old_after = after;
     after = data.data.after;
     $("#siteTable").text("");
     $("#subredditName").text(subreddit);
@@ -385,11 +432,13 @@ function parseReddit(data, textStatus, jqXHR) {
 		new_size = 30 - ((total_length-MAX_CHARS_PER_PAGE)/50);
 		$(".link .title").css("font-size",new_size+"px");
 	}
+    /*
     else if (total_length < MIN_CHARS_PER_PAGE) {
 		// Increase font size
     	new_size = 35 + 4*((MIN_CHARS_PER_PAGE-total_length)/50);
     	$(".link .title").css("font-size",new_size+"px");
 	}
+	*/
     
     // Mark first article and update page
     markSelector($('#article0'));
@@ -399,16 +448,20 @@ function parseReddit(data, textStatus, jqXHR) {
 function markSelector(x) {
     x.css("background-color", "#FFFF99");
     x.css("border-color", "#FF6666");
+    /*
     font_size = parseInt(x.find(".title").css("font-size"));
     x.find(".title").css("font-size", font_size+5+"px");
+    */
 } 
 
 function unmarkSelector(x) {
     if (null != x) {
         x.css("background-color", "");
         x.css("border-color", "");
+        /*
         font_size = parseInt(x.find(".title").css("font-size"));
         x.find(".title").css("font-size", font_size-5+"px");
+        */
     }
 }
 
@@ -422,14 +475,6 @@ function imageloaded() {
 	}
 }
 
-function iframeloaded() {
-	$('#loadingId').sfLoading('hide');
-	
-    if ($("#pageDisplayer").attr("src")) {
-    	$("#mainPage").css("opacity","0");
-    	$("#pageDisplayer").css("display","block");
-    } 
-}
 
 function isImageUrl(url) {
 	if (endsWith(url,".png")) return true;
@@ -442,12 +487,27 @@ function isImageUrl(url) {
 	return false;
 }
 
+function isYoutubeUrl(url) {
+	if (startsWith(url, "https://www.youtube.com")) return true;
+	if (startsWith(url, "http://youtu.be")) return true;
+	return false;
+}
+
+function onYouTubePlayerReady(playerId) {
+	vidplayer = $("#"+playerId);
+	/*
+    onstate = function(state) {
+    	alert("%%%%% onStatechange "  + state); 
+    };
+    onerror = function(code) {
+    	alert("$$$$$$$$$$ " + code);
+    };
+    vidplayer[0].addEventListener("onStateChange", "onstate");
+    vidplayer[0].addEventListener('onError','onerror');
+    */
+}
+
 function handleArticlesKeydown(keyCode) {
-	// If keys are disabled (and key isn't return) - do nothing
-	if (keys_disabled && keyCode != sf.key.RETURN) {
-		return;
-	}
-	
 	switch (keyCode) {
 		case sf.key.LEFT: // PREV PAGE
 	    	if (page_number > 0) {
@@ -478,79 +538,38 @@ function handleArticlesKeydown(keyCode) {
 	        break;
 	    
 		case sf.key.ENTER: // GOTO LINK
-		    article_title = $('#article'+ cur_article + " a.title");
+			article = $('#article'+ cur_article);
+		    article_title = article.find("a.title");
 		    url = article_title.attr("href");
+		    isself = article.attr("isself"); 
 		    
-		    if (COMMENTS_REGEX.test(url)) {
+		    if ("true" == isself) {
 		    	// Comments link - Open in comments view
-		    	alert("HANDLE IN COMMENTS VIEW");
-		    	//TODO 
+		    	sf.scene.show('comments',{Url: url} );
+				sf.scene.focus('comments');
+				sf.scene.hide("Scene1");
 		    }
 		    else if (isImageUrl(url)) {
 		    	// Image link - Show in <img> element
-		    	 
-		    	// Determine if vertical or horizontal stretch
-		    	/*
-		    	img = new Image();
-		    	img.onload = function() {
-		    		if (this.height >= this.width) {
-		    			$("#imageDisplayer").css("height","100%");
-		    			$("#imageDisplayer").css("width","auto");
-		    		}
-		    		else {
-		    			$("#imageDisplayer").css("width","100%");
-		    			$("#imageDisplayer").css("height","auto");
-		    		}
-		    	};
-		    	img.src = url;
-		    	*/
-		    	
-		    	// Show the image
 		    	$("#imageDisplayer").attr("src",url);
 		    	$("#loadingId").sfLoading("show");
 		    	$("#mainPage").css("opacity","0.1");
-		    	keys_disabled = true;
+		    	key_state = keystates.IMAGE;
 		    }
-		    else if (startsWith(url, "https://www.youtube.com")) {
-		    	// Youtube link - Open with video player
-		    	alert("HANDLE IN YOUTUBE PLAYER");
-		    	
-		    	// Play the video
-		    	/*
-		    	sf.service.VideoPlayer.setFullScreen(true);
-		    	sf.service.VideoPlayer.play({
-		    	    url: url,
-		    	    fullScreen: true
-		    	});
-		    	*/
+		    else if (isYoutubeUrl(url)) {
+		    	// Youtube link - Play with youtube player
+		    	$("#mainPage").css("opacity","0");
+		        vidplayer[0].loadVideoByUrl(url, 0, "hd720");
+		        vidplayer.css("opacity","1");
+		        key_state = keystates.VIDEO;
 		    }
 		    else {
-		    	// Normal link - open in IFRAME
-		    	// TODO: How to add scroll bar?!?
-		    	$("#pageDisplayer").attr("src",url);
-				$("#loadingId").sfLoading("show");
-				$("#mainPage").css("opacity","0.1");
-				keys_disabled = true;
+		    	// Normal link - open in browser
+		    	launchExternalBrowser(url);				
 		    }
 		    
 		    break;
 		    
-		case sf.key.RETURN: // BACK TO APP (Hide IFRAME/IMAGE)
-			widgetAPI.blockNavigation(event);
-			
-			$('#loadingId').sfLoading('hide');
-		    $("#pageDisplayer").css("display","none");
-		    $("#pageDisplayer").attr("src","");
-		    
-		    $("#imageDisplayer").css("display","none");
-		    $("#imageDisplayer").attr("src","");
-		    
-		    $("#SceneScene1").css("background-color","#ffffff");
-		    $("#mainPage").css("opacity","1");
-		    keys_disabled = false;
-		    
-		    break;
-	    
 		case sf.key.FF: // UPVOTE
 			// Check that user is logged in
 			if (config_params.username == "") {
@@ -559,7 +578,7 @@ function handleArticlesKeydown(keyCode) {
 			}
 			
 			art = $('#article'+ cur_article);
-			uid = art.attr("uid"); // uniquen id
+			uid = art.attr("uid");
 			
 			// Handle midcol
 			midcol = art.find(".midcol");
@@ -571,10 +590,10 @@ function handleArticlesKeydown(keyCode) {
 			arrow_up = art.find(".arrow.upmod");
 			arrow_downmod = art.find(".arrow.downmod");
 			
-			if (arrow.length) { // if arrow exists 
+			if (arrow.length) {
 			    // UPVOTE
-			    arrow.toggleClass("up upmod"); // switch between up upmod
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "1"}); // 1 - upvote
+			    arrow.toggleClass("up upmod");
+			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "1"});
 			}
 			else if (arrow_up.length) {
 			    // REVERT UPVOTE
@@ -630,18 +649,15 @@ function handleArticlesKeydown(keyCode) {
 			break;
 			
 		case sf.key.GREEN: // GOTO COMMENTS
-	        // TODO
 			article_comments = $('#article'+ cur_article + " a.comments");
 			alert(article_comments.attr("href"));
 			
 			sf.scene.show('comments',{Url: article_comments.attr("href")} );
 			sf.scene.focus('comments');
-			sf.scene.hide("scene1", NULL);
+			sf.scene.hide("Scene1");
 	    	break;
 	    	
 		case sf.key.YELLOW: // GOTO SLIDESHOW
-			//temp
-		
 			// TODO
 			break;
 			
@@ -704,7 +720,6 @@ function handleSubredditsKeydown(keyCode) {
 			
 		case sf.key.RETURN: // HIDE SUBREDDIT LIST
 		case sf.key.RED: 
-			widgetAPI.blockNavigation(event);
 			key_state = keystates.MAIN;
 			$("#subredditsList").css("opacity","0");
 			break;
@@ -735,14 +750,65 @@ function handleMenuKeydown(keyCode) {
 	    
 		case sf.key.RETURN: // HIDE MENU
 		case sf.key.TOOLS: 
-			widgetAPI.blockNavigation(event);
 			key_state = keystates.MAIN;
 			$('#menuBox').css("opacity","0");
 			break;
 	}
 }
 
+function handleImageKeydown(keyCode) {
+	switch (keyCode) {	 
+	    // Stop and hide the player
+		case sf.key.RETURN:
+			// Hide loading sprite & image
+			$('#loadingId').sfLoading('hide');
+		    $("#imageDisplayer").css("display","none");
+		    $("#imageDisplayer").attr("src","");
+		    $("#SceneScene1").css("background-color","#ffffff");
+		    $("#mainPage").css("opacity","1");
+		    
+		    key_state = keystates.MAIN;
+		    
+	        break;
+	}
+}
+
+function handleVideoKeydown(keyCode) {
+	switch (keyCode) {	 
+		// Resume the player
+		case sf.key.PLAY:
+			vidplayer[0].playVideo();
+	        break;
+	        
+	    // Pause the player
+		case sf.key.PAUSE:
+			vidplayer[0].pauseVideo();
+	        break;
+	        
+	    // Rewind the player
+		case sf.key.REW:
+			vidplayer[0].seekTo(0, false);
+	        break;
+	    
+	    // Stop and hide the player
+		case sf.key.RETURN: 
+		case sf.key.STOP:
+			key_state = keystates.MAIN;
+			vidplayer[0].stopVideo();
+		    vidplayer.css("opacity","0");
+		    $("#mainPage").css("opacity","1");
+	        break;
+	}
+}
+
 SceneScene1.prototype.handleKeyDown = function (keyCode) {
+	
+	// Don't allow the "return" key to kill the app
+	if (keyCode == sf.key.RETURN) {
+		widgetAPI.blockNavigation(event);
+	}
+	
+	// Switch key function by the current key state
 	switch (key_state) {
 		case keystates.MAIN: 
 			handleArticlesKeydown(keyCode);
@@ -754,6 +820,14 @@ SceneScene1.prototype.handleKeyDown = function (keyCode) {
 			
 		case keystates.MENU:
 			handleMenuKeydown(keyCode);
+			break;
+			
+		case keystates.IMAGE:
+			handleImageKeydown(keyCode);
+			break;
+			
+		case keystates.VIDEO:
+			handleVideoKeydown(keyCode);
 			break;
 	}
 };
@@ -786,7 +860,7 @@ SceneScene1.prototype.initialize = function () {
 	
 	// Set timeout for splash screen
 	setTimeout(fadeSplash, SPLASH_FADE_TIME);
-	
+		
 	// Read config params from config file
 	fs = new FileSystem();
 	configFile = fs.openCommonFile("config.json",'r');
@@ -833,6 +907,12 @@ SceneScene1.prototype.initialize = function () {
 		buttons:['OK']
 	});
 	
+	$('#timeoutPrompt').sfPopup({
+		text:"Request timed-out. Make sure you are still connected to the Internet",
+		num:1,
+		buttons:['OK']
+	});
+	
 	// Init menu box
 	$('#menuBox').sfList({data:menu_items.displaynames, index:0});
 	
@@ -845,26 +925,24 @@ SceneScene1.prototype.initialize = function () {
 	search_box.inputboxID = "searchText";
 	search_box.inputTitle = "Search Reddit";
 	search_box.onKeyPressFunc = onSearchSubmit;
-	search_box.context = this;
 	
 	username_box = new IMEShell_Common();
 	username_box.inputboxID = "usernameText";
 	username_box.inputTitle = "Username";
 	username_box.onKeyPressFunc = onUsernameSubmit;
-	username_box.context = this;
 	
 	password_box = new IMEShell_Common();
 	password_box.inputboxID = "passwordText";
 	password_box.inputTitle = "Password";
 	password_box.onKeyPressFunc = onPasswordSubmit;
-	password_box.context = this;
+	password_box.setPasswordMode(true);
 	
 	subreddit_box = new IMEShell_Common();
 	subreddit_box.inputboxID = "subredditText";
 	subreddit_box.inputTitle = "Choose a subreddit";
 	subreddit_box.inputDescription = "(for example \"science\")";
 	subreddit_box.onCompleteFunc = onSubredditKeypress;
-	subreddit_box.context = this;
+	subreddit_box.onKeyPressFunc = onSubredditGotoSubmit;
 		
 	// Init legend
 	$('#mainLegend').sfKeyHelp(legend_items_1);
@@ -877,42 +955,62 @@ SceneScene1.prototype.initialize = function () {
 		$("#pageNumber").css("bottom","0px");
 	}
 	
-	// Init video player
-	sf.service.VideoPlayer.setKeyHandler(sf.key.RETURN, function () {
-	    sf.service.VideoPlayer.stop();
-	});
-
-	config_params.username = "silvertounge24";
-	config_params.password =  "leghlegh";
-	config_params.subreddits_list = ["FRONTPAGEasdsad", "ALL", "PICS", "FUNNY", "GAMING", "WORLDNEWS"];		
+	// Load the main page
+	if (config_params.clean_start) {
+		cur_url = "http://www.reddit.com"+subreddit+"/.json";
+		// If we have saved credentials - try to login (will get the front page)
+		if (config_params.username != "") {
+			$.post("http://www.reddit.com/api/login", {api_type:"json", user:config_params.username, passwd:config_params.password, rem:false}, verifyLogin);
+		}
+		else {
+			// Just get the front page
+			refreshPage();
+		}
+	}
+	else {
+		// Restore clean flag
+		config_params.clean_start = true;
+		updateConfig();
+		
+		// Restore the user state
+		subreddit = config_params.saved_subreddit;
+		cur_url = "http://www.reddit.com"+subreddit+"/.json";
+		page_number = config_params.saved_page;
+		old_after = config_params.saved_after;
+		refreshPage();
+	}
 	
-	updateConfig();
-	
-	// If we have saved credentials - try to login
-	if (config_params.username != "") {
-		alert("trying to login, user: " + config_params.username);
-		alert("password: " + config_params.password);
-		$.post("http://www.reddit.com/api/login", {api_type:"json", user:config_params.username, password:config_params.password, rem:false}, verifyLogin);
-	}	
+	// DEBUG
+	//$("#userName").text("STATUS: " + window.navigator.onLine);
 };
 
 SceneScene1.prototype.handleShow = function (data) {
 	alert("SceneScene1.handleShow()");
-	
-	// Get the current page's articles
-	cur_url = "http://www.reddit.com"+subreddit+"/.json";
-	updatePage(true);
+	refreshPage();
 };
+
+function onUnload() {
+	// Close all IME boxes
+	if (search_box) {
+		search_box.onClose();
+	}
+	
+	if (username_box) {
+		username_box.onClose();
+	}
+	
+	if (password_box) {
+		password_box.onClose();
+	}
+	
+	if (subreddit_box) {
+		subreddit_box.onClose();
+	}
+}
 
 SceneScene1.prototype.handleHide = function () {
 	alert("SceneScene1.handleHide()");
 	// this function will be called when the scene manager hide this scene
-	
-	// Close all IME boxes
-	search_box.onClose();
-	username_box.onClose();
-	password_box.onClose();
-	subreddit_box.onClose();
 };
 
 SceneScene1.prototype.handleFocus = function () {

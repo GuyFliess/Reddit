@@ -1,16 +1,21 @@
 <!-- this html will be a contents of div SceneScene1 -->
+   
 <div id="splash">	
 	<img src="images/splash.jpg"> 
 </div>
 
-
- <iframe id="pageDisplayer" onload="iframeloaded();"></iframe>
 <img id="imageDisplayer" onload="imageloaded();">
+<object type="application/x-shockwave-flash" id="ytplayer" width="1280" height="720">
+            <param name="movie" value="http://www.youtube.com/apiplayer?enablejsapi=1&version=2&playerapiid=ytplayer">
+            <param name="allowFullScreen" value="true">
+            <param name="allowScriptAccess" value="always">
+</object>
 
 <div id="subredditsList"></div>
 <div id="menuBox"></div>
 <div id="loadingId"></div>
 <div id="mainLegend"></div>
+<div id="timeoutPrompt"></div>
 <div id="loginPrompt"></div>
 <div id="logoutPrompt"></div>
 <div id="loginFailurePrompt"></div>
@@ -22,8 +27,7 @@
 <input type="text" class="imeText" id="passwordText">
 <input type="text" class="imeText" id="subredditText">
 
-<div id="mainPage">
-	
+<div id="mainPage">	
 	<div id="header">
 		<a id="header_img" class="default-header"></a>
 		<div id="subredditName" class="subreddit"></div>
