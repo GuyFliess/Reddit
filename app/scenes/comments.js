@@ -178,7 +178,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	    
 	case sf.key.FF: // UPVOTE
 		// Check that user is logged in
-		if (config_params.username == "") {
+		if (username == "") {
 			$('#needLoginPromptComment').sfPopup('show');
 			break;
 		}
@@ -199,12 +199,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		if (arrow.length) { // if arrow exists 
 		    // UPVOTE
 		    arrow.toggleClass("up upmod"); // switch between up upmod
-		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "1"}); // 1 - upvote
+		    $.post(REDDIT_VOTE_URL,{id: uid, dir: "1", uh:modhash}); // 1 - upvote
 		}
 		else if (arrow_up.length) {
 		    // REVERT UPVOTE
 		    arrow_up.toggleClass("up upmod");
-		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+		    $.post(REDDIT_VOTE_URL,{id: uid, dir: "0", uh:modhash});
 		}
 		
 		if (arrow_downmod.length) {
@@ -214,7 +214,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
     
 	case sf.key.STOP: // DOWNVOTE
 		// Check that user is logged in
-		if (config_params.username == "") {
+		if (username == "") {
 			$('#needLoginPromptComment').sfPopup('show');
 			break;
 		}
@@ -235,12 +235,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		if (arrow.length) {
 		    // DOWNVOTE
 		    arrow.toggleClass("down downmod");
-		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "-1"});
+		    $.post(REDDIT_VOTE_URL,{id: uid, dir: "-1", uh:modhash});
 		}
 		else if (arrow_down.length) {
 		    // REVERT DOWNVOTE
 		    arrow_down.toggleClass("down downmod");
-		    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+		    $.post(REDDIT_VOTE_URL,{id: uid, dir: "0", uh:modhash});
 		}
 		
 		if (arrow_upmod.length) {
@@ -395,7 +395,7 @@ function handle_title_comment(article_data, index, head)
     var arr;
         
     // Create new article
-    var article = $('<div id="comment'+index+'" class="thing link" uid="'+info.id+'"></div>');
+    var article = $('<div id="comment'+index+'" class="thing link" uid="'+article_data.kind+'_'+info.id+'"></div>');
 
     head.append(article);
 
@@ -554,7 +554,7 @@ function toggleCommentLegendItems() {
 function postComment()
 {
 	// Check that user is logged in
-//	if (config_params.username == "") {
+//	if (username == "") {
 //		$('#needLoginPromptComment').sfPopup('show');
 //		return;
 //	}
@@ -573,8 +573,7 @@ function onCommentSubmit(userAction, userString, id) {
 	switch (userAction) {
     	case 29443:	// Enter Key
     		
-    	    $.post(REDDIT_VOTE_URL,{api_type: "json", id: uid, text: userString});
-    	    
+    	    $.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: uid, text: userString, uh:modhash});    	    
         	break;
     	case 88: 	// return
     	case 45:   	//exit

@@ -7,11 +7,14 @@ pluginAPI = new Common.API.Plugin();
 ARTICLES_IN_PAGE = 6;
 REDDIT_VOTE_URL = "http://www.reddit.com/api/vote";
 SPLASH_FADE_TIME = 1000;
-//COMMENTS_REGEX = /http:\/\/www\.reddit\.com\/r\/[^\/]*\/comments\/.*/i;
+
+// Milliseconds before announcing timeout
+REQUEST_TIMEOUT = 8000;
 
 // Title char count used to fit text to page
-MIN_CHARS_PER_PAGE = 300;
 MAX_CHARS_PER_PAGE = 500;
+NORMAL_FONT_SIZE = 30;
+MIN_FONT_SIZE = 27;
 
 // Top subreddits, sorted by popularity
 SUBREDDITS_AUTOCOMPLETE = ["announcements","blog","funny","pics","reddit.com","wtf","science","politics","worldnews","technology","askreddit","programming","gaming","offbeat","entertainment","atheism","comics","business","geek","videos","iama","bestof","music","economics","todayilearned","humor","gadgets","environment","news","wikipedia","linux","sex","movies","scifi","space","doesanybodyelse","cogsci","food","philosophy","marijuana","frugal","fffffffuuuuuuuuuuuu","self","health","books","history","photography","math","worldpolitics","sports","apple","web_design","art","howto","happy","energy","netsec","aww","libertarian","webgames","diy","tldr","lolcats","obama","economy","psychology","conspiracy","canada","xkcd","fitness","design","drugs","python","photos","listentothis","cooking","compsci","sexy","trees","4chan","physics","software","writing","relationship_advice","freethought","skeptic","opensource","hardware","twoxchromosomes","wearethemusicmakers","video","lgbt","mensrights","anarchism","beer","guns","pictures","documentaries","android","bicycling","tfwomen","religion","coding","astronomy","iphone","youshouldknow","bacon","ubuntu","itookapicture","circlejerk","cannabis","craigslist","zombies","webcomics","opendirectories","lectures","woahdude","collapse","lists","javascript","pscarlhprogramming","travel","green","anime","christianity","pic","hackers","google","firefox","australia","lost","government","military","linguistics","zenhabits","tech","japan","rpg","ruby","socialism","starcraft","worstof","shittyadvice","newreddits","somethingimade","robotics","guitar","education","cpp","metal","haskell","moviecritic","seduction","mma","ronpaul","productivity","php","buddhism","nature","feminisms","jokes","computersecurity","unitedkingdom","astro","bad_cop_no_donut","windowshots","reverseengineering","literature","tipofmytongue","browsers","chemistry","pets","lisp","soccer","socialmedia","celebrities","philosophyofscience","architecture","hockey","wallpapers","bestofcraigslist","truereddit","perl","secretsanta","fashion","equality","suicidewatch","conspiracies","redditstories","meetup","torrents","youtube","doctorwho","india","ukpolitics","wow","l33t","xboxisrael","recipes","homebrewing","usa","europe","mac","tedtalks","electronicmusic","dailywtf","law","osx","interestingasfuck","graffiti","biology","autos","evolution","apathy","redditchan","linux4noobs","vegan","lostgeneration","startups","anthropology","nyc","gardening","django","facebookquotes","911truth","java","transhuman","vim","sociology","things","cheap_meals","csbooks","gamedev","blackops","dubstep","idea","microsoft","ilivein","television","uspedrunk","areaindiegaming","machinelearning","starwars","quotes","lol","trippy","ufos","americanpolitics","standupcomedy","selfsufficiency","nonprofit","movieclub","scientology","auto","logo","ideas","scienceamericangovernment","veg","survivalist","zen","engineering","seattle","bash","survival","kde","cheats","electronics","cute","needadvice","cyberlaws","creepy","ted","overpopulation","poker","joel","catpictures","ideasfortheadmins","linux_gaming","erlang","chicago","reddithax","emacs","boston","celebcrack","hacking","malefashionadvice","politicalhumor","learnprogramming","euro","gossip","hardscience","c_programming","academicphilosophy","startrek","hrw","wave","paranormal","love","coffee","dwarffortress","ece","depression","softwaredevelopment","ediscover","austin","worldwidenews","ama","dotnet","tonightsdinner","progressive","windows","tipoftheday","portland","howtodiy","onlinegames","twitter","selfhelp","ladybashing","ohwhataworld","database","islam","scientific","formulabsd","motorcycles","porn","ireland","codeprojects","investing","psychonaut","comicbooks","crime","jobs","poetry","ads","eve","lsd","webdesign","networking","agi","neuro","snobs","liberty","slackerrecipes","palinproblem","toronto","reportthespammers","aviation","mmj","scheme","fakenews","vegetarianism","climateskeptics","conservative","functional","sanfrancisco","spaceflight","fascinating","pcgaming","finance","culture","blogs","iwantout","reddittraveljetblue","commonlaw","independent","gif","typography","pandemic","occult","baseball","freegames","dnb","classicalmusic","mwappengine","fiction","theology","asm","tothemoon","jazz","marketing","wdp","photocritique","parenting","egalitarian","animals","entrepreneur","trance","types","language","wallpaper","musictheory","archlinux","digg","promos","hipstergurlz","bestgamesever","learnjapanese","statistics","chrome","sysor","bikinis","apod","hacks","redditmusicclub","climate","systems","techplore","evopsych","visualization","gnu","clojure","wireless","mashups","radioreddit","cryptogon","photoshop","putinforpresident","bioinformatics","computergraphics","redditdev","c_language","search","baking","idap","alternativehealth","anticonsumption","unix","learnanewlanguage","rugc","semanticweb","rails","scala","magictcg","bugs","intp","geopolitics","animalrights","singularity","sonypslosangeles","taoism","mathbooks","social_bookmarking","freemusic","pch","git","newzealand","tmbr","learnmath","fsm","furry","culturalstudies","webnews","shortfilms","tea","de","mexico","smart","philadelphia","campingandhiking","war","lovecraft","chess","nootropics","webmaster","financialplanning","tattoos","omegle","redditbooks","cplusplus","wackyworld","permaculture","whedon","worldnewsartificial","bayarea","fail","lego","musicians","mspainttoday","ecoreddit","greasemonkey","celebrity","1000words","zombie","hackernews","animation","indierock","seo","freelance","fantasy","guitarlessons","askme","whalebait","england","lastnight","p2p","geospatial","linux_devices","whitemengonewild","wii","longtext","moddit","gamereviews","meta","artcrit","askusers","agile","redditmakesagame","spacefleet","emmawatson","matheducation","mixes","sysadmin","security","haiti","til","apocalypse","meditation","media","nonaustrianeconomics","pittsburgh","internet","vid","charts","itsnotonion","learning","dogs","piracy","nanotech","texas","noveltyaccounts","shortstories","ocaml","eebooks","screenwriting","work","forts","france","dragonage","mycology","organicgardening","yourweek","datasets","trust","designthought","picture","politicalphilosophy","trt","wordplay","podcasts","tips_tricks","americanhistory","algorithms","bookclub","fml","running","xbox360games","darwin","slashdot","libredesign","leaked","plt","statuegropers","medicine","code","cars","dae","latex","ufo","compilers","forhire","gamedeals","giveaways","walls","california","tvcritic","webdev","ajax","archaeology","computers","sewerhorse","shell","football","happybirthday","puzzles","hiphop","steampunk","stocks","cats","blogging","grammar","netfluff","polyamory","wearethefilmmakers","breakfast","atlanta","antiwar","wine","stoners","internetmarketing","povertytips","riaa","worldbuilding","crypto","wordpress","tuxtraining","boardgames","skateboarding","particlephysics","lifestyle","punk","magick","foodporn","lifehacks","jquery","helpoutreddit","gnome","iphoneappstore","sketchcomedy","artistic","redditjobs","sportsvideo","feminism","worldhistory","debian","men","newtotfbadass","cocoa","hipsters","moviereddit","encryption","mitchhedberg","phpfreelancer","spirituality","police","designourshirt","argentina","usability","recommendmovies","stopsmoking","dating","outrage","urbanplanning","audio","jobpostings","topgear","weeaboo","dior_lei","minimalism","conspiratard","musicnews","itnews","pirate","mises","future","tomorrowiwill","winternals","africa","nota","sos","wenyude","debateit","aerospace","china","brisbane","cricket","vids","gunners","vancouver","scotch","newyork","sexpositive","snowboarding","globalistnews","pirateparty","ebooks","transgender","newspeak","help","opened","conan","starcrafthellwarlrod","linkmingle","redditirc","contraptions","muxtape","climbing","drugscience","gifs","maplelinks","xboxlive","tiantiankankan","photoshopchallenge","virtualization","billxia","outdoors","vegas","forgottenbookmarks","new_right","web_infrastructure","es","rubyonrails","republican","exmormon","timetravel","cool","gentoo","web_development","aspnet","death_metal","michigan","hurts_my_eyes","operabrowser","indepthstories","london","rap","audioengineering","avant_garde","inspirational","mccainsgaffeoftheday","stonerrock","melbourne","androidappreviews","askagirl","rit","zh","linuxadmin","stargate","albumcritic","fineart","nfl","dexter","myth","atheismgender","idm","alt_conspiracy","golang","russia","spiritual","xmonad","macprogramming","technologyundead","thebookclub","d_language","freebies","arduino","blackhatseo","subprime","fixedgearbicycle","nin","picswashingtondc","wincustomize","gothic","houston","lolwut","breakglass","cosplay","fallacy","drupal","penpals","capitalism","oregon","psychopharmacology","smalltalk","fr","geography","needafriend","haiku","forumreddit","psp","bashladies","goodoldays","erth","lovereddit","ciencia","weird_science","pwnage","wanderlust","socialskills","stripclubs","testmysite","dissent","latinoamerica","prolog","housing","left4dead","cimigo","nostalgia","racistreddit","liquor","redditorsfor911truth","colorado","deutschland","movie","pokemon","fishing","postrock","photoblog","androiddev","ja","musicfail","pua","fsharp","j2ee","amazingtopaskscience","programminglanguages","cheatatmathhomework","mpbaduk","parent","missingpersons","bass","autism","flash","geology","alphanumeric","csharp","wikidashboard","alphainputs","intelligent","offensive","plasma","cannabiscultivation","linuxquestions","homeworkhelp","spoilers","treasuremaster","checkthisout","yardsale","gameswap","objectivism","floss","mentors","mobile","reallygrindsmygears","bodybuilding","droid","cheatingthesystem","insomnia","monterrey","animatedgifs","asia","lua","venturebros","yro","dallas","graphic_design","greenproducts","cycling","massageparlors","scene","trailertrash","yahooanswers","bestof_conspiracy","quebec","ferrets","technologyblogs","alcohol","strongatheism","theistvsatheist","dada","xtrumanx","drums","haskell_proposals","legalizeit","stories","djs","flickr","montreal","knives","nihilisms","resisttyranny","songwriters","twincitiessocial","homebrew","fantasticcontraption","technews","unhappy","truehorrorstories","etab","integral","sec","aragon","offmychest","futurama","knitting","physicsbooks","norge","sydney","freebooks","iran","luciddreaming","sailing","amateurradio","relax","techsupport","bluesmusic","fosshelpwanted","sfstories","functionallang","ui_programming","uppercanada","d_programming","dreams","etymology","genetics","karmaparty","sportscars","catholicism","germany","tattoosofgirlschildfree","reddit","bipolarreddit","canucks","redditanswers","selforganization","wisconsin","horror","activism","italy","nphotoweek","drunkenpigs","iphoneapps","triangle","tvclub","cnbeta","propaganda","contra","economicsneopagan","amazon","unicode","vegetarian","dandd","mspaint","ekklesia","css","hip_hop","bullshit","humanresources","reddiquette","retrogames","bjj","craft","pandorastations","socialscience","brasil","cocoadev","foodblog","obvious","omegletextadventure","celtic","disapproval","simpleliving","spotify","aws","facebook","futurism","teamfortressottawa","surreal","bargainbin","forum","macroeconomics","iamaf","censorship","opengl","cyberpunk","digitaladvertising","mediareddit","origami","memetics","redsox","joos","malkovich","linuxtutorials","wouldliketomeet","chineselanguage","magic","iphonedev","spontaneousmeetup","woodworking","ada","crazy_on_tap","nottheonion","it","motorsport","sandiego","xss","games","minnesota","zeropunctuation","invest","yoga","anarcho_capitalism","beekeeping","cheese","game","lanl_german","yahoo","dietandhealth","hunting","eeepc","herddit","religionseriously","spamrss","tf2au","techculture","libertarianleft","portugal","socialnews","quickquestions","rockclimbing","yodawg","blender","fedora","pakistan","potussoapier","thoriumreactor","folk","hot","academiceconomics","actuallesbians","bitch","comedy","webtools","iowa","marxism","newworldorder","reddit_fact_check","stupid","unpopular","h4ckers","hypatia","switzerland","cannotunsee","eyes","film","getfreakinfit","holeyhands","personalarmy","cthulhu","german","kinov","mmorpg","puns","arresteddevelopment","borderlands","pt","radiohead","awesomereddit","fantasyfootball","goodcops","highstrangeness","hotcosplaygirls","trading_ai","catswithbacon","mandrivafr","otl","wedding","chileremix","ebay","lojban","sfmagazines","aptliving","bsg","wwtt","busey","intellectualreddit","quantumcomputing","selfimprovement","cartoon","conspiracyhub","gangsandstuff","made","norml","onlycode","puppieswhofightbears","racism","womenofreddit","wsid","loldogs","tellreddit","tips","francophone","piano","rant","reddittrolls","saddestof","urbanexploring","blogger","sociologyforall","100wordstories","democrats","genetic_algorithms","marketpicks","painting","promote","prowrestling","singapore","sportsblogs","gaijin","teleco","nanotechnology","numerical","phish","app","kucinich","vacation","solaris","steak","transformers","gtd","lanl_latin","worldwidepolitics","geekmusic","nintendo","cookmesomething","longboarding","octopustomfoolery","art_int","shortentertainment","weather","anxietypanic","appearanceadvice","management","skiing","stlouis","voluntarism","birdpics","madscientist","mememuseum","sustainability","whine","breakcore","darkstep","french","gerald","modhelp","cherejimonica","gays","criticalwwwigr","answerreddit","archiyantram","corruption","latin","botany","cappuccino","pie","burningman","metaphysics","modded","righttodie","tolkienfans","reggae","acidstories","djmixes","frenchally","idontunderstand","newmusic","redditectives","redditia","sexywomen","teknoloji","demoscene","epicthread","image","knots","xfce","agnosticism","apologists","poll","chemlab","mustard","tasers","entomology","firefoxextensions","gothicandhorror","imadethis","psychedelic","dosugporuskij","justwow","kids","organic","baltimore","bccresearch","cakewin","onlinebooks","survivalguide","warcraft","compling","groovy","idareyou","impoliteconversation","kebek","photoshopcontest","archery","infos","nba","oneswarm","piercing","reviews","riddle","voteupif","bestestof","gay","grilledcheese","homeschool","mec","mybags","mydreamwebapp","gundem","pleasedtomeetyou","appleapps","firefly","liberalarts","timetravellers","window","controllablewebcams","cookbook","noads","pantsless","couchdb","gifts","transit","libraries","norulesmma","nuclear","pandora","rva","sinema","tefl","dickoftheyear","footballcentral","peterschiff","battlestations","blogtech","nihilism","reddituniversity","synthesizers","intj","religioninamerica","man","multisubs","scotland","buddha","quran","sql","beauty","cultcinema","disability","newagereligion","sinfest","vaporware","asblackculture","callgirls","datacompression","mertblog","schneier","vmware","antibacon","common_lisp","healthjudaism","realestate","freeideas","ninjas","redditizeme","otaku","virginia","geeky","mikecann","poetryofscience","redditor_pics","rickroll","ru","unity3d","book","hero","istanbul","matlab","privacy","survivalfood","unsolvedmysteries","water","teeshirtart","thankkickme","ultimate","physicalfitness","wtfcodingcontests","designercorps","elsalvador","pizza","redditdeals","tcl","ughh","webgaming","criticalsoftware","flowchart","mixtape","p2ptech","webtechblog","arabic","financenews","hiking","hugs","infographics","usefulshit","antiterrorism","computing","heroesofnewerth","introweb","just4callie","newjersey","npr","onlinejournalism","antihillary","eupolitics","hitchhiking","rugbyunion","unanimous","vinyl","asc","beautiful","copyleft","lgbtreddit","mjstrains","piratenpartei","suomi","tourdefrance","vfx","coolpics","dogpictures","lanl_spanish","pixelart","textsalad","awwcute","cagematch","gis","goodnewsinbadtimes","scholar","diabetes","freesoftware","narwhals","qgyhrecreationaldrugs","scribd","universalhealthcare","black_metal","dependent_types","forth","gearhead","genealogy","invisiblefist","islamofascism","merb","uiuc","askcheez","ornithology","programming_ru","quirked","wildcrafting","youre_doing_it_wrong","ambigrams","beards","easymoneyforteens","industrialdesign","liberal","wildcraft","house_music","motorsports","advertising","avantgardemusic","cevre","colorreddit","discussion","minecraft","mjd","themes","warhammer","ascii","boobs","erowid","sweden","websitefeedback","brewing","cleveland","conservation","friendship","photographers","ushistory","brooklyn","cheat_sheets","homeowners","illustration","kultur_sanat","parkour","samokrutka","terrible","twiddit","wildlife","mit","reprap","timelapse","askxkcd","criticalthinking","defcon","rlquotes","seti","vectorgraphics","belgium","complaints","greenskeptics","horses","hotlinks","hypnotoad","iloveboxxy","korean","pre","reason","collaborative_hub","musicvideos","nhl","pricxwatch","redaction","redditbay","karma","urbantransport","britpolitics","enamerique","israelexposed","nl","noncrazychristians","realists","drblog","nederlands","respectfuldebate","theredditbay","autotune","christopherhitchens","theatre","calgary","denmark","discgolf","eastereggs","entrepreneurship","is_computer_on","philosophyofliberty","realty","spore","templates","durrr","oklahoma","reasoners","electronic_cigarette","florida","interiordesign","lds","memes","tf2comics","trepanation","boxing","golf","mozilla","pregnancy","screenshots","telescopes","treadmills","useful","vlogging","defendyourself","dog","nosql","personals","portraitphotos","prostitution","rawfitnessonline","scifiscroll","starlets","surfing","yard","3dma","bootstrapping","contacts","denver","happyatwork","nethack","stupidcriminals","americanmilitary","copyfight","dailyshow","foodart","furries","healthcare","madeinusa","northcarolina","ralphnader","arc","coding_tutorials","espanol","gong","hotshots","logic","mormon","pvttrackers","sales","secondlife","tragic_satire","uureddit","warpiggs","websecurity","aikido","anonymous","christopherlower","college","communist","credesktop_wallpaper","editors","holyfuckingshit","labor","redditeame","subgenius","l4dlookingforlove","redditshirt","transhumanism","alaska","lina","motivatedphotos","predictions","punkskahardcore","religiousdebate","sanjosesharks","squeak","tattoosofgirls","craftivism","globaleconomy","happymonsanto","imdrunk","netbooks","philosophycorner","southafrican","subvertising","django_class","notmadeinchina","onions","redditfriends","tacos","algeria","foreignaffairs","gratefuldead","headlines","invites","oliveoil","russian","wackynews","bloggerdal","electro","enhaskell","environmentfreebsd","fun","hackintosh","postapocalypse","sfsteamgiveaways","techbookreviews","ykwih","yourfav","zine","dogtraining","freestuff","greatpics","kimkardashian","longvideos","misogyny","mixtapes","nsfw_wtf","oldreddits","orchestral","polls","shakeytimes","amiga","colbertreport","evosoc","hardeconomics","hilary","maemo","mindfuck","nativeamerican","oldfamilyphotos","tvshowsdirectory","crossfit","dr_horrible","funnylolcats","homedreamtheater","ohm","streetfights","thelema","videogamedevelopment","mst3k","nomorecrapmusic","softwareundergroundfilm","7mooode","ambientalmente","fdsafe","kidsfacepainting","manga","mypussyhurts","runetnews","sandbox","strength_training","today_in_history","valve","christians","existentialism","gameshq","geeklove","kiteboarding","left4deadmoosepatrol","thereligionofpeace","thetechlabs","2008isabletonlive","bizarro","designfloat","fts","glassart","hdemici","jambands","leftist","aquariumfish","energyghosts","gmaps","graviga","mensissues","ourchinese","parsoc","polska","recommendme","redditclassics","shuttercraft","srrar","travelguides","adultchildren","altess","animemusicvideos","glutenfree","ipr","osc","revolution","flex","heresy","hotelsandtravel","infp","metalworking","openbsd","politicstoo","undergroundbound","abortionisprolife","americaneconomy","athiesm","bizarrenews","classyinsults","disney","farming","horribleidea","pssnaked","puppies","redditoriginals","scipy","searchisbroken","anticapitalism","businessnews","htmllegalnews","oddstuff","postquebec","reruns","ukulele","weight","crmnews","essays","geocaching","marijuanastudies","nachos","oracle","perth","redditbookclub","redditorsinrecovery","store","winnipeg","badmusic","bonsai","hpf","keys","restaurant","askjeph","computerviruses","criticalminds","hinduism","iceland","jobreddit","lockpicking","noisemachine","traveling","trueblood","audiosurf","bbwbikinis","dmt","geyik","guitartuts","humanitarian","karenliberation","macgamedev","pretty","punthreads","robot","abdelilah","android_nospam","arizona","cleverbot","edmonton","exdiggers","gametheory","hooray","icanhaz","lanl_french","leafs","neil_degrasse_tyson","orlando","poetscorner","sodypop","vintagecomputing","ablog","aprilfoolcolumbus","dance","meat","personalfinance","qualityassurance","rockband","streetviews","swapmeet","wolframalpha_answers","wood","hardhockey","jailbaitphotos","middleeastnews","projects","quant","sexyfemale","shortstory","vintage","amerikanpolizei","catonmat","iwasclevertoday","montana","muskurahat","socialist","stockmarket","stoner","walloftext","airport","ccrm","destructoid","econbooks","gorgeous","oss","outdoorsports","relationships","saltlakecity","scribblenauts","smokefree2mod","babies","missed","mockthehivemind","nontheist","phenomenology","suggestmusic","closeencounters","educationepicbacon","geekmylove","hackerspaces","outreach","scripting","spain","terraserenus","usnews","actlocally","cannabisextracts","ptsd","web_utilities","abandonware","adhd","antisharia","badsites","garden","gradschool","humanist","kiva","malaysia","oaxaca","tinfoilhat","trackbike","unrestricted","zeppelins","dsp","gadgetlab","maru","masculinists","tf2uk","unsee","econ","gangsnstuff","gta4hacks","krugman","land","maker","rally","redditcinema","socialite","tr","asianmovieclub","billnye","detroit","guides","hotdeals","industrial","jaikratom","manchester","memphis","movienights","uqreddit","webbuzzz","weedit","bodymods","clinton","dotfiles","followup","greenfatigue","juxtaposition","kitchen","loomknitting","maps","motive","redditstats","svg","tabletop","wtf_florida","alife","appraisals","boise","debate","elior","life","mccain","mileycyrus","schoonology","southafrica","trollcave","windows_worldwidejackboot","awesome","bittorrent","championsleague","fringescience","hookah","karmanaut","primatology","print","vector_art_b","watchthis","celebritiesphotos","creatives","deepspacenine","geneology","huntsvillealabama","lastnightontv","motorcycle","palestinians","pipetobacco","rgrd","savagegarden","tf2comp","thisshouldbepolitics","versus"];
@@ -39,6 +42,7 @@ legend_items_2 = {
 		'STOP':'Downvote',
 		//'YELLOW':'Slideshow View',
 		'GREEN':'Edit Subreddit (When in Subreddits menu)',
+		'PAUSE':'Toggle legend',
 		'BLUE':'More Keys'
 };
 
@@ -56,6 +60,9 @@ page_number = 0;
 subreddit = "";
 key_state = keystates.MAIN;
 
+username = "";
+modhash = "";
+
 search_box = null;
 username_box = null;
 password_box = null;
@@ -64,15 +71,13 @@ subreddit_box = null;
 var vidplayer;
 
 menu_items = {
-	displaynames: ['Login/Logout',		'Goto Subreddit',	'Search',		'Open In Browser',	'Show/Hide Legend'],
-	actions: [		menuLoginLogout,	menuGotoSubreddit, menuOpenSearch,	menuOpenInBrowser,	menuToggleLegend]
+	displaynames: ['Login/Logout',		'Goto Subreddit',	'Search',		'Open In Browser'],
+	actions: [		menuLoginLogout,	menuGotoSubreddit, menuOpenSearch,	menuOpenInBrowser]
 };
 
 // These are the default config params (After initial run, they will be read from the config file each time)
 config_params = {
 	legend_shown: 1, // Controls which legend items are currently shown. 0 = Don't show
-	username: "",
-	password: "",
 	subreddits_list: ["FRONTPAGE", "ALL", "PICS", "FUNNY", "GAMING", "WORLDNEWS"],
 	
 	// Params for user session restore (when coming back from browser)
@@ -128,22 +133,24 @@ function doLogout(userAction) {
 		return;
 	}
 	
-	// Just delete the user credentials
-	config_params.username = "";
-	config_params.password = "";
-	updateConfig();
+	// Request logout from reddit (deletes session cookie)
+	$.post("http://www.reddit.com/logout", {uh:modhash});
+	
+	// Delete login details
+	username = "";
+	$("#userName").text("");
 }
 
 
 function menuLoginLogout() {
-	if (config_params.username == "") {
+	if (username == "") {
 		// Ask for login
 		$('#loginPrompt').sfPopup('show');					
 	}
 	else {
 		// Ask for logout (must update logged in username)
 		$('#logoutPrompt').sfPopup({
-			text:'Currently logged in as "' + config_params.username + '". Would you like to logout?',
+			text:'Currently logged in as "' + username + '". Would you like to logout?',
 			num:2,
 			buttons:['YES','NO'],
 			callback:doLogout
@@ -168,8 +175,8 @@ function menuOpenInBrowser() {
 	launchExternalBrowser("http://www.reddit.com"+subreddit);
 }
 
-function menuToggleLegend() {
-	// Toggle the legend
+// Toggle the legend
+function toggleLegend() {
 	if (config_params.legend_shown) {
 		$('#mainLegend').sfKeyHelp('hide');
 		config_params.legend_shown = 0;
@@ -185,6 +192,7 @@ function menuToggleLegend() {
 	updateConfig();
 }
 
+// Toggle the legend items
 function toggleLegendItems() {
 	if (config_params.legend_shown == 1) {
 		$('#mainLegend').sfKeyHelp(legend_items_2);
@@ -215,7 +223,7 @@ function onUsernameSubmit(userAction, userString, id) {
 	switch (userAction) {
     	case 29443:	// Enter Key
     		// Save username
-    		config_params.username = userString;
+    		username = userString;
     		
     		// Show password inputbox
     		password_box.onShow();
@@ -233,14 +241,13 @@ function onPasswordSubmit(userAction, userString, id) {
 	switch (userAction) {
     	case 29443:	// Enter Key
     		// Try to login
-    		config_params.password = userString;
-    		$.post("http://www.reddit.com/api/login", {api_type:"json", user:config_params.username, passwd:config_params.password, rem:false}, verifyLogin);
+    		$.post("http://www.reddit.com/api/login", {api_type:"json", user:username, passwd:userString, rem:true}, verifyLogin);
     		break;
     	case 88: 	// return
     	case 45:   	//exit
     	default:
     		// User cancelled, delete creds
-    		config_params.username = "";
+    		username = "";
     		break;
 	}
 }
@@ -302,28 +309,24 @@ function onSubredditKeypress(userStringSoFar) {
 
 function verifyLogin(data, textStatus, jqXHR) {
 	if (0 == data.json.errors.length) {
-		// Login success! Save creds
-		updateConfig();
-		$("#userName").text("logged in as: " + config_params.username);
+		// Login success, refresh page
+		modhash = data.json.data.modhash;
+		$("#userName").text("logged in as: " + username);
+		refreshPage();
 	}
 	else {
 		// Login failed, remove creds
-		config_params.username = "";
-		config_params.password = "";
+		username = "";
 		$('#loginFailurePrompt').sfPopup('show');
-		$("#userName").text("");
-	}
-	
-	// Anyways, do a page refresh
-	refreshPage();
+	}	
 }
 
-function handle_article(index, article ) {
+function handleArticle(index, article ) {
     info = article.data;
     var arr;
         
     // Create new article
-    $("#siteTable").append('<div id="article'+index+'" class="thing link" uid="'+info.id+'" isself="'+info.is_self+'"></div>');
+    $("#siteTable").append('<div id="article'+index+'" class="thing link" uid="'+article.kind+'_'+info.id+'" isself="'+info.is_self+'"></div>');
     article = $('#article'+index);
        
     // Add the rank
@@ -352,7 +355,7 @@ function handle_article(index, article ) {
     }
     
     // Add permalink to comments
-    // TODO: Maybe add using the "reddit API" method (add "/comments/<uid>/.json")
+    // TODO: Maybe add using the "reddit API" method (add "/comments/<id>/.json")
     article.append('<a class="comments" href="http://www.reddit.com' + info.permalink +'"> </a>');
     
     // Add the entry
@@ -379,14 +382,12 @@ function ajaxErrorHandler(jqXHR, textStatus, errorThrown) {
 }
 
 function getJsonWrapper(url, data, success) {
-	$.ajax({url:url, dataType:"json", data:data, success:success, error:ajaxErrorHandler, timeout: 8000});
+	$.ajax({url:url, dataType:"json", data:data, success:success, error:ajaxErrorHandler, timeout: REQUEST_TIMEOUT});
 }
 
 function refreshPage() {
 	if (page_number == 0) { 
 		getJsonWrapper(cur_url, {limit: ARTICLES_IN_PAGE}, parseReddit);
-		
-		
 	}
 	else {
 		getJsonWrapper(cur_url, {count:page_number*ARTICLES_IN_PAGE, after:old_after, limit: ARTICLES_IN_PAGE}, parseReddit);
@@ -419,27 +420,21 @@ function parseReddit(data, textStatus, jqXHR) {
     $("#siteTable").text("");
     $("#subredditName").text(subreddit);
     for (var i=0; i < ARTICLES_IN_PAGE; i++) {
-    	handle_article(i, data.data.children[i]);
+    	handleArticle(i, data.data.children[i]);
     }
     
-    // Adjust text size by page size
+    // Adjust text size by page length
 	total_length = 0;
 	for (var i=0; i < ARTICLES_IN_PAGE; i++) {
 		total_length += data.data.children[i].data.title.length;
     }
     if (total_length > MAX_CHARS_PER_PAGE) {
-		// Decrease font size
-		new_size = 30 - ((total_length-MAX_CHARS_PER_PAGE)/50);
+		// Decrease font size (don't allow font smaller than MIN_FONT_SIZE) 
+		new_size = NORMAL_FONT_SIZE - ((total_length-MAX_CHARS_PER_PAGE)/50);
+		new_size = Math.max(new_size, MIN_FONT_SIZE);
 		$(".link .title").css("font-size",new_size+"px");
 	}
-    /*
-    else if (total_length < MIN_CHARS_PER_PAGE) {
-		// Increase font size
-    	new_size = 35 + 4*((MIN_CHARS_PER_PAGE-total_length)/50);
-    	$(".link .title").css("font-size",new_size+"px");
-	}
-	*/
-    
+        
     // Mark first article and update page
     markSelector($('#article0'));
     $("#pageNumber").text(page_number+1);
@@ -448,20 +443,12 @@ function parseReddit(data, textStatus, jqXHR) {
 function markSelector(x) {
     x.css("background-color", "#FFFF99");
     x.css("border-color", "#FF6666");
-    /*
-    font_size = parseInt(x.find(".title").css("font-size"));
-    x.find(".title").css("font-size", font_size+5+"px");
-    */
 } 
 
 function unmarkSelector(x) {
     if (null != x) {
         x.css("background-color", "");
         x.css("border-color", "");
-        /*
-        font_size = parseInt(x.find(".title").css("font-size"));
-        x.find(".title").css("font-size", font_size-5+"px");
-        */
     }
 }
 
@@ -487,9 +474,21 @@ function isImageUrl(url) {
 	return false;
 }
 
+function lstrip(string, pattern) {
+	pat = new RegExp("^" + pattern);
+    return string.replace(pat, "");
+}
+
 function isYoutubeUrl(url) {
-	if (startsWith(url, "https://www.youtube.com")) return true;
-	if (startsWith(url, "http://youtu.be")) return true;
+	// Strip http/https
+	url = lstrip(url, "https://");
+	url = lstrip(url, "http://");
+	
+	if (startsWith(url, "www.youtube.com")) return true;
+	if (startsWith(url, "youtube.com")) return true;
+	if (startsWith(url, "m.youtube.com")) return true;
+	if (startsWith(url, "youtu.be")) return true;
+	
 	return false;
 }
 
@@ -505,6 +504,19 @@ function onYouTubePlayerReady(playerId) {
     vidplayer[0].addEventListener("onStateChange", "onstate");
     vidplayer[0].addEventListener('onError','onerror');
     */
+}
+
+function getYoutubeVideoId(url) {
+    var ID = '';
+    url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    if(url[2] !== undefined) {
+	ID = url[2].split(/[^0-9a-z_]/i);
+        ID = ID[0];
+    }
+    else {
+	ID = url;
+    }
+    return ID;
 }
 
 function handleArticlesKeydown(keyCode) {
@@ -556,10 +568,15 @@ function handleArticlesKeydown(keyCode) {
 		    	$("#mainPage").css("opacity","0.1");
 		    	key_state = keystates.IMAGE;
 		    }
-		    else if (isYoutubeUrl(url)) {
+		    else if (isYoutubeUrl(url)) {	
 		    	// Youtube link - Play with youtube player
+		    	if (vidplayer === undefined) {
+		    		alert("Youtube player uninitialized!");
+		    		break;
+		    	} 
 		    	$("#mainPage").css("opacity","0");
-		        vidplayer[0].loadVideoByUrl(url, 0, "hd720");
+		    	vidId = getYoutubeVideoId(url);
+		    	vidplayer[0].loadVideoById(vidId, 0, "hd720");
 		        vidplayer.css("opacity","1");
 		        key_state = keystates.VIDEO;
 		    }
@@ -572,7 +589,7 @@ function handleArticlesKeydown(keyCode) {
 		    
 		case sf.key.FF: // UPVOTE
 			// Check that user is logged in
-			if (config_params.username == "") {
+			if (username == "") {
 				$('#needLoginPrompt').sfPopup('show');
 				break;
 			}
@@ -593,12 +610,12 @@ function handleArticlesKeydown(keyCode) {
 			if (arrow.length) {
 			    // UPVOTE
 			    arrow.toggleClass("up upmod");
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "1"});
+			    $.post(REDDIT_VOTE_URL,{id: uid, dir: "1", uh:modhash});
 			}
 			else if (arrow_up.length) {
 			    // REVERT UPVOTE
 			    arrow_up.toggleClass("up upmod");
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+			    $.post(REDDIT_VOTE_URL,{id: uid, dir: "0", uh:modhash});
 			}
 			
 			if (arrow_downmod.length) {
@@ -608,7 +625,7 @@ function handleArticlesKeydown(keyCode) {
 	    
 		case sf.key.STOP: // DOWNVOTE
 			// Check that user is logged in
-			if (config_params.username == "") {
+			if (username == "") {
 				$('#needLoginPrompt').sfPopup('show');
 				break;
 			}
@@ -629,12 +646,12 @@ function handleArticlesKeydown(keyCode) {
 			if (arrow.length) {
 			    // DOWNVOTE
 			    arrow.toggleClass("down downmod");
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "-1"});
+			    $.post(REDDIT_VOTE_URL,{id: uid, dir: "-1", uh:modhash});
 			}
 			else if (arrow_down.length) {
 			    // REVERT DOWNVOTE
 			    arrow_down.toggleClass("down downmod");
-			    //$.post(REDDIT_VOTE_URL,{id: uid, dir: "0"});
+			    $.post(REDDIT_VOTE_URL,{id: uid, dir: "0", uh:modhash});
 			}
 			
 			if (arrow_upmod.length) {
@@ -661,6 +678,10 @@ function handleArticlesKeydown(keyCode) {
 			// TODO
 			break;
 			
+		case sf.key.PAUSE: // TOGGLE LEGEND
+		    toggleLegend();
+		    break;
+			
 		case sf.key.BLUE: // TOGGLE LEGEND ITEMS
 			toggleLegendItems();
 			break;
@@ -670,7 +691,7 @@ function handleArticlesKeydown(keyCode) {
 			$("#menuBox").css("opacity","0.8");
 			key_state = keystates.MENU;
 		    break;
-	    	
+		    
 		default:
 			alert("handle default key event, key code(" + keyCode + ")");
 			break;
@@ -787,7 +808,7 @@ function handleVideoKeydown(keyCode) {
 	        
 	    // Rewind the player
 		case sf.key.REW:
-			vidplayer[0].seekTo(0, false);
+			vidplayer[0].seekTo(0, true);
 	        break;
 	    
 	    // Stop and hide the player
@@ -847,6 +868,18 @@ function startsWith(str, prefix) {
     return (str.indexOf(prefix) == 0);
 }
 
+// Parses the username from a reddit "me.json" request
+function parseUsername(data, textStatus, jqXHR) {
+	if ($.isEmptyObject(data)) {
+		// No user logged in
+		username = "";
+	}
+	else {
+		username = data.data.name;
+		modhash = data.data.modhash;
+		$("#userName").text("logged in as: " + username);
+	}
+}
 
 /********************************
  * Init Functions
@@ -955,33 +988,24 @@ SceneScene1.prototype.initialize = function () {
 		$("#pageNumber").css("bottom","0px");
 	}
 	
-	// Load the main page
-	if (config_params.clean_start) {
-		cur_url = "http://www.reddit.com"+subreddit+"/.json";
-		// If we have saved credentials - try to login (will get the front page)
-		if (config_params.username != "") {
-			$.post("http://www.reddit.com/api/login", {api_type:"json", user:config_params.username, passwd:config_params.password, rem:false}, verifyLogin);
-		}
-		else {
-			// Just get the front page
-			refreshPage();
-		}
-	}
-	else {
-		// Restore clean flag
+	// Get the logged-in username info (if any)
+	getJsonWrapper("http://www.reddit.com/api/me.json", null, parseUsername);
+	
+	// Restore user state if needed
+	if (false == config_params.clean_start) {
+		// Set the clean flag
 		config_params.clean_start = true;
 		updateConfig();
 		
 		// Restore the user state
 		subreddit = config_params.saved_subreddit;
-		cur_url = "http://www.reddit.com"+subreddit+"/.json";
 		page_number = config_params.saved_page;
 		old_after = config_params.saved_after;
-		refreshPage();
 	}
 	
-	// DEBUG
-	//$("#userName").text("STATUS: " + window.navigator.onLine);
+	// Refresh the current page
+	cur_url = "http://www.reddit.com"+subreddit+"/.json";
+	refreshPage();
 };
 
 SceneScene1.prototype.handleShow = function (data) {
