@@ -17,7 +17,7 @@ REDDIT_COMMENT_URL = "http://www.reddit.com/api/comment";
 
 comment_legend_items_1 = {
 		
-		//'LEFTRIGHT':'Move between siblings',
+		'LEFTRIGHT':'Page up/down',
 		//'VOL_UP' : 'scroll',
 		
 		'UPDOWN':'choose comment',	
@@ -145,12 +145,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	alert("Scenecomments.handleKeyDown(" + keyCode + ")");
 	// TODO : write an key event handler when this scene get focued
 	switch (keyCode) {
-	case sf.key.LEFT: // PREV PAGE
-
+	case sf.key.LEFT: //  page down
+		Scenecomments.prototype.Scroll(($( window ).height() - 150));
     	break;
 	
-	case sf.key.RIGHT: // NEXT PAGE
-
+	case sf.key.RIGHT: // page up
+		Scenecomments.prototype.Scroll(-($( window ).height() - 150));
     	break;
     
 	case sf.key.UP: // SELECT PREVIOUS
@@ -175,6 +175,8 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
         break;
     
 	case sf.key.ENTER: // GOTO LINK
+		
+		
 //	    article_title = $('#article'+ cur_article + " a.title");
 //	    //alert(article_title.attr("href"));
 //	    //window.location = article_title.attr("href");
@@ -538,8 +540,10 @@ function unmarkCommentSelector(x) {
 Scenecomments.prototype.Scroll = function (offset) {
 	//alert("y coordinates: " + commentsScroll.y);
 //	alert("height of windows: " + $( window ).height());
-
- 	if (commentsScroll.y + offset <= 0)  // scrolling is negative, i.e we scroll down to negative y coord
+	alert("Comment scroll height: " + commentsScroll.scrollerHeight);
+	alert("scroll current height: " +  commentsScroll.y);
+	//alert(document.height());
+ 	if (commentsScroll.y + offset <= 0 && commentsScroll.y + offset > -commentsScroll.scrollerHeight)  // scrolling is negative, i.e we scroll down to negative y coord
  		{
  			commentsScroll.scrollBy(0, offset);
  		}
