@@ -823,7 +823,7 @@ body > .content .link.compressed .midcol {
 }
 .tagline {
     color: #888888;
-    font-size: medium;
+    font-size: 20px;
     margin-bottom:5px;
 }
 .tagline a {
