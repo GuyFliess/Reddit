@@ -11,8 +11,8 @@ commentsScroll = null;
 
 
 //Constants
-COMMENTS_IN_PAGE = 50;
-DEFUALT_SCROLL_OFFSET = 40;
+COMMENTS_IN_PAGE = 70;
+DEFUALT_SCROLL_OFFSET = 60;
 REDDIT_COMMENT_URL = "http://www.reddit.com/api/comment";
 
 comment_legend_items_1 = {
@@ -82,10 +82,20 @@ Scenecomments.prototype.initialize = function () {
 
 Scenecomments.prototype.handleShow = function (data) {
 	alert("Scenecomments.handleShow()");
-//	alert(data.Url);
-	articleName = data.Url;
-	//$('#subredditsList').sfList({data:subredditsList.displaynames, index:0});
 
+	articleName = data.Url;
+	$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
+	
+	if (config_params.comments_legend_shown) {
+		alert("show legend");
+		$('#CommentsLegend').sfKeyHelp('show');
+	//	$("#pageNumber").css("bottom","40px");
+	}
+	else {
+		alert("hide legend");
+		$('#CommentsLegend').sfKeyHelp('hide');
+		//$("#pageNumber").css("bottom","0px");
+	}
 //	alert(data.Url + ".json");
 	//some inits
 	 $("#subredditName.comments").text("");
@@ -295,13 +305,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 };
 
 function parse_comments(data, textStatus, jqXHR) {
-    // Init some globals
-	
     
-    // Handle the user-specified amount of articles
-//    before = data.data.before;
-//    after = data.data.after;
-
     $('#wrapper').text("");
     $("#subredditName.comments").text(subreddit);
     if (username != "")
@@ -316,12 +320,7 @@ function parse_comments(data, textStatus, jqXHR) {
      //testing
     var head = $('<div id="'+ comment_id + '" class="sitetable nestedlisting"></div>');
      $("#wrapper").append(head);
-           
-   //  handle_title_comment(data[0].data.children[0], current_comment_count++, head); //set siteTable to hold the original post
-    
-
-    var current_list = $("#"+comment_id );
-    
+    var current_list = $("#"+comment_id );   
     current_list = handle_title_comment(data[0].data.children[0], current_comment_count++, current_list ); //set siteTable to hold the original post
 
     //handle each comment
@@ -331,16 +330,12 @@ function parse_comments(data, textStatus, jqXHR) {
         handle_comment( data[1].data.children[i], 1, current_list);
         i++;
     }
-        
-   
+
     commentsScroll = new IScroll('#wrapper', { mouseWheel: true, scrollbars: true });
 
-
     // Mark first comment and update page
-    markCommentSelector($('#comment' + cur_comment ));
-        
-    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-	
+    markCommentSelector($('#comment' + cur_comment ));       
+    //document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);	
 }
 
 function handle_comment( article, level, curret_list_node ) {
@@ -356,15 +351,12 @@ function handle_comment( article, level, curret_list_node ) {
     current_comment_count++;
     comment.append('<p class="parent"><a name="'+ info.id + '"></a></p>');
     // Add the rank
- //   article.append('<span class="rank">' + (page_number*ARTICLES_IN_PAGE + index+1) + '</span>');
     
     // Add the score + voting buttons
     arr = [];
     arr.push('<div class="midcol unvoted">');
     arr.push('<div class="arrow up"></div>');
-   // arr.push('<div class="score dislikes">' + (info.score-1) + '</div>');
-   // arr.push('<div class="score unvoted">' + info.score + '</div>');
-    //arr.push('<div class="score likes">' + (info.score+1) + '</div>');
+
     arr.push('<div class="arrow down"></div>');
     arr.push('</div>');
     comment.append(arr.join(''));
