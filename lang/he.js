@@ -14,24 +14,24 @@ LEGEND_MORE_KEYS = 'מקשים נוספים';
 LEGEND_UPVOTE = 'הצבע למעלה';
 LEGEND_DOWNVOTE = 'הצבע למטה';
 LEGEND_SLIDESHOW_VIEW = 'מבט שקופיות';
-LEGEND_EDIT_SUBREDDIT = 'ערוך סאברדיט (כאשר בתפריט סאברדיטים)';
-LEGEND_TOGGLE_LEGEND = 'Toggle legend';
+LEGEND_EDIT_SUBREDDIT = '(ערוך סאברדיט (כאשר בתפריט סאברדיטים';
+LEGEND_TOGGLE_LEGEND = 'הצג/הסתר מקרא';
 
 BUTTON_YES = "כן";
 BUTTON_NO = "לא";
 BUTTON_OK = "אשר";
 
-INFO_LOGIN = 'מחובר כ: ';
-INFO_SUBMITTED_BY = 'הועלה על ידי: ';
+INFO_LOGIN = 'מחובר כ ';
+INFO_SUBMITTED_BY = 'הועלה על ידי ';
 INFO_COMMENTS = ' תגובות';
 
-PROMPT_LOGOUT_1 = 'כרגע מחובר כ "' ;
+PROMPT_LOGOUT_1 = 'כרגע מחובר כ' ;
 PROMPT_LOGOUT_2 = '". האם תרצה להתנתק?';
 PROMPT_LOGIN = 'כרגע מנותק. האם תרצה להתחבר?';
 PROMPT_LOGIN_SUCCESS = 'ההתחברות הושלמה';
 PROMPT_LOGIN_FAILED = 'ההתחברות נכשלה';
 PROMPT_NEED_LOGIN = 'בשביל להצביע, עליך להיות מחובר';
-PROMPT_CANT_EDIT = "לא ניתן לערוך את הסאברדיט הראשון (FRONTPAGE)";
+PROMPT_CANT_EDIT = "(FRONTPAGE) לא ניתן לערוך את הסאברדיט הראשון";
 PROMPT_TIMEOUT = 'הבקשה נכשלה. אנא בדוק שחיבור האינטרנט זמין';
 
 TITLE_SEARCH = "חפש ברדיט";
