@@ -823,7 +823,7 @@ body > .content .link.compressed .midcol {
 }
 .tagline {
     color: #888888;
-    font-size: 20px;
+    font-size: medium;
     margin-bottom:5px;
 }
 .tagline a {
@@ -1597,7 +1597,7 @@ a.author {
     top: 1px;
 }
 .md {
-    font-size: large;
+    font-size: x-large;
     max-width: 60em;
     overflow: auto;
 }
