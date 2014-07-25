@@ -65,7 +65,7 @@ Scenecomments.prototype.handleShow = function (data) {
 //	alert(data.Url);
 	articleName = data.Url;
 	//$('#subredditsList').sfList({data:subredditsList.displaynames, index:0});
-	UpdateCommentLegend();
+
 //	alert(data.Url + ".json");
 	
 	$.getJSON(data.Url + ".json", parse_comments);
@@ -163,7 +163,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		break;
 		
 	case sf.key.RED:
-		menuToggleCommentLegend();
+		
 		break;
 		
 	case sf.key.GREEN: 
@@ -175,6 +175,10 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	case sf.key.TOOLS: // OPEN MENU
 	    // TODO
 	    break;
+	    
+	case sf.key.PAUSE: // toggle legend
+		UpdateCommentLegend();
+		break;
 	    
 	case sf.key.FF: // UPVOTE
 		// Check that user is logged in
@@ -505,40 +509,28 @@ Scenecomments.prototype.Scroll = function (offset) {
  			commentsScroll.scrollBy(0, offset);
  		}
 	
-}
-
-//function iframeloaded() {
-//	$('#loadingId').sfLoading('hide');
-//    if ($("#iframeId").attr("src")) $("#iframeId").css("display","inline");
-//}
-;
+};
 
 
-function menuToggleCommentLegend() {
-	/*
-	// Toggle the legend
-	if (config_params.legend_shown) {
-//		alert("Turrnoff legegend");
-		config_params.legend_shown = 0;
-	}
-	else {		
-		config_params.legend_shown = 1;			
-	}	
-	updateConfig();
-	UpdateCommentLegend();
-	*/
-}
+
 
 function UpdateCommentLegend()
 {
-	if (config_params.legend_shown) {
+	if (config_params.comments_legend_shown) {
 		$('#CommentsLegend').sfKeyHelp('hide');
+		config_params.comments_legend_shown = 0;
+		//$("#pageNumber").css("bottom","0");
 	}
 	else {
 		$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);	
-		$('#CommentsLegend').sfKeyHelp('show');		
+		config_params.comments_legend_shown = 1;
+		$('#CommentsLegend').sfKeyHelp('show');
+		//$("#pageNumber").css("bottom","40px");
 	}
+	
+	updateConfig();
 }
+
 
 function toggleCommentLegendItems() {
 	if (config_params.legend_shown == 1) {
@@ -554,19 +546,38 @@ function toggleCommentLegendItems() {
 function postComment()
 {
 	// Check that user is logged in
-//	if (username == "") {
-//		$('#needLoginPromptComment').sfPopup('show');
-//		return;
-//	}
+	if (username == "") {
+		$('#needLoginPromptComment').sfPopup('show');
+		return;
+	}
 	
 	art = $('#comment'+cur_comment);
 	uid = art.attr("uid"); // unique id
-	
-	submit_comment_box.onShow();
-	$('#id="commentText"').focus();
+
+	//DEBUG
+	 $.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: uid, text: "That's right", uh:modhash}, verifyPostComment);
+//	submit_comment_box.onShow();
+//	$('#id="commentText"').focus();
 	
        
 		
+}
+
+function verifyPostComment(data, textStatus, jqXHR) {
+	alert("Verify post comment");
+	if (0 == data.json.errors.length) {
+		// Login success, refresh page
+		alert("post suscess");
+		modhash = data.json.data.modhash;
+		//$("#userName").text("logged in as: " + username);
+		refreshCommentPage();
+	}
+	else {
+		// Login failed, remove creds
+		alert("Failed to post: "+ data.json.errors[0]);
+		//username = "";
+		
+	}	
 }
 
 function onCommentSubmit(userAction, userString, id) {
