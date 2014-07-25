@@ -564,9 +564,6 @@ function postComment()
 	
 	submit_comment_box.onShow();
 	$('#id="commentText"').focus();
-	
-       
-		
 }
 
 function onCommentSubmit(userAction, userString, id) {

@@ -2,5 +2,6 @@
  "files": [],
  "scenes": ["Scene1","comments"],
  "theme": "base",
- "modules": ["ime"]
+ "modules": ["ime"],
+ "languages": ["en","he"]
 }

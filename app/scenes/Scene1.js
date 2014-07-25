@@ -5,8 +5,12 @@ pluginAPI = new Common.API.Plugin();
  * Constants
  *******************************/
 ARTICLES_IN_PAGE = 6;
-REDDIT_VOTE_URL = "http://www.reddit.com/api/vote";
 SPLASH_FADE_TIME = 1000;
+
+// Some needed URLs
+REDDIT_VOTE_URL = "http://www.reddit.com/api/vote";
+REDDIT_LOGIN_URL = "http://www.reddit.com/api/login";
+REDDIT_LOGOUT_URL = "http://www.reddit.com/logout";
 
 // Milliseconds before announcing timeout
 REQUEST_TIMEOUT = 8000;
@@ -27,23 +31,25 @@ keystates = {
 		VIDEO:4
 };
 
+
+
 legend_items_1 = {
-		'UPDOWN':'Scroll Article',
-		'LEFTRIGHT':'Scroll Page',
-		'ENTER':'View Article',
-		'GREEN':'View Comments',
-		'RETURN':'Close Image/Video',
-		'TOOLS':'Menu',
-		'RED':'Subreddits',
-		'BLUE':'More Keys'
+		'UPDOWN':LEGEND_SCROLL_ARTICLE,
+		'LEFTRIGHT':LEGEND_SCROLL_PAGE,
+		'ENTER':LEGEND_VIEW_ARTICLE,
+		'GREEN':LEGEND_VIEW_COMMENTS,
+		'RETURN':LEGEND_CLOSE_IMAGE,
+		'TOOLS':LEGEND_MENU,
+		'RED':LEGEND_SUBREDDITS,
+		'BLUE':LEGEND_MORE_KEYS,
 };
 legend_items_2 = {
-		'FF':'Upvote',
-		'STOP':'Downvote',
-		//'YELLOW':'Slideshow View',
-		'GREEN':'Edit Subreddit (When in Subreddits menu)',
-		'PAUSE':'Toggle legend',
-		'BLUE':'More Keys'
+		'FF':LEGEND_UPVOTE,
+		'STOP':LEGEND_DOWNVOTE,
+		//'YELLOW':LEGEND_SLIDESHOW_VIEW,
+		'GREEN':LEGEND_EDIT_SUBREDDIT,
+		'PAUSE':LEGEND_TOGGLE_LEGEND,
+		'BLUE':LEGEND_MORE_KEYS,
 };
 
 
@@ -69,10 +75,10 @@ password_box = null;
 subreddit_box = null;
 
 var vidplayer;
-
+	
 menu_items = {
-	displaynames: ['Login/Logout',		'Goto Subreddit',	'Search',		'Open In Browser'],
-	actions: [		menuLoginLogout,	menuGotoSubreddit, menuOpenSearch,	menuOpenInBrowser]
+	displaynames: [MENU_LOGIN_LOGOUT,	MENU_GOTO_SUBREDDIT,	MENU_SEARCH,	MENU_OPEN_IN_BROWSER],
+	actions: [		menuLoginLogout,	menuGotoSubreddit, 		menuOpenSearch,	menuOpenInBrowser]
 };
 
 // These are the default config params (After initial run, they will be read from the config file each time)
@@ -134,12 +140,13 @@ function doLogout(userAction) {
 	}
 	
 	// Request logout from reddit (deletes session cookie)
-	$.post("http://www.reddit.com/logout", {uh:modhash});
+	$.post(REDDIT_LOGOUT_URL, {uh:modhash});
 	
 	// Delete login details
 	username = "";
 	$("#userName").text("");
 }
+
 
 
 function menuLoginLogout() {
@@ -150,9 +157,9 @@ function menuLoginLogout() {
 	else {
 		// Ask for logout (must update logged in username)
 		$('#logoutPrompt').sfPopup({
-			text:'Currently logged in as "' + username + '". Would you like to logout?',
+			text:PROMPT_LOGOUT_1 + username + PROMPT_LOGOUT_2,
 			num:2,
-			buttons:['YES','NO'],
+			buttons:[BUTTON_YES,BUTTON_NO],
 			callback:doLogout
 		});
 		$('#logoutPrompt').sfPopup('show');
@@ -241,7 +248,7 @@ function onPasswordSubmit(userAction, userString, id) {
 	switch (userAction) {
     	case 29443:	// Enter Key
     		// Try to login
-    		$.post("http://www.reddit.com/api/login", {api_type:"json", user:username, passwd:userString, rem:true}, verifyLogin);
+    		$.post(REDDIT_LOGIN_URL, {api_type:"json", user:username, passwd:userString, rem:true}, verifyLogin);
     		break;
     	case 88: 	// return
     	case 45:   	//exit
@@ -311,7 +318,8 @@ function verifyLogin(data, textStatus, jqXHR) {
 	if (0 == data.json.errors.length) {
 		// Login success, refresh page
 		modhash = data.json.data.modhash;
-		$("#userName").text("logged in as: " + username);
+		INFO_LOGIN
+		$("#userName").text(INFO_LOGIN + username);
 		refreshPage();
 	}
 	else {
@@ -366,7 +374,7 @@ function handleArticle(index, article ) {
         arr.push('<p class="title"> <a class="title" href="' + info.url + '"> ' + info.title + '</a></p>');   
     
         // Add tagline
-        arr.push('<p class="tagline"> submitted by ' + info.author + ', ' + info.num_comments + ' comments</p>');
+        arr.push('<p class="tagline"> ' + INFO_SUBMITTED_BY + info.author + ', ' + info.num_comments + INFO_COMMENTS + '</p>');
         
     // End the entry
     arr.push('<div class="clearleft"></div>');
@@ -877,7 +885,7 @@ function parseUsername(data, textStatus, jqXHR) {
 	else {
 		username = data.data.name;
 		modhash = data.data.modhash;
-		$("#userName").text("logged in as: " + username);
+		$("#userName").text(INFO_LOGIN + username);
 	}
 }
 
@@ -909,41 +917,41 @@ SceneScene1.prototype.initialize = function () {
 	
 	// Init prompts
 	$('#loginPrompt').sfPopup({
-		text:'Currently logged out. Would you like to login to reddit?',
+		text:PROMPT_LOGIN,
 		num:2,
-		buttons:['YES','NO'],
+		buttons:[BUTTON_YES,BUTTON_NO],
 		callback:doLogin
 	});
 	
 	$('#loginSuccessPrompt').sfPopup({
-		text:'Login succeeded',
+		text:PROMPT_LOGIN_SUCCESS,
 		num:1,
-		buttons:['OK']
+		buttons:[BUTTON_OK]
 	});
 	
 	
 	$('#loginFailurePrompt').sfPopup({
-		text:'Login failed',
+		text:PROMPT_LOGIN_FAILED,
 		num:1,
-		buttons:['OK']
+		buttons:[BUTTON_OK]
 	});
 	
 	$('#needLoginPrompt').sfPopup({
-		text:'In order to upvote/downvote, you must be logged in',
+		text:PROMPT_NEED_LOGIN,
 		num:1,
-		buttons:['OK']
+		buttons:[BUTTON_OK]
 	});
 	
 	$('#cantEditSubredditPrompt').sfPopup({
-		text:"Can't edit the first subreddit entry (FRONTPAGE)",
+		text:PROMPT_CANT_EDIT,
 		num:1,
-		buttons:['OK']
+		buttons:[BUTTON_OK]
 	});
 	
 	$('#timeoutPrompt').sfPopup({
-		text:"Request timed-out. Make sure you are still connected to the Internet",
+		text:PROMPT_TIMEOUT,
 		num:1,
-		buttons:['OK']
+		buttons:[BUTTON_OK]
 	});
 	
 	// Init menu box
@@ -952,28 +960,27 @@ SceneScene1.prototype.initialize = function () {
 	// Init subreddits list
 	$('#subredditsList').sfList({data:config_params.subreddits_list, index:0});
 	
-	
 	// Init IME boxes
 	search_box = new IMEShell_Common();
 	search_box.inputboxID = "searchText";
-	search_box.inputTitle = "Search Reddit";
+	search_box.inputTitle = TITLE_SEARCH ;
 	search_box.onKeyPressFunc = onSearchSubmit;
 	
 	username_box = new IMEShell_Common();
 	username_box.inputboxID = "usernameText";
-	username_box.inputTitle = "Username";
+	username_box.inputTitle = TITLE_USERNAME;
 	username_box.onKeyPressFunc = onUsernameSubmit;
 	
 	password_box = new IMEShell_Common();
 	password_box.inputboxID = "passwordText";
-	password_box.inputTitle = "Password";
+	password_box.inputTitle = TITLE_PASSWORD;
 	password_box.onKeyPressFunc = onPasswordSubmit;
 	password_box.setPasswordMode(true);
 	
 	subreddit_box = new IMEShell_Common();
 	subreddit_box.inputboxID = "subredditText";
-	subreddit_box.inputTitle = "Choose a subreddit";
-	subreddit_box.inputDescription = "(for example \"science\")";
+	subreddit_box.inputTitle = TITLE_SUBREDDIT;
+	subreddit_box.inputDescription = DESC_SUBREDDIT;
 	subreddit_box.onCompleteFunc = onSubredditKeypress;
 	subreddit_box.onKeyPressFunc = onSubredditGotoSubmit;
 		
