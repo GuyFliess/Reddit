@@ -205,7 +205,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		
 	case sf.key.GREEN: 
         // TODO
-		alert("Post comment");
+		alert("Post comment")
 		postComment();
 	
     	break;
@@ -373,7 +373,7 @@ function handle_comment( article, level, curret_list_node ) {
             arr.push('<span class="score dislikes">' + (info.ups - info.downs - 1) + ' points</span>');
             arr.push('<span class="score unvoted">' + (info.ups - info.downs) + ' points</span>');
             arr.push('<span class="score likes">' + (info.ups - info.downs + 1) + ' points</span>');           
-            //var date = new Date(info.created); //TODO: format to "3 hours ago"
+            var date = new Date(info.created);//TODO foramt to "3 hours ago"
         arr.push('</p>');
 
 	    //comment body
@@ -629,3 +629,5 @@ function onCommentSubmit(userAction, userString, id) {
 }
 
 //TODO unite shared code base
+
+
