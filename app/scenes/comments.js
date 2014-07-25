@@ -3,7 +3,7 @@ alert('Scenecomments.js loaded');
 //Globals
 cur_comment = 0;
 submit_comment_box = null;
-
+current_url =null;
 
 current_comment_count = 0;
 
@@ -66,6 +66,18 @@ Scenecomments.prototype.initialize = function () {
 	submit_comment_box.inputTitle = "Add comment";
 	submit_comment_box.onKeyPressFunc = onCommentSubmit;
 	submit_comment_box.context = this;
+	
+	//init comment legend
+	// Init legend
+	$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
+	if (config_params.comment_legend_shown) {
+		$('#CommentsLegend').sfKeyHelp('show');
+	//	$("#pageNumber").css("bottom","40px");
+	}
+	else {
+		$('#CommentsLegend').sfKeyHelp('hide');
+		//$("#pageNumber").css("bottom","0px");
+	}
 };
 
 Scenecomments.prototype.handleShow = function (data) {
@@ -75,16 +87,26 @@ Scenecomments.prototype.handleShow = function (data) {
 	//$('#subredditsList').sfList({data:subredditsList.displaynames, index:0});
 
 //	alert(data.Url + ".json");
+	//some inits
 	 $("#subredditName.comments").text("");
 	 $("#userName.comments").text("");
+	 cur_comment = 0;
 	 $("#subredditName.comments").text(subreddit);
 	    if (username != "")
 	    {
 			$("#userName.comments").text("logged in as: " + username);
 	    }
-	$.getJSON(data.Url + ".json", parse_comments);
+	current_url = data.Url + ".json";
+	//getJsonWrapper(current_url, {}, parse_comments);
+	RefreshCommentsPage(current_url);
+	//$.getJSON(data.Url + ".json", parse_comments);
 	// this function will be called when the scene manager show this scene
 };
+
+function RefreshCommentsPage(url)
+{
+	getJsonWrapper(current_url, {}, parse_comments);
+}
 
 Scenecomments.prototype.handleHide = function () {
 	alert("Scenecomments.handleHide()");
@@ -112,20 +134,11 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	// TODO : write an key event handler when this scene get focued
 	switch (keyCode) {
 	case sf.key.LEFT: // PREV PAGE
-//    	if (page_number > 0) {
-//    		page_number--;
-//    		if (page_number == 0) { 
-//    			$.getJSON("http://www.reddit.com"+subreddit+"/.json", {limit: ARTICLES_IN_PAGE}, parse_reddit);
-//    		}
-//    		else {
-//    			$.getJSON("http://www.reddit.com"+subreddit+"/.json", {count:page_number*ARTICLES_IN_PAGE, before:before, limit: ARTICLES_IN_PAGE}, parse_reddit);
-//    		}
-//    	}
+
     	break;
 	
 	case sf.key.RIGHT: // NEXT PAGE
-//    	page_number++;
-//    	$.getJSON("http://www.reddit.com"+subreddit+"/.json", {count:page_number*ARTICLES_IN_PAGE, after:after, limit: ARTICLES_IN_PAGE}, parse_reddit);
+
     	break;
     
 	case sf.key.UP: // SELECT PREVIOUS
@@ -182,6 +195,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		
 	case sf.key.GREEN: 
         // TODO
+		alert("Post comment")
 		postComment();
 	
     	break;
@@ -205,14 +219,21 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		uid = art.attr("uid"); // unique id
 		
 		// Handle midcol
-		midcol = art.find(".midcol");
-		midcol.removeClass("dislikes");
-		midcol.toggleClass("unvoted likes");
+		midcol = $('#comment'+cur_comment + '> .midcol').first();
+	//	midcol = art.find(".midcol").first();
+		midcol.removeClass("dislikes").first();
+		midcol.toggleClass("unvoted likes").first();
+		
+		// Handle entry class
+		entry =  $('#comment'+cur_comment + '> .entry').first();
+		entry = art.find(".entry").first();
+		entry.removeClass("dislikes").first();
+		entry.toggleClass("unvoted likes").first();
 		
 		// Handle arrows
-		arrow = art.find(".arrow.up");
-		arrow_up = art.find(".arrow.upmod");
-		arrow_downmod = art.find(".arrow.downmod");
+		arrow = midcol.find(".arrow.up").first();
+		arrow_up = midcol.find(".arrow.upmod").first();
+		arrow_downmod = midcol.find(".arrow.downmod").first();
 		
 		if (arrow.length) { // if arrow exists 
 		    // UPVOTE
@@ -241,14 +262,14 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
         uid = art.attr("uid");
 	
 		// Handle midcol
-		midcol = art.find(".midcol");
+		midcol = art.find(".midcol").first();;
 		midcol.removeClass("likes");
 		midcol.toggleClass("unvoted dislikes");
 		
 		// Handle arrows
-		arrow = art.find(".arrow.down");
-		arrow_down = art.find(".arrow.downmod");
-		arrow_upmod = art.find(".arrow.upmod");
+		arrow = midcol.find(".arrow.down").first();;
+		arrow_down = midcol.find(".arrow.downmod").first();;
+		arrow_upmod = midcol.find(".arrow.upmod").first();;
 		
 		if (arrow.length) {
 		    // DOWNVOTE
@@ -275,7 +296,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 
 function parse_comments(data, textStatus, jqXHR) {
     // Init some globals
-	cur_comment = 0;
+	
     
     // Handle the user-specified amount of articles
 //    before = data.data.before;
@@ -316,7 +337,7 @@ function parse_comments(data, textStatus, jqXHR) {
 
 
     // Mark first comment and update page
-    markCommentSelector($('#comment0'));
+    markCommentSelector($('#comment' + cur_comment ));
         
     document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 	
@@ -330,7 +351,7 @@ function handle_comment( article, level, curret_list_node ) {
     // Create new comment
     var commentClass = 'thing id-'+ info.name;    
     curret_list_node.append(
-             '<div class="'+ commentClass + ' comment" id="comment' + current_comment_count + '"></div>');
+             '<div class="'+ commentClass + ' comment" id="comment' + current_comment_count + '" uid="'+article.kind+'_'+info.id+'"></div>');
     var comment = $('#comment' + current_comment_count );
     current_comment_count++;
     comment.append('<p class="parent"><a name="'+ info.id + '"></a></p>');
@@ -352,14 +373,14 @@ function handle_comment( article, level, curret_list_node ) {
     
     // Add the entry
     arr = [];
-    arr.push('<div class="entry">');
+    arr.push('<div class="entry unvoted">');
        
     // 	Add tagline
     	arr.push('<p class="tagline">');
             arr.push('<a class="author may-blank"> ' + info.author + '</a>');            
-          //  arr.push('<span class="score dislikes">' + (info.ups - info.downs - 1) + '</span>');
+            arr.push('<span class="score dislikes">' + (info.ups - info.downs - 1) + ' points</span>');
             arr.push('<span class="score unvoted">' + (info.ups - info.downs) + ' points</span>');
-          //  arr.push('<span class="score likes">' + (info.ups - info.downs + 1) + '</span>');           
+            arr.push('<span class="score likes">' + (info.ups - info.downs + 1) + ' points</span>');           
             var date = new Date(info.created);//TODO foramt to "3 hours ago"
         arr.push('</p>');
 
@@ -574,7 +595,9 @@ function postComment()
 	uid = art.attr("uid"); // unique id
 
 	//DEBUG
-	 $.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: uid, text: "That's right", uh:modhash}, verifyPostComment);
+	alert("$.post");
+	alert("$.post comment, thing id: " + uid);
+	 $.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: uid, text: "+1", uh:modhash}, verifyPostComment);
 //	submit_comment_box.onShow();
 //	$('#id="commentText"').focus();
 	
@@ -588,8 +611,8 @@ function verifyPostComment(data, textStatus, jqXHR) {
 		// Login success, refresh page
 		alert("post suscess");
 		modhash = data.json.data.modhash;
-		//$("#userName").text("logged in as: " + username);
-		refreshCommentPage();
+		
+		 RefreshCommentsPage(current_url);
 	}
 	else {
 		// Login failed, remove creds
