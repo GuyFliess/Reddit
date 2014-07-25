@@ -16,21 +16,29 @@ DEFUALT_SCROLL_OFFSET = 40;
 REDDIT_COMMENT_URL = "http://www.reddit.com/api/comment";
 
 comment_legend_items_1 = {
-		'UPDOWN':'Scroll comments',
-		'LEFTRIGHT':'Move between siblings',
+		
+		//'LEFTRIGHT':'Move between siblings',
+		//'VOL_UP' : 'scroll',
+		
+		'UPDOWN':'choose comment',	
 		'GREEN':'Add comment',
+	
 		'RETURN':'Articles',
 		'FF':'Upvote',
 		'STOP':'Downvote',
-		'BLUE':'More Keys'
+		'PAUSE': 'Toggle legend',
+		'REW' : 'Scroll up',
+		'RECORD' : 'Scroll down', 
+		//'BLUE':'More Keys'
+		//'RED' : 'Refresh'
 };
 
 comment_legend_items_2 = {
-		'FF':'Upvote',
-		'STOP':'Downvote',
-		'YELLOW':'Split Screen View',
-		'GREEN':'Edit Subreddit (When in Subreddits menu)',
-		'BLUE':'More Keys'
+		//'FF':'Upvote',
+		//'STOP':'Downvote',
+	//	'YELLOW':'Split Screen View',
+	//	'GREEN':'Edit Subreddit (When in Subreddits menu)',
+	//	'BLUE':'More Keys'
 };
 
 
@@ -67,7 +75,13 @@ Scenecomments.prototype.handleShow = function (data) {
 	//$('#subredditsList').sfList({data:subredditsList.displaynames, index:0});
 
 //	alert(data.Url + ".json");
-	
+	 $("#subredditName.comments").text("");
+	 $("#userName.comments").text("");
+	 $("#subredditName.comments").text(subreddit);
+	    if (username != "")
+	    {
+			$("#userName.comments").text("logged in as: " + username);
+	    }
 	$.getJSON(data.Url + ".json", parse_comments);
 	// this function will be called when the scene manager show this scene
 };
@@ -152,11 +166,11 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	    break;
     
 	
-    
+	case sf.key.REW:
 	case sf.key.VOL_UP: 
 		Scenecomments.prototype.Scroll(DEFUALT_SCROLL_OFFSET);
 		break;
-    
+	case sf.key.REC:
 	case sf.key.VOL_DOWN:
 
 		Scenecomments.prototype.Scroll(-DEFUALT_SCROLL_OFFSET);
@@ -268,7 +282,12 @@ function parse_comments(data, textStatus, jqXHR) {
 //    after = data.data.after;
 
     $('#wrapper').text("");
-    //$("#subredditName").text(articleName);
+    $("#subredditName.comments").text(subreddit);
+    if (username != "")
+    {
+		$("#userName.comments").text("logged in as: " + username);
+    }
+ 
     
     current_comment_count = 0;
 
