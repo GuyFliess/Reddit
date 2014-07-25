@@ -31,8 +31,6 @@ keystates = {
 		VIDEO:4
 };
 
-
-
 legend_items_1 = {
 		'UPDOWN':LEGEND_SCROLL_ARTICLE,
 		'LEFTRIGHT':LEGEND_SCROLL_PAGE,
@@ -316,18 +314,14 @@ function onSubredditKeypress(userStringSoFar) {
 }
 
 function verifyLogin(data, textStatus, jqXHR) {
-	alert("Verify login");
 	if (0 == data.json.errors.length) {
 		// Login success, refresh page
-		alert("login suscess");
 		modhash = data.json.data.modhash;
-		INFO_LOGIN
 		$("#userName").text(INFO_LOGIN + username);
 		refreshPage();
 	}
 	else {
 		// Login failed, remove creds
-		alert("Failed to login: "+ data.json.errors[0]);
 		username = "";
 		$('#loginFailurePrompt').sfPopup('show');
 	}	
@@ -679,7 +673,6 @@ function handleArticlesKeydown(keyCode) {
 			
 		case sf.key.GREEN: // GOTO COMMENTS
 			article_comments = $('#article'+ cur_article + " a.comments");
-			alert(article_comments.attr("href"));
 			
 			sf.scene.show('comments',{Url: article_comments.attr("href")} );
 			sf.scene.focus('comments');
@@ -898,7 +891,7 @@ function parseUsername(data, textStatus, jqXHR) {
  *******************************/
 
 SceneScene1.prototype.initialize = function () {
-	alert("SceneScene1.initialize()");
+	//alert("SceneScene1.initialize()");
 	// this function will be called only once when the scene manager show this scene first time
 	// initialize the scene controls and styles, and initialize your variables here
 	// scene HTML and CSS will be loaded before this function is called
@@ -1020,7 +1013,7 @@ SceneScene1.prototype.initialize = function () {
 };
 
 SceneScene1.prototype.handleShow = function (data) {
-	alert("SceneScene1.handleShow()");
+	//alert("SceneScene1.handleShow()");
 };
 
 function onUnload() {
@@ -1043,17 +1036,17 @@ function onUnload() {
 }
 
 SceneScene1.prototype.handleHide = function () {
-	alert("SceneScene1.handleHide()");
+	//alert("SceneScene1.handleHide()");
 	// this function will be called when the scene manager hide this scene
 };
 
 SceneScene1.prototype.handleFocus = function () {
-	alert("SceneScene1.handleFocus()");
+	//alert("SceneScene1.handleFocus()");
 	// this function will be called when the scene manager focus this scene
 };
 
 SceneScene1.prototype.handleBlur = function () {
-	alert("SceneScene1.handleBlur()");
+	//alert("SceneScene1.handleBlur()");
 	// this function will be called when the scene manager move focus to another scene from this scene
 		
 };
