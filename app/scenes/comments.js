@@ -11,7 +11,7 @@ commentsScroll = null;
 
 
 //Constants
-COMMENTS_IN_PAGE = 70;
+COMMENTS_IN_PAGE = 50;
 DEFUALT_SCROLL_OFFSET = 60;
 REDDIT_COMMENT_URL = "http://www.reddit.com/api/comment";
 
@@ -115,7 +115,9 @@ Scenecomments.prototype.handleShow = function (data) {
 
 function RefreshCommentsPage(url)
 {
-	getJsonWrapper(current_url, {}, parse_comments);
+	
+	//$.get(url, {limit: COMMENTS_IN_PAGE}, parse_comments);
+	getJsonWrapper(current_url, {limit: COMMENTS_IN_PAGE}, parse_comments);
 }
 
 Scenecomments.prototype.handleHide = function () {
@@ -325,7 +327,7 @@ function parse_comments(data, textStatus, jqXHR) {
 
     //handle each comment
     var i = 0;
-    while (current_comment_count < COMMENTS_IN_PAGE - 1)
+    while (current_comment_count < COMMENTS_IN_PAGE - 2)
     {
         handle_comment( data[1].data.children[i], 1, current_list);
         i++;
@@ -406,7 +408,7 @@ function handle_comment( article, level, curret_list_node ) {
     {
    
     if (typeof info.replies !== undefined && typeof info.replies.data !==  undefined && typeof  info.replies.data["children"] !== undefined)
-    if (current_comment_count < COMMENTS_IN_PAGE ){    	
+    if (current_comment_count < COMMENTS_IN_PAGE - 2 ){    	
 
     		var j = 0;
     		while (info.replies !== "" && info.replies.data.children[j] !== undefined && current_comment_count < COMMENTS_IN_PAGE){    		
