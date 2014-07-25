@@ -380,9 +380,10 @@ function handle_comment( article, level, curret_list_node ) {
 
 	    //comment body
 	    arr.push('<div class="usertext-body may-blank-within">');
-	        arr.push('<div class="md">');
-	            arr.push('<p>'+ info.body +'</p>');
-	        arr.push('</div>');   
+	    	arr.push(htmlDecode(info.body_html));
+//	        arr.push('<div class="md">');
+//	            arr.push('<p>'+ info.body +'</p>');
+//	        arr.push('</div>');   
 	    arr.push('</div>');   
         
     //close tagline
@@ -632,4 +633,10 @@ function onCommentSubmit(userAction, userString, id) {
 
 //TODO unite shared code base
 
+
+function htmlDecode(input){
+  var e = document.createElement('div');
+  e.innerHTML = input;
+  return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+}
 
