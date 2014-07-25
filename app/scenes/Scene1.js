@@ -84,6 +84,7 @@ menu_items = {
 // These are the default config params (After initial run, they will be read from the config file each time)
 config_params = {
 	legend_shown: 1, // Controls which legend items are currently shown. 0 = Don't show
+	comment_legend_shown: 1,
 	subreddits_list: ["FRONTPAGE", "ALL", "PICS", "FUNNY", "GAMING", "WORLDNEWS"],
 	
 	// Params for user session restore (when coming back from browser)
@@ -315,8 +316,10 @@ function onSubredditKeypress(userStringSoFar) {
 }
 
 function verifyLogin(data, textStatus, jqXHR) {
+	alert("Verify login");
 	if (0 == data.json.errors.length) {
 		// Login success, refresh page
+		alert("login suscess");
 		modhash = data.json.data.modhash;
 		INFO_LOGIN
 		$("#userName").text(INFO_LOGIN + username);
@@ -324,6 +327,7 @@ function verifyLogin(data, textStatus, jqXHR) {
 	}
 	else {
 		// Login failed, remove creds
+		alert("Failed to login: "+ data.json.errors[0]);
 		username = "";
 		$('#loginFailurePrompt').sfPopup('show');
 	}	
