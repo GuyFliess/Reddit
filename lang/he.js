@@ -25,9 +25,9 @@ INFO_LOGIN = 'מחובר כ ';
 INFO_SUBMITTED_BY = 'הועלה על ידי ';
 INFO_COMMENTS = ' תגובות';
 
-PROMPT_LOGOUT_1 = 'כרגע מחובר כ' ;
-PROMPT_LOGOUT_2 = '". האם תרצה להתנתק?';
-PROMPT_LOGIN = 'כרגע מנותק. האם תרצה להתחבר?';
+PROMPT_LOGOUT_1 = '.כרגע מחובר' ;
+PROMPT_LOGOUT_2 = '?האם תרצה להתנתק ';
+PROMPT_LOGIN = '?כרגע מנותק. האם תרצה להתחבר';
 PROMPT_LOGIN_SUCCESS = 'ההתחברות הושלמה';
 PROMPT_LOGIN_FAILED = 'ההתחברות נכשלה';
 PROMPT_NEED_LOGIN = 'בשביל להצביע, עליך להיות מחובר';
