@@ -27,8 +27,8 @@ comment_legend_items_1 = {
 		'FF': LEGEND_UPVOTE,
 		'STOP': LEGEND_DOWNVOTE,
 		'PAUSE': LEGEND_TOGGLE_LEGEND,
-		'REW' : LEGEND_SCROLL_UP,
-		'RECORD' : LEGEND_SCROLL_DOWN, 
+	//	'REW' : LEGEND_SCROLL_UP,
+	//	'RECORD' : LEGEND_SCROLL_DOWN, 
 		//'BLUE':'More Keys'
 		//'RED' : 'Refresh'
 };
