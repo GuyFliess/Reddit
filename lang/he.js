@@ -16,6 +16,13 @@ LEGEND_DOWNVOTE = 'הצבע למטה';
 LEGEND_SLIDESHOW_VIEW = 'מבט שקופיות';
 LEGEND_EDIT_SUBREDDIT = '(ערוך סאברדיט (כאשר בתפריט סאברדיטים';
 LEGEND_TOGGLE_LEGEND = 'הצג/הסתר מקרא';
+LEGEND_PAGE_UPDOWN = 'הורד/העלה עמוד';
+LEGEND_CHOOSE_COMMENT = 'בחר הערה';
+LEGEND_ARTICLES = 'כתבות';
+LEGEND_ADD_COMMENT = 'הוסף הערה';
+LEGEND_SCROLL_UP = 'גלול למעלה';
+LEGEND_SCROLL_DOWN = 'גלול למטה';
+
 
 BUTTON_YES = "כן";
 BUTTON_NO = "לא";
@@ -33,9 +40,12 @@ PROMPT_LOGIN_FAILED = 'ההתחברות נכשלה';
 PROMPT_NEED_LOGIN = 'בשביל להצביע, עליך להיות מחובר';
 PROMPT_CANT_EDIT = "(FRONTPAGE) לא ניתן לערוך את הסאברדיט הראשון";
 PROMPT_TIMEOUT = 'הבקשה נכשלה. אנא בדוק שחיבור האינטרנט זמין';
+PROMPT_NEED_LOGIN_COMMENT = 'כדי לבצע פעולה זאת עליך להיות מחובר';
 
 TITLE_SEARCH = "חפש ברדיט";
 TITLE_USERNAME = "שם משתמש";
 TITLE_PASSWORD = "סיסמא";
 TITLE_SUBREDDIT = "בחר סאברדיט";
 DESC_SUBREDDIT = "(לדוגמא \"science\")";
+
+COMMENT_ADD_COMMENT = 'הוסף הערה';

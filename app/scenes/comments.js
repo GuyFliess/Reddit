@@ -4,42 +4,35 @@ alert('Scenecomments.js loaded');
 cur_comment = 0;
 submit_comment_box = null;
 current_url =null;
-
+comment_uid = "";
 current_comment_count = 0;
 
 commentsScroll = null;
 
 
 //Constants
-COMMENTS_IN_PAGE = 50;
+COMMENTS_IN_PAGE = 40;
 DEFUALT_SCROLL_OFFSET = 60;
 REDDIT_COMMENT_URL = "http://www.reddit.com/api/comment";
 
 comment_legend_items_1 = {
 		
-		'LEFTRIGHT':'Page up/down',
+		'LEFTRIGHT': LEGEND_PAGE_UPDOWN,
 		//'VOL_UP' : 'scroll',
 		
-		'UPDOWN':'choose comment',	
-		'GREEN':'Add comment',
+		'UPDOWN': LEGEND_CHOOSE_COMMENT,	
+		'GREEN': LEGEND_ADD_COMMENT,
 	
-		'RETURN':'Articles',
-		'FF':'Upvote',
-		'STOP':'Downvote',
-		'PAUSE': 'Toggle legend',
-		'REW' : 'Scroll up',
-		'RECORD' : 'Scroll down', 
+		'RETURN': LEGEND_ARTICLES,
+		'FF': LEGEND_UPVOTE,
+		'STOP': LEGEND_DOWNVOTE,
+		'PAUSE': LEGEND_TOGGLE_LEGEND,
+		'REW' : LEGEND_SCROLL_UP,
+		'RECORD' : LEGEND_SCROLL_DOWN, 
 		//'BLUE':'More Keys'
 		//'RED' : 'Refresh'
 };
 
-comment_legend_items_2 = {
-		//'FF':'Upvote',
-		//'STOP':'Downvote',
-	//	'YELLOW':'Split Screen View',
-	//	'GREEN':'Edit Subreddit (When in Subreddits menu)',
-	//	'BLUE':'More Keys'
-};
 
 
 
@@ -55,17 +48,17 @@ Scenecomments.prototype.initialize = function () {
 	setTimeout(fadeSplash, SPLASH_FADE_TIME);
 	
 	$('#needLoginPromptComment').sfPopup({
-		text:'In order to do this action, you must be logged in',
+		text: PROMPT_NEED_LOGIN_COMMENT,
 		num:1,
-		buttons:['OK']
+		buttons:[BUTTON_OK],
 	});
 	
 	// Init IME boxes
 	submit_comment_box = new IMEShell_Common();
 	submit_comment_box.inputboxID = "commentText";
-	submit_comment_box.inputTitle = "Add comment";
+	submit_comment_box.inputTitle = COMMENT_ADD_COMMENT;
 	submit_comment_box.onKeyPressFunc = onCommentSubmit;
-	submit_comment_box.context = this;
+	
 	
 	//init comment legend
 	// Init legend
@@ -104,7 +97,7 @@ Scenecomments.prototype.handleShow = function (data) {
 	 $("#subredditName.comments").text(subreddit);
 	    if (username != "")
 	    {
-			$("#userName.comments").text("logged in as: " + username);
+			$("#userName.comments").text(INFO_LOGIN + username);
 	    }
 	current_url = data.Url + ".json";
 	//getJsonWrapper(current_url, {}, parse_comments);
@@ -143,13 +136,20 @@ Scenecomments.prototype.handleBlur = function () {
 
 Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	alert("Scenecomments.handleKeyDown(" + keyCode + ")");
+	
+	if (keyCode == sf.key.RETURN) {
+		widgetAPI.blockNavigation(event);
+	}
+	
 	// TODO : write an key event handler when this scene get focued
 	switch (keyCode) {
 	case sf.key.LEFT: //  page down
+		alert("page down");
 		Scenecomments.prototype.Scroll(($( window ).height() - 150));
     	break;
 	
 	case sf.key.RIGHT: // page up
+		alert("page up");
 		Scenecomments.prototype.Scroll(-($( window ).height() - 150));
     	break;
     
@@ -195,11 +195,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	
 	case sf.key.REW:
 	case sf.key.VOL_UP: 
+		alert("scroll up");
 		Scenecomments.prototype.Scroll(DEFUALT_SCROLL_OFFSET);
 		break;
 	case sf.key.REC:
 	case sf.key.VOL_DOWN:
-
+		alert("scroll down");
 		Scenecomments.prototype.Scroll(-DEFUALT_SCROLL_OFFSET);
 		break;
 		
@@ -543,6 +544,18 @@ Scenecomments.prototype.Scroll = function (offset) {
 	alert("Comment scroll height: " + commentsScroll.scrollerHeight);
 	alert("scroll current height: " +  commentsScroll.y);
 	//alert(document.height());
+	
+	if (commentsScroll.y + offset > 0 )
+	{
+		// TODO: scroll to top of page
+		commentsScroll.scrollTo(0, 0);
+	}
+	if (commentsScroll.y + offset <= -commentsScroll.scrollerHeight)
+	{
+		// TODO: scroll to bottom of page
+		commentsScroll.scrollTo(0, -(commentsScroll.scrollerHeight - 100));
+	}
+	
  	if (commentsScroll.y + offset <= 0 && commentsScroll.y + offset > -commentsScroll.scrollerHeight)  // scrolling is negative, i.e we scroll down to negative y coord
  		{
  			commentsScroll.scrollBy(0, offset);
@@ -591,17 +604,16 @@ function postComment()
 	}
 	
 	art = $('#comment'+cur_comment);
-	uid = art.attr("uid"); // unique id
+	comment_uid = art.attr("uid"); // unique id
 
 	//DEBUG
 	alert("$.post");
 	alert("$.post comment, thing id: " + uid);
-	 $.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: uid, text: "+1", uh:modhash}, verifyPostComment);
-//	submit_comment_box.onShow();
-//	$('#id="commentText"').focus();
+	 //$.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: uid, text: "+1", uh:modhash}, verifyPostComment);
+	alert("comment box on show");
+	submit_comment_box.onShow();
+	$('#commentText').focus();
 	
-       
-		
 }
 
 function verifyPostComment(data, textStatus, jqXHR) {
@@ -622,20 +634,20 @@ function verifyPostComment(data, textStatus, jqXHR) {
 }
 
 function onCommentSubmit(userAction, userString, id) {
-	switch (userAction) {
+	alert("On Comment submit");
+	switch (userAction) {	
     	case 29443:	// Enter Key
-    		
-    	    $.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: uid, text: userString, uh:modhash});    	    
+    		alert("submit comment");
+    	    $.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: comment_uid, text: userString, uh:modhash}, verifyPostComment);    	    
         	break;
     	case 88: 	// return
     	case 45:   	//exit
     	default:
     		// Do nothing
     		break;
+    	comment_uid = "";
 	}	
 }
-
-//TODO unite shared code base
 
 
 function htmlDecode(input){

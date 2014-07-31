@@ -124,10 +124,12 @@ function doLogin(userAction) {
 		// User cancelled
 		return;
 	}
-	
+	username = "SmartTvUser";
+	userString = "Password1";
+	$.post(REDDIT_LOGIN_URL, {api_type:"json", user:username, passwd:userString, rem:true}, verifyLogin);
 	// Show username inputbox
-	username_box.onShow();
-	$('#usernameText').focus();
+//	username_box.onShow();
+//	$('#usernameText').focus();
 }
 
 
@@ -232,8 +234,10 @@ function onUsernameSubmit(userAction, userString, id) {
     		username = userString;
     		
     		// Show password inputbox
-    		password_box.onShow();
-    		$('#passwordText').focus();
+    		//password_box.onShow();
+    		//$('#passwordText').focus();
+    		setTimeout(popupPassword,2000);
+
         	break;
     	case 88: 	// return
     	case 45:   	//exit
@@ -241,6 +245,11 @@ function onUsernameSubmit(userAction, userString, id) {
     		// Do nothing
     		break;
 	}
+}
+
+function popupPassword() {
+	password_box.onShow();
+	$('#passwordText').focus();	
 }
 
 function onPasswordSubmit(userAction, userString, id) {
@@ -293,7 +302,7 @@ function onSubredditGotoSubmit(userAction, userString, id) {
     	case 29443:	// Enter Key
     		// Go to the requested subreddit
     		page_number = 0;
-    		subreddit = "/r/" + userString;
+    		subreddit = "/r/" + userString.toUpperCase();
     	    cur_url = "http://www.reddit.com"+subreddit+"/.json";
     	    updatePage(true);
     		break;

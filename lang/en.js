@@ -16,6 +16,14 @@ LEGEND_DOWNVOTE = 'Downvote';
 LEGEND_SLIDESHOW_VIEW = 'Slideshow View';
 LEGEND_EDIT_SUBREDDIT = 'Edit Subreddit (When in Subreddits menu)';
 LEGEND_TOGGLE_LEGEND = 'Toggle legend';
+LEGEND_PAGE_UPDOWN = 'Page up/down';
+LEGEND_CHOOSE_COMMENT = 'Choose comment';
+LEGEND_ARTICLES = 'Articles';
+LEGEND_ADD_COMMENT = 'Add comment';
+LEGEND_SCROLL_UP = 'Scroll up';
+LEGEND_SCROLL_DOWN = 'Scroll down';
+
+
 
 BUTTON_YES = "YES";
 BUTTON_NO = "NO";
@@ -33,9 +41,12 @@ PROMPT_LOGIN_FAILED = 'Login failed';
 PROMPT_NEED_LOGIN = 'In order to upvote/downvote, you must be logged in';
 PROMPT_CANT_EDIT = "Can't edit the first subreddit entry (FRONTPAGE)";
 PROMPT_TIMEOUT = 'Request timed-out. Make sure you are still connected to the Internet';
+PROMPT_NEED_LOGIN_COMMENT = 'In order to do this action, you must be logged in';
 
 TITLE_SEARCH = "Search Reddit";
 TITLE_USERNAME = "Username";
 TITLE_PASSWORD = "Password";
 TITLE_SUBREDDIT = "Choose a subreddit";
 DESC_SUBREDDIT = "(for example \"science\")";
+
+COMMENT_ADD_COMMENT = 'Add comment';
