@@ -912,10 +912,12 @@ SceneScene1.prototype.initialize = function () {
 	fs = new FileSystem();
 	configFile = fs.openCommonFile("config.json",'r');
 	if (null == configFile) {
+		alert("NO CONFIG FILE");
 		// Create config file
 		updateConfig();
 	}
 	else {
+		alert("READING CONFIG FILE");
 		// Read config params
 		config_params = JSON.parse(configFile.readAll());
 		fs.closeCommonFile(configFile);

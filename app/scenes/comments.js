@@ -62,6 +62,9 @@ Scenecomments.prototype.initialize = function () {
 	
 	//init comment legend
 	// Init legend
+	
+	alert("INIT COMMENTS, config_params.comment_legend_shown: " + config_params.comment_legend_shown + " ");
+	alert("INIT COMMENTS, config_params.legend_shown: " + config_params.legend_shown + " ");
 	$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
 	if (config_params.comment_legend_shown) {
 		$('#CommentsLegend').sfKeyHelp('show');
@@ -78,6 +81,11 @@ Scenecomments.prototype.handleShow = function (data) {
 
 	articleName = data.Url;
 	$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
+	
+	if (config_params.comments_legend_shown == undefined)
+	{
+		config_params.comments_legend_shown = 1;
+	}
 	
 	if (config_params.comments_legend_shown) {
 		alert("show legend");
