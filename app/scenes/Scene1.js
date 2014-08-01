@@ -11,9 +11,11 @@ SPLASH_FADE_TIME = 1000;
 REDDIT_VOTE_URL = "http://www.reddit.com/api/vote";
 REDDIT_LOGIN_URL = "http://www.reddit.com/api/login";
 REDDIT_LOGOUT_URL = "http://www.reddit.com/logout";
+REDDIT_REGISTER_URL = "http://www.reddit.com/register";
 
-// Milliseconds before announcing timeout
+// Milliseconds before announcing request timeout
 REQUEST_TIMEOUT = 8000;
+PASSWORD_POPUP_TIMEOUT = 1000;
 
 // Title char count used to fit text to page
 MAX_CHARS_PER_PAGE = 500;
@@ -36,25 +38,37 @@ legend_items_1 = {
 		'LEFTRIGHT':LEGEND_SCROLL_PAGE,
 		'ENTER':LEGEND_VIEW_ARTICLE,
 		'GREEN':LEGEND_VIEW_COMMENTS,
-		'RETURN':LEGEND_CLOSE_IMAGE,
 		'TOOLS':LEGEND_MENU,
 		'RED':LEGEND_SUBREDDITS,
 		'BLUE':LEGEND_MORE_KEYS,
 };
 legend_items_2 = {
 		'FF':LEGEND_UPVOTE,
-		'STOP':LEGEND_DOWNVOTE,
+		'REW':LEGEND_DOWNVOTE,
 		//'YELLOW':LEGEND_SLIDESHOW_VIEW,
 		'GREEN':LEGEND_EDIT_SUBREDDIT,
 		'PAUSE':LEGEND_TOGGLE_LEGEND,
 		'BLUE':LEGEND_MORE_KEYS,
+};
+// Legend when displaying an image
+legend_items_image = {
+		'RETURN':LEGEND_CLOSE_IMAGE,
+		'PAUSE':LEGEND_TOGGLE_LEGEND,
+};
+//Legend when displaying a video
+legend_items_video = {
+		'RETURN':LEGEND_CLOSE_VIDEO,
+		'PLAY':LEGEND_PLAY,
+		'STOP':LEGEND_CLOSE_VIDEO,
+		'REW':LEGEND_REWIND,
+		'PAUSE':LEGEND_TOGGLE_LEGEND,
 };
 
 
 /********************************
  * Globals
  *******************************/
-fs = new FileSystem();
+
 cur_url = "";
 cur_article = 0;
 before = "";
@@ -63,6 +77,8 @@ after = "";
 page_number = 0;
 subreddit = "";
 key_state = keystates.MAIN;
+
+video_playing = false;
 
 username = "";
 modhash = "";
@@ -73,6 +89,7 @@ password_box = null;
 subreddit_box = null;
 
 var vidplayer;
+var fs;
 	
 menu_items = {
 	displaynames: [MENU_LOGIN_LOGOUT,	MENU_GOTO_SUBREDDIT,	MENU_SEARCH,	MENU_OPEN_IN_BROWSER],
@@ -81,8 +98,10 @@ menu_items = {
 
 // These are the default config params (After initial run, they will be read from the config file each time)
 config_params = {
-	legend_shown: 1, // Controls which legend items are currently shown. 0 = Don't show
+	article_legend_shown: 1, // Controls which legend items are currently shown. 0 = Don't show
 	comment_legend_shown: 1,
+	image_legend_shown: 1,
+	video_legend_shown: 1,
 	subreddits_list: ["FRONTPAGE", "ALL", "PICS", "FUNNY", "GAMING", "WORLDNEWS"],
 	
 	// Params for user session restore (when coming back from browser)
@@ -120,16 +139,21 @@ function launchExternalBrowser(url) {
 }
 
 function doLogin(userAction) {
-	if (0 != userAction) {
-		// User cancelled
-		return;
+	switch (userAction) {
+		// Login
+		case 0:
+			// Show username inputbox
+			username_box.onShow();
+			$('#usernameText').focus();
+			break;
+		// Cancel
+		case 1:
+			break;
+		// Register
+		case 2:
+			launchExternalBrowser(REDDIT_REGISTER_URL);
+			break;
 	}
-	username = "SmartTvUser";
-	userString = "Password1";
-	$.post(REDDIT_LOGIN_URL, {api_type:"json", user:username, passwd:userString, rem:true}, verifyLogin);
-	// Show username inputbox
-//	username_box.onShow();
-//	$('#usernameText').focus();
 }
 
 
@@ -148,6 +172,16 @@ function doLogout(userAction) {
 	$("#userName").text("");
 }
 
+
+function doExit(userAction) {
+	if (0 != userAction) {
+		// User cancelled
+		return;
+	}
+	
+	// Exit the app
+	widgetAPI.sendReturnEvent();
+}
 
 
 function menuLoginLogout() {
@@ -183,18 +217,44 @@ function menuOpenInBrowser() {
 	launchExternalBrowser("http://www.reddit.com"+subreddit);
 }
 
-// Toggle the legend
-function toggleLegend() {
-	if (config_params.legend_shown) {
+// Toggle the legends
+function toggleArticleLegend() {
+	if (config_params.article_legend_shown) {
 		$('#mainLegend').sfKeyHelp('hide');
-		config_params.legend_shown = 0;
-		$("#pageNumber").css("bottom","0");
+		config_params.article_legend_shown = 0;
 	}
 	else {
 		$('#mainLegend').sfKeyHelp(legend_items_1);
-		config_params.legend_shown = 1;
+		config_params.article_legend_shown = 1;
 		$('#mainLegend').sfKeyHelp('show');
-		$("#pageNumber").css("bottom","40px");
+	}
+	
+	updateConfig();
+}
+
+function toggleImageLegend() {
+	if (config_params.image_legend_shown) {
+		$('#mainLegend').sfKeyHelp('hide');
+		config_params.image_legend_shown = 0;
+	}
+	else {
+		$('#mainLegend').sfKeyHelp(legend_items_image);
+		config_params.image_legend_shown = 1;
+		$('#mainLegend').sfKeyHelp('show');
+	}
+	
+	updateConfig();
+}
+
+function toggleVideoLegend() {
+	if (config_params.video_legend_shown) {
+		$('#mainLegend').sfKeyHelp('hide');
+		config_params.video_legend_shown = 0;
+	}
+	else {
+		$('#mainLegend').sfKeyHelp(legend_items_video);
+		config_params.video_legend_shown = 1;
+		$('#mainLegend').sfKeyHelp('show');
 	}
 	
 	updateConfig();
@@ -202,13 +262,13 @@ function toggleLegend() {
 
 // Toggle the legend items
 function toggleLegendItems() {
-	if (config_params.legend_shown == 1) {
+	if (config_params.article_legend_shown == 1) {
 		$('#mainLegend').sfKeyHelp(legend_items_2);
-		config_params.legend_shown = 2;
+		config_params.article_legend_shown = 2;
 	}
-	else if (config_params.legend_shown == 2) {
+	else if (config_params.article_legend_shown == 2) {
 		$('#mainLegend').sfKeyHelp(legend_items_1);
-		config_params.legend_shown = 1;
+		config_params.article_legend_shown = 1;
 	} 
 }
 
@@ -233,10 +293,10 @@ function onUsernameSubmit(userAction, userString, id) {
     		// Save username
     		username = userString;
     		
-    		// Show password inputbox
+    		// Show password inputbox (with delay)
+    		setTimeout(popupPassword, PASSWORD_POPUP_TIMEOUT);
     		//password_box.onShow();
     		//$('#passwordText').focus();
-    		setTimeout(popupPassword,2000);
 
         	break;
     	case 88: 	// return
@@ -427,13 +487,23 @@ function updatePage(move_forward) {
 function parseReddit(data, textStatus, jqXHR) {
 	// Init some globals
     cur_article = 0;
+    $("#siteTable").text("");
+    
+    // Update subreddit name
+    if ("" == subreddit) {
+    	$("#subredditName").text("FRONTPAGE");
+    }
+    else {
+    	$("#subredditName").text(subreddit);
+    }
+    
     
     // Handle the user-specified amount of articles
     before = data.data.before;
     old_after = after;
     after = data.data.after;
-    $("#siteTable").text("");
-    $("#subredditName").text(subreddit);
+    
+    
     for (var i=0; i < ARTICLES_IN_PAGE; i++) {
     	handleArticle(i, data.data.children[i]);
     }
@@ -470,6 +540,7 @@ function unmarkSelector(x) {
 function imageloaded() {
 	$('#loadingId').sfLoading('hide');
 	
+	// Show the image
 	if ($("#imageDisplayer").attr("src")) {
 		$("#mainPage").css("opacity","0");
 		$("#SceneScene1").css("background-color","#202020");
@@ -582,6 +653,14 @@ function handleArticlesKeydown(keyCode) {
 		    	$("#loadingId").sfLoading("show");
 		    	$("#mainPage").css("opacity","0.1");
 		    	key_state = keystates.IMAGE;
+		    	
+		    	// Handle image legend
+		    	$('#mainLegend').sfKeyHelp('hide');
+		    	if (config_params.image_legend_shown) {
+		    		$('#mainLegend').sfKeyHelp(legend_items_image);
+		    		$('#mainLegend').sfKeyHelp('show');
+		    	}
+		    	
 		    }
 		    else if (isYoutubeUrl(url)) {	
 		    	// Youtube link - Play with youtube player
@@ -592,8 +671,18 @@ function handleArticlesKeydown(keyCode) {
 		    	$("#mainPage").css("opacity","0");
 		    	vidId = getYoutubeVideoId(url);
 		    	vidplayer[0].loadVideoById(vidId, 0, "hd720");
+		    	video_playing = true;
 		        vidplayer.css("opacity","1");
 		        key_state = keystates.VIDEO;
+		        
+		        // Handle video legend
+		    	$('#mainLegend').sfKeyHelp('hide');
+		    	if (config_params.video_legend_shown) {
+		    		$('#mainLegend').sfKeyHelp(legend_items_video);
+		    		$('#mainLegend').sfKeyHelp('show');
+		    	}
+		        
+		        
 		    }
 		    else {
 		    	// Normal link - open in browser
@@ -638,7 +727,7 @@ function handleArticlesKeydown(keyCode) {
 			}
 			break;
 	    
-		case sf.key.STOP: // DOWNVOTE
+		case sf.key.REW: // DOWNVOTE
 			// Check that user is logged in
 			if (username == "") {
 				$('#needLoginPrompt').sfPopup('show');
@@ -693,7 +782,7 @@ function handleArticlesKeydown(keyCode) {
 			break;
 			
 		case sf.key.PAUSE: // TOGGLE LEGEND
-		    toggleLegend();
+		    toggleArticleLegend();
 		    break;
 			
 		case sf.key.BLUE: // TOGGLE LEGEND ITEMS
@@ -705,6 +794,10 @@ function handleArticlesKeydown(keyCode) {
 			$("#menuBox").css("opacity","0.8");
 			key_state = keystates.MENU;
 		    break;
+		    
+		case sf.key.RETURN: // EXIT APPLICATION (with prompt)
+			$('#exitPrompt').sfPopup('show');
+			break;
 		    
 		default:
 			alert("handle default key event, key code(" + keyCode + ")");
@@ -792,8 +885,13 @@ function handleMenuKeydown(keyCode) {
 }
 
 function handleImageKeydown(keyCode) {
-	switch (keyCode) {	 
-	    // Stop and hide the player
+	switch (keyCode) {
+		// Toggle image legend
+		case sf.key.PAUSE:
+		    toggleImageLegend();
+		    break;
+	
+	    // Hide the image
 		case sf.key.RETURN:
 			// Hide loading sprite & image
 			$('#loadingId').sfLoading('hide');
@@ -802,32 +900,61 @@ function handleImageKeydown(keyCode) {
 		    $("#SceneScene1").css("background-color","#ffffff");
 		    $("#mainPage").css("opacity","1");
 		    
+		    // Restore article legend
+		    if (config_params.article_legend_shown) {
+		    	$('#mainLegend').sfKeyHelp(legend_items_1);
+		    	$('#mainLegend').sfKeyHelp('show');
+		    }
+		    else {
+		    	$('#mainLegend').sfKeyHelp('hide');
+		    }
+		    
 		    key_state = keystates.MAIN;
 		    
 	        break;
+	        
+	    
 	}
 }
 
 function handleVideoKeydown(keyCode) {
 	switch (keyCode) {	 
-		// Resume the player
+		// Toggle video legend
+		case sf.key.PAUSE: 
+		    toggleVideoLegend();
+		    break;
+	
+		// Resume/Pause the player
 		case sf.key.PLAY:
-			vidplayer[0].playVideo();
+			if (video_playing) {
+				vidplayer[0].pauseVideo();
+				video_playing = false;
+			}
+			else {
+				vidplayer[0].playVideo();
+				video_playing = true;
+			}
+			
 	        break;
-	        
-	    // Pause the player
-		case sf.key.PAUSE:
-			vidplayer[0].pauseVideo();
-	        break;
-	        
+	            
 	    // Rewind the player
 		case sf.key.REW:
 			vidplayer[0].seekTo(0, true);
 	        break;
-	    
+	        
 	    // Stop and hide the player
 		case sf.key.RETURN: 
 		case sf.key.STOP:
+			
+			// Restore article legend
+		    if (config_params.article_legend_shown) {
+		    	$('#mainLegend').sfKeyHelp(legend_items_1);
+		    	$('#mainLegend').sfKeyHelp('show');
+		    }
+		    else {
+		    	$('#mainLegend').sfKeyHelp('hide');
+		    }
+			
 			key_state = keystates.MAIN;
 			vidplayer[0].stopVideo();
 		    vidplayer.css("opacity","0");
@@ -912,12 +1039,10 @@ SceneScene1.prototype.initialize = function () {
 	fs = new FileSystem();
 	configFile = fs.openCommonFile("config.json",'r');
 	if (null == configFile) {
-		alert("NO CONFIG FILE");
 		// Create config file
 		updateConfig();
 	}
 	else {
-		alert("READING CONFIG FILE");
 		// Read config params
 		config_params = JSON.parse(configFile.readAll());
 		fs.closeCommonFile(configFile);
@@ -926,8 +1051,8 @@ SceneScene1.prototype.initialize = function () {
 	// Init prompts
 	$('#loginPrompt').sfPopup({
 		text:PROMPT_LOGIN,
-		num:2,
-		buttons:[BUTTON_YES,BUTTON_NO],
+		num:3,
+		buttons:[BUTTON_YES,BUTTON_NO,BUTTON_REGISTER],
 		callback:doLogin
 	});
 	
@@ -962,6 +1087,13 @@ SceneScene1.prototype.initialize = function () {
 		buttons:[BUTTON_OK]
 	});
 	
+	$('#exitPrompt').sfPopup({
+		text:PROMPT_EXIT,
+		num:2,
+		buttons:[BUTTON_YES,BUTTON_NO],
+		callback:doExit
+	});
+	
 	// Init menu box
 	$('#menuBox').sfList({data:menu_items.displaynames, index:0});
 	
@@ -994,13 +1126,11 @@ SceneScene1.prototype.initialize = function () {
 		
 	// Init legend
 	$('#mainLegend').sfKeyHelp(legend_items_1);
-	if (config_params.legend_shown) {
+	if (config_params.article_legend_shown) {
 		$('#mainLegend').sfKeyHelp('show');
-		$("#pageNumber").css("bottom","40px");
 	}
 	else {
 		$('#mainLegend').sfKeyHelp('hide');
-		$("#pageNumber").css("bottom","0px");
 	}
 	
 	// Get the logged-in username info (if any)

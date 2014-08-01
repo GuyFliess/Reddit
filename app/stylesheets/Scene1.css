@@ -7795,16 +7795,18 @@ body.with-listing-chooser.listing-chooser-collapsed .listing-chooser .grippy:aft
 }
 
 #pageNumber {
-    position: fixed;
+	position:absolute;
+	top: 10px;
+	left: 50%;
     font-size: 25px;
-    text-align: center;
-	
-    bottom: 40px;
-    height: 40px;
-    width: 100%;
-    background-color: #CEE3F8;
-    border-top: 1px solid #5F99CF;    
 }
+
+#userName {
+	display: inline;
+	float: right;
+	font-size: 15px;
+}
+
 
 #subredditsList{
 	position : absolute;
@@ -7823,7 +7825,7 @@ body.with-listing-chooser.listing-chooser-collapsed .listing-chooser .grippy:aft
 
 #menuBox{
 	position : absolute;
-	bottom : 40px;
+	bottom : 0px;
 	left : 0;
 	width : 300px;
 	height: 200px;
@@ -7856,12 +7858,6 @@ body.with-listing-chooser.listing-chooser-collapsed .listing-chooser .grippy:aft
 	position : absolute;
 	left : 0px;
 	bottom : 0px;
-}
-
-#userName {
-	display: inline;
-	float: right;
-	font-size: 15px;
 }
 
 #ytplayer {

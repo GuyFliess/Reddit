@@ -7,9 +7,10 @@ LEGEND_SCROLL_ARTICLE = 'Scroll Article';
 LEGEND_SCROLL_PAGE = 'Scroll Page';
 LEGEND_VIEW_ARTICLE = 'View Article';
 LEGEND_VIEW_COMMENTS = 'View Comments';
-LEGEND_CLOSE_IMAGE = 'Close Image/Video';
-LEGEND_MENU = 'Menu';
-LEGEND_SUBREDDITS = 'Subreddits';
+LEGEND_CLOSE_IMAGE = 'Close Image';
+LEGEND_CLOSE_VIDEO = 'Close Video';
+LEGEND_MENU = 'Actions Menu';
+LEGEND_SUBREDDITS = 'Subreddits Menu';
 LEGEND_MORE_KEYS = 'More Keys';
 LEGEND_UPVOTE = 'Upvote';
 LEGEND_DOWNVOTE = 'Downvote';
@@ -22,12 +23,13 @@ LEGEND_ARTICLES = 'Articles';
 LEGEND_ADD_COMMENT = 'Add comment';
 LEGEND_SCROLL_UP = 'Scroll up';
 LEGEND_SCROLL_DOWN = 'Scroll down';
-
-
+LEGEND_PLAY = 'Play/Pause Video';
+LEGEND_REWIND = 'Rewind Video';
 
 BUTTON_YES = "YES";
 BUTTON_NO = "NO";
 BUTTON_OK = "OK";
+BUTTON_REGISTER = "REGISTER";
 
 INFO_LOGIN = 'logged in as: ';
 INFO_SUBMITTED_BY = 'submitted by ';
@@ -42,6 +44,7 @@ PROMPT_NEED_LOGIN = 'In order to upvote/downvote, you must be logged in';
 PROMPT_CANT_EDIT = "Can't edit the first subreddit entry (FRONTPAGE)";
 PROMPT_TIMEOUT = 'Request timed-out. Make sure you are still connected to the Internet';
 PROMPT_NEED_LOGIN_COMMENT = 'In order to do this action, you must be logged in';
+PROMPT_EXIT = 'Are you sure you wish to exit?';
 
 TITLE_SEARCH = "Search Reddit";
 TITLE_USERNAME = "Username";
