@@ -53,3 +53,8 @@ TITLE_SUBREDDIT = "בחר סאברדיט";
 DESC_SUBREDDIT = "(לדוגמא \"science\")";
 
 COMMENT_ADD_COMMENT = 'הוסף הערה';
+
+TYPE_SELF = 'פנימי';
+TYPE_EXTERNAL = 'חיצוני';
+TYPE_IMAGE = 'תמונה';
+TYPE_VIDEO = 'וידאו';

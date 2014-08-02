@@ -53,3 +53,8 @@ TITLE_SUBREDDIT = "Choose a subreddit";
 DESC_SUBREDDIT = "(for example \"science\")";
 
 COMMENT_ADD_COMMENT = 'Add comment';
+
+TYPE_SELF = 'self';
+TYPE_EXTERNAL = 'external';
+TYPE_IMAGE = 'image';
+TYPE_VIDEO = 'video';

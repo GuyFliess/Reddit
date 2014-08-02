@@ -399,9 +399,15 @@ function verifyLogin(data, textStatus, jqXHR) {
 function handleArticle(index, article ) {
     info = article.data;
     var arr;
-        
+    
+    // Get article type    	
+    if (true == info.is_self) type=TYPE_SELF;
+   	else if (isImageUrl(info.url)) type=TYPE_IMAGE;
+   	else if (isYoutubeUrl(info.url)) type=TYPE_VIDEO;
+   	else type=TYPE_EXTERNAL;
+    
     // Create new article
-    $("#siteTable").append('<div id="article'+index+'" class="thing link" uid="'+article.kind+'_'+info.id+'" isself="'+info.is_self+'"></div>');
+    $("#siteTable").append('<div id="article'+index+'" class="thing link" uid="'+article.kind+'_'+info.id+'" type="'+type+'"></div>');
     article = $('#article'+index);
        
     // Add the rank
@@ -441,7 +447,7 @@ function handleArticle(index, article ) {
         arr.push('<p class="title"> <a class="title" href="' + info.url + '"> ' + info.title + '</a></p>');   
     
         // Add tagline
-        arr.push('<p class="tagline"> ' + INFO_SUBMITTED_BY + info.author + ', ' + info.num_comments + INFO_COMMENTS + '</p>');
+        arr.push('<p class="tagline"> ' + INFO_SUBMITTED_BY + info.author + ', ' + info.num_comments + INFO_COMMENTS + ', ' + type + '</p>');
         
     // End the entry
     arr.push('<div class="clearleft"></div>');
@@ -639,54 +645,56 @@ function handleArticlesKeydown(keyCode) {
 			article = $('#article'+ cur_article);
 		    article_title = article.find("a.title");
 		    url = article_title.attr("href");
-		    isself = article.attr("isself"); 
+		    type = article.attr("type");
 		    
-		    if ("true" == isself) {
-		    	// Comments link - Open in comments view
-		    	sf.scene.show('comments',{Url: url} );
-				sf.scene.focus('comments');
-				sf.scene.hide("Scene1");
-		    }
-		    else if (isImageUrl(url)) {
-		    	// Image link - Show in <img> element
-		    	$("#imageDisplayer").attr("src",url);
-		    	$("#loadingId").sfLoading("show");
-		    	$("#mainPage").css("opacity","0.1");
-		    	key_state = keystates.IMAGE;
-		    	
-		    	// Handle image legend
-		    	$('#mainLegend').sfKeyHelp('hide');
-		    	if (config_params.image_legend_shown) {
-		    		$('#mainLegend').sfKeyHelp(legend_items_image);
-		    		$('#mainLegend').sfKeyHelp('show');
-		    	}
-		    	
-		    }
-		    else if (isYoutubeUrl(url)) {	
-		    	// Youtube link - Play with youtube player
-		    	if (vidplayer === undefined) {
-		    		alert("Youtube player uninitialized!");
-		    		break;
-		    	} 
-		    	$("#mainPage").css("opacity","0");
-		    	vidId = getYoutubeVideoId(url);
-		    	vidplayer[0].loadVideoById(vidId, 0, "hd720");
-		    	video_playing = true;
-		        vidplayer.css("opacity","1");
-		        key_state = keystates.VIDEO;
-		        
-		        // Handle video legend
-		    	$('#mainLegend').sfKeyHelp('hide');
-		    	if (config_params.video_legend_shown) {
-		    		$('#mainLegend').sfKeyHelp(legend_items_video);
-		    		$('#mainLegend').sfKeyHelp('show');
-		    	}
-		        
-		        
-		    }
-		    else {
-		    	// Normal link - open in browser
-		    	launchExternalBrowser(url);				
+		    switch (type) {
+		    	case TYPE_SELF:
+		    		// Comments link - Open in comments view
+			    	sf.scene.show('comments',{Url: url} );
+					sf.scene.focus('comments');
+					sf.scene.hide("Scene1");
+					break;
+					
+		    	case TYPE_IMAGE:
+		    		// Image link - Show in <img> element
+			    	$("#imageDisplayer").attr("src",url);
+			    	$("#loadingId").sfLoading("show");
+			    	$("#mainPage").css("opacity","0.1");
+			    	key_state = keystates.IMAGE;
+			    	
+			    	// Handle image legend
+			    	$('#mainLegend').sfKeyHelp('hide');
+			    	if (config_params.image_legend_shown) {
+			    		$('#mainLegend').sfKeyHelp(legend_items_image);
+			    		$('#mainLegend').sfKeyHelp('show');
+			    	}
+			    	break;
+			    	
+		    	case TYPE_VIDEO:
+		    		// Youtube link - Play with youtube player
+			    	if (vidplayer === undefined) {
+			    		alert("Youtube player uninitialized!");
+			    		break;
+			    	} 
+			    	$("#mainPage").css("opacity","0");
+			    	vidId = getYoutubeVideoId(url);
+			    	vidplayer[0].loadVideoById(vidId, 0, "hd720");
+			    	video_playing = true;
+			        vidplayer.css("opacity","1");
+			        key_state = keystates.VIDEO;
+			        
+			        // Handle video legend
+			    	$('#mainLegend').sfKeyHelp('hide');
+			    	if (config_params.video_legend_shown) {
+			    		$('#mainLegend').sfKeyHelp(legend_items_video);
+			    		$('#mainLegend').sfKeyHelp('show');
+			    	}
+			    	break;
+			    
+		    	case TYPE_EXTERNAL:
+		    		// Normal link - open in browser
+			    	launchExternalBrowser(url);
+			    	break;
 		    }
 		    
 		    break;

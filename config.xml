@@ -6,7 +6,7 @@
 <BigThumbIcon>icon/sampleIcon_115_95.png</BigThumbIcon>
 <ListIcon>icon/sampleIcon_85_70.png</ListIcon>
 <BigListIcon>icon/sampleIcon_95_78.png</BigListIcon>
-<category> </category>
+<category>Information</category>
 <autoUpdate>n</autoUpdate>
 <ver>1.0.1.0</ver>
 <mgrver> </mgrver>
@@ -18,7 +18,7 @@
 <videomute>n</videomute>
 <dcont>y</dcont>
 <widgetname>RedditTV</widgetname>
-<description> </description>
+<description>A reddit client for Samsung's SmartTV</description>
 <width>1280</width>
 <height>720</height>
 <author> <name> </name>
