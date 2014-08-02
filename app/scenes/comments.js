@@ -24,13 +24,9 @@ comment_legend_items_1 = {
 		'GREEN': LEGEND_ADD_COMMENT,
 	
 		'RETURN': LEGEND_ARTICLES,
-		'FF': LEGEND_UPVOTE,
-		'STOP': LEGEND_DOWNVOTE,
+		'FF': LEGEND_UPVOTE,		
 		'PAUSE': LEGEND_TOGGLE_LEGEND,
-	//	'REW' : LEGEND_SCROLL_UP,
-	//	'RECORD' : LEGEND_SCROLL_DOWN, 
-		//'BLUE':'More Keys'
-		//'RED' : 'Refresh'
+		'REW' : LEGEND_DOWNVOTE,
 };
 
 
@@ -149,7 +145,6 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		widgetAPI.blockNavigation(event);
 	}
 	
-	// TODO : write an key event handler when this scene get focued
 	switch (keyCode) {
 	case sf.key.LEFT: //  page down
 		alert("page down");
@@ -201,24 +196,21 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	    break;
     
 	
-	case sf.key.REW:
-	case sf.key.VOL_UP: 
-		alert("scroll up");
-		Scenecomments.prototype.Scroll(DEFUALT_SCROLL_OFFSET);
-		break;
-	case sf.key.REC:
-	case sf.key.VOL_DOWN:
-		alert("scroll down");
-		Scenecomments.prototype.Scroll(-DEFUALT_SCROLL_OFFSET);
-		break;
+	
+//	case sf.key.STOP: 
+//		alert("scroll up");
+//		Scenecomments.prototype.Scroll(DEFUALT_SCROLL_OFFSET);
+//		break;
+//	case sf.key.REC:
+//		alert("scroll down");
+//		Scenecomments.prototype.Scroll(-DEFUALT_SCROLL_OFFSET);
+//		break;
 		
-	case sf.key.RED:
-		
+	case sf.key.RED:		
 		break;
 		
 	case sf.key.GREEN: 
-        // TODO
-		alert("Post comment")
+		alert("Post comment");
 		postComment();
 	
     	break;
@@ -274,7 +266,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		}
 		break;
     
-	case sf.key.STOP: // DOWNVOTE
+	case sf.key.REW: // DOWNVOTE	
 		// Check that user is logged in
 		if (username == "") {
 			$('#needLoginPromptComment').sfPopup('show');
@@ -554,16 +546,13 @@ Scenecomments.prototype.Scroll = function (offset) {
 	//alert(document.height());
 	
 	if (commentsScroll.y + offset > 0 )
-	{
-		// TODO: scroll to top of page
+	{ 
 		commentsScroll.scrollTo(0, 0);
 	}
 	if (commentsScroll.y + offset <= -commentsScroll.scrollerHeight)
 	{
-		// TODO: scroll to bottom of page
 		commentsScroll.scrollTo(0, -(commentsScroll.scrollerHeight - 100));
-	}
-	
+	}	
  	if (commentsScroll.y + offset <= 0 && commentsScroll.y + offset > -commentsScroll.scrollerHeight)  // scrolling is negative, i.e we scroll down to negative y coord
  		{
  			commentsScroll.scrollBy(0, offset);
