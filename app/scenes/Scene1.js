@@ -437,9 +437,11 @@ function handleArticle(index, article ) {
     }
     
     // Add permalink to comments
-    // TODO: Maybe add using the "reddit API" method (add "/comments/<id>/.json")
-    article.append('<a class="comments" href="http://www.reddit.com' + info.permalink +'"> </a>');
-    
+
+    if (info.subreddit != null) 
+    	article.append('<a class="comments" href="http://www.reddit.com/' + 'r/' + info.subreddit + '/comments/' + info.id +'"> </a>');
+    else    	
+    	article.append('<a class="comments" href="http://www.reddit.com/comments/' + info.id +'"> </a>');
     // Add the entry
     arr = [];
     arr.push('<div class="entry">');
