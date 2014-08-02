@@ -161,30 +161,19 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
         	unmarkCommentSelector($('#comment'+cur_comment));
             cur_comment--;
             markCommentSelector($('#comment'+cur_comment));
-        //    commentsScroll.scrollToElement('#comment'+cur_comment, "1s");
-            //Scenecomments.prototype.Scroll(DEFUALT_SCROLL_OFFSET);
-            
         }
         break;
         
 	case sf.key.DOWN: // SELECT NEXT
-        if (cur_comment < COMMENTS_IN_PAGE - 1) {
+        if (cur_comment < current_comment_count - 1) {
         	unmarkCommentSelector($('#comment'+cur_comment));
         	cur_comment++;
-            markCommentSelector($('#comment'+cur_comment));
-         //   commentsScroll.scrollToElement('#comment'+cur_comment, "1s");
-//            Scenecomments.prototype.Scroll(-DEFUALT_SCROLL_OFFSET);            
+            markCommentSelector($('#comment'+cur_comment));         
         }
         break;
     
 	case sf.key.ENTER: // GOTO LINK
-		
-		
-//	    article_title = $('#article'+ cur_article + " a.title");
-//	    //alert(article_title.attr("href"));
-//	    //window.location = article_title.attr("href");
-//	    $("#iframeId").attr("src",article_title.attr("href"));
-//	    $('#loadingId').sfLoading('show');
+
 	    break;
 	    
 	case sf.key.RETURN: // Back to articles
@@ -194,9 +183,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		sf.scene.show('Scene1');
 		sf.scene.focus('Scene1');
 	    break;
-    
-	
-	
+
 //	case sf.key.STOP: 
 //		alert("scroll up");
 //		Scenecomments.prototype.Scroll(DEFUALT_SCROLL_OFFSET);
@@ -310,7 +297,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 };
 
 function parse_comments(data, textStatus, jqXHR) {
-    
+    alert("Pasring comments!");
+
+    if (commentsScroll != null) {
+		commentsScroll.destroy();
+		commentsScroll = null;
+	}
     $('#wrapper').text("");
     $("#subredditName.comments").text(subreddit);
     if (username != "")
@@ -332,6 +324,7 @@ function parse_comments(data, textStatus, jqXHR) {
     var i = 0;
     while (current_comment_count < COMMENTS_IN_PAGE - 2)
     {
+    	if (data[1].data.children[i] === undefined) break; // no more comments
         handle_comment( data[1].data.children[i], 1, current_list);
         i++;
     }
