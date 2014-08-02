@@ -277,6 +277,7 @@ function onSearchSubmit(userAction, userString, id) {
     	case 29443:	// Enter Key
     		page_number = 0;
     		cur_url = "http://www.reddit.com/search/.json?q="+userString;
+    		//subreddit = 'search "' + userString + '"';
         	updatePage(true);
         	break;
     	case 88: 	// return
@@ -1111,7 +1112,7 @@ SceneScene1.prototype.initialize = function () {
 	// Init IME boxes
 	search_box = new IMEShell_Common();
 	search_box.inputboxID = "searchText";
-	search_box.inputTitle = TITLE_SEARCH ;
+	search_box.inputTitle = TITLE_SEARCH;
 	search_box.onKeyPressFunc = onSearchSubmit;
 	
 	username_box = new IMEShell_Common();
