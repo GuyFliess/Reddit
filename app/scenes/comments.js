@@ -13,6 +13,7 @@ commentsScroll = null;
 //Constants
 COMMENTS_IN_PAGE = 40;
 DEFUALT_SCROLL_OFFSET = 60;
+MAXIMUM_LETTERS_IN_COMMENT = 500;
 REDDIT_COMMENT_URL = "http://www.reddit.com/api/comment";
 
 comment_legend_items_1 = {
@@ -24,8 +25,9 @@ comment_legend_items_1 = {
 		'GREEN': LEGEND_ADD_COMMENT,
 	
 		'RETURN': LEGEND_ARTICLES,
-		'FF': LEGEND_UPVOTE,				
 		'REW' : LEGEND_DOWNVOTE,
+		'FF': LEGEND_UPVOTE,				
+	
 		'PAUSE': LEGEND_TOGGLE_LEGEND,
 };
 
@@ -54,6 +56,7 @@ Scenecomments.prototype.initialize = function () {
 	submit_comment_box.inputboxID = "commentText";
 	submit_comment_box.inputTitle = COMMENT_ADD_COMMENT;
 	submit_comment_box.onKeyPressFunc = onCommentSubmit;
+	submit_comment_box.setMaxlength(MAXIMUM_LETTERS_IN_COMMENT);
 	
 	
 	//init comment legend
@@ -264,9 +267,15 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
         uid = art.attr("uid");
 	
 		// Handle midcol
-		midcol = art.find(".midcol").first();;
+        midcol = $('#comment'+cur_comment + '> .midcol').first();
 		midcol.removeClass("likes");
 		midcol.toggleClass("unvoted dislikes");
+		
+		// Handle entry class
+		entry =  $('#comment'+cur_comment + '> .entry').first();
+		entry = art.find(".entry").first();
+		entry.removeClass("likes").first();
+		entry.toggleClass("unvoted dislikes").first();
 		
 		// Handle arrows
 		arrow = midcol.find(".arrow.down").first();;
@@ -366,7 +375,7 @@ function handle_comment( article, level, curret_list_node ) {
     arr.push('<div class="entry unvoted">');
        
     // 	Add tagline
-    	arr.push('<p class="tagline">');
+    	arr.push('<p class="tagline2">');
             arr.push('<a class="author may-blank"> ' + info.author + '</a>');            
             arr.push('<span class="score dislikes">' + (info.ups - info.downs - 1) + ' points</span>');
             arr.push('<span class="score unvoted">' + (info.ups - info.downs) + ' points</span>');
@@ -465,10 +474,25 @@ function handle_title_comment(article_data, index, head)
         arr.push('<p class="title"> <a class="title" href="' + info.url + '"> ' + info.title + '</a></p>');   
     
         // Add tagline
-        arr.push('<p class="tagline"> submitted by ' + info.author + ', ' + info.num_comments + ' comments</p>');
+        arr.push('<p class="tagline2"> submitted by ' + info.author + ', ' + info.num_comments + ' comments</p>');
         
-    // End the entry
+        alert("info.selftext_html: " + info.selftext_html);
+        //Add self text if exsits
+        if (info.selftext_html != null)
+    	{
+        	alert("adding self.text");
+    		arr.push('<div class="expando">');    				
+    				arr.push('<div class="usertext-body may-blank-within Comment-Title">');
+    					
+    					arr.push(htmlDecode(info.selftext_html));
+    				arr.push('</div>');
+			arr.push('</div>');
+  
+	    arr.push('</div>');   
+    	}
+        
     arr.push('<div class="clearleft"></div>');
+    // End the entry
     arr.push('</div>');
     article.append(arr.join(''));
 
@@ -479,17 +503,6 @@ function handle_title_comment(article_data, index, head)
 
 
 
-function markCommentSelector(el) {
-	x = el.children(".entry");
-    x.css("background-color", "#FFFF99");
-    x.css("border-color", "#FF6666");
-//    x.find(".usertext-body").children().each(function (i) {
-//        $(this).css('font-size','40px');  
-//        });
-//    
-    scrollToMarkedComment(el);
-   //commentsScroll.scrollToElement(x);
-} 
 
 function scrollToMarkedComment(x){ 
 //	alert("height of windows: " +commentsScroll.scrollerHeight);
@@ -518,6 +531,15 @@ function scrollToMarkedComment(x){
 
 }
 
+
+function markCommentSelector(el) {
+	x = el.children(".entry");
+    x.css("background-color", "#FFFF99");
+    x.css("border-color", "#FF6666");
+
+    scrollToMarkedComment(el);
+   //commentsScroll.scrollToElement(x);
+} 
 
 function unmarkCommentSelector(x) {
 	
@@ -597,10 +619,10 @@ function postComment()
 	comment_uid = art.attr("uid"); // unique id
 
 	//DEBUG
-	alert("$.post");
-	alert("$.post comment, thing id: " + uid);
-	 //$.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: uid, text: "+1", uh:modhash}, verifyPostComment);
-	alert("comment box on show");
+//	alert("$.post");
+//	alert("$.post comment, thing id: " + comment_uid);
+//	$.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: comment_uid, text: "+1", uh:modhash}, verifyPostComment);
+//	alert("comment box on show");
 	submit_comment_box.onShow();
 	$('#commentText').focus();
 	

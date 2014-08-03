@@ -30,3 +30,95 @@
 	overflow: hidden;
 }
 
+.Comment-Title {
+	padding: 0 5px;
+background-color: #fafafa;
+border: 1px solid #369;
+border-radius: 7px;
+}
+
+.link .usertext .md {
+padding: 0 5px;
+background-color: #fafafa;
+border: 1px solid #369;
+border-radius: 7px;
+}
+
+
+
+
+.tagline2 {
+    color: #888888;
+    font-size: 20px;
+    margin-bottom:5px;
+}
+.tagline2 a {
+    color: #336699;
+    text-decoration: none;
+}
+.tagline2 .friend {
+    color: #FF4500;
+}
+.tagline2 .submitter {
+    color: #0055DF;
+}
+.tagline2 .moderator, .green {
+    color: #228822;
+}
+.tagline2 .admin {
+    color: #FF0011;
+}
+.tagline2 .alum {
+    color: #BE1337;
+}
+.tagline2 a.author.admin {
+    font-weight: bold;
+}
+.tagline2 a:hover {
+    text-decoration: underline;
+}
+.tagline2 .edited-timestamp {
+    cursor: default;
+}
+.tagline2 .stickied-tagline {
+    color: #228822;
+}
+.tagline2 .userattrs .cakeday {
+    background-image: url("../../images/sprites.png");
+    background-position: 0 -840px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 8px;
+    text-indent: -9999px;
+    vertical-align: middle;
+    width: 11px;
+}
+
+.flairrow .tagline2 {
+    display: inline-block;
+    margin-bottom: 8px;
+    margin-left: 6px;
+    text-align: left;
+    width: 36ex;
+}
+
+.link.compressed .tagline2 {
+    display: inline;
+    margin-right: 12px;
+}
+
+.message.message-parent .tagline2, .message.message-reply .tagline2 {
+    color: #448855;
+}
+.message.gold .tagline2, .message.gold .correspondent, .message.gold .expand-btn, .message.gold .unread-button, .message.gold .block-button, .message.gold .report-button, .message.gold ul.buttons li.first {
+    display: none;
+}
+.starkcomment .tagline2 {
+    text-align: right;
+}
+.tagline2 .approval-checkmark {
+    height: 1em;
+}
+.titlebox .tagline2 {
+    margin: 5px 0 5px 20px;
+}
