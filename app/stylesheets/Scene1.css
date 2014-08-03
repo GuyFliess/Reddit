@@ -7813,9 +7813,25 @@ body.with-listing-chooser.listing-chooser-collapsed .listing-chooser .grippy:aft
 	top : 50px;
 	right : 50px;
 	width : 220px;
-	height: 300px;
+	height: 350px;
 	background-color : #000000;
     border: 2px solid red;
+    opacity:0;
+    -webkit-transition: opacity 0.2s ease-in-out;
+  	-moz-transition: opacity 0.2s ease-in-out;
+  	-o-transition: opacity 0.2s ease-in-out;
+  	transition: opacity 0.2s ease-in-out;
+}
+
+#subredditsHelp{
+	position : absolute;
+	top : 350px;
+	right : 30px;
+	width : 220px;
+	height: 50px;
+	color: white;
+	font-size: 24px;
+	vertical-align: middle;
     opacity:0;
     -webkit-transition: opacity 0.2s ease-in-out;
   	-moz-transition: opacity 0.2s ease-in-out;

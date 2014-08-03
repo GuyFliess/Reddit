@@ -33,22 +33,15 @@ keystates = {
 		VIDEO:4
 };
 
-legend_items_1 = {
-		'UPDOWN':LEGEND_SCROLL_ARTICLE,
+legend_items_article = {
 		'LEFTRIGHT':LEGEND_SCROLL_PAGE,
 		'ENTER':LEGEND_VIEW_ARTICLE,
-		'GREEN':LEGEND_VIEW_COMMENTS,
-		'TOOLS':LEGEND_MENU,
 		'RED':LEGEND_SUBREDDITS,
-		'BLUE':LEGEND_MORE_KEYS,
-};
-legend_items_2 = {
-		'FF':LEGEND_UPVOTE,
+		'GREEN':LEGEND_VIEW_COMMENTS,
+		'YELLOW':LEGEND_MENU,
 		'REW':LEGEND_DOWNVOTE,
-		//'YELLOW':LEGEND_SLIDESHOW_VIEW,
-		'GREEN':LEGEND_EDIT_SUBREDDIT,
+		'FF':LEGEND_UPVOTE,
 		'PAUSE':LEGEND_TOGGLE_LEGEND,
-		'BLUE':LEGEND_MORE_KEYS,
 };
 // Legend when displaying an image
 legend_items_image = {
@@ -75,6 +68,7 @@ before = "";
 old_after = "";
 after = "";
 page_number = 0;
+temp_subreddit = "";
 subreddit = "";
 key_state = keystates.MAIN;
 
@@ -203,8 +197,9 @@ function menuLoginLogout() {
 
 function menuGotoSubreddit() {
 	// Show the subreddit chooser
+	subreddit_box.onKeyPressFunc = onSubredditGotoSubmit;
 	subreddit_box.onShow();
-	$('#subredditText').focus();	
+	$('#subredditText').focus();
 }
 
 function menuOpenSearch() {
@@ -224,7 +219,7 @@ function toggleArticleLegend() {
 		config_params.article_legend_shown = 0;
 	}
 	else {
-		$('#mainLegend').sfKeyHelp(legend_items_1);
+		$('#mainLegend').sfKeyHelp(legend_items_article);
 		config_params.article_legend_shown = 1;
 		$('#mainLegend').sfKeyHelp('show');
 	}
@@ -258,18 +253,6 @@ function toggleVideoLegend() {
 	}
 	
 	updateConfig();
-}
-
-// Toggle the legend items
-function toggleLegendItems() {
-	if (config_params.article_legend_shown == 1) {
-		$('#mainLegend').sfKeyHelp(legend_items_2);
-		config_params.article_legend_shown = 2;
-	}
-	else if (config_params.article_legend_shown == 2) {
-		$('#mainLegend').sfKeyHelp(legend_items_1);
-		config_params.article_legend_shown = 1;
-	} 
 }
 
 function onSearchSubmit(userAction, userString, id) {
@@ -343,14 +326,45 @@ function getTop20(list, prefix) {
 	return res;
 }
 
+function verifyReplaceSubreddit(data, textStatus, jqXHR) {
+	// Check if valid
+	info = data.data; 
+	if (info == null || info.children.length == 0) {
+		// Not valid - show error prompt
+		$('#noSuchSubredditPrompt').sfPopup('show');
+	}
+	else {
+		// Valid - replace the current entry with new entry
+		subreddit_idx = $('#subredditsList').sfList("getIndex");
+		config_params.subreddits_list[subreddit_idx] = temp_subreddit.toUpperCase();  
+		$('#subredditsList').sfList({data:config_params.subreddits_list, index:subreddit_idx});
+		updateConfig();
+	}
+}
+
+function verifyGotoSubreddit(data, textStatus, jqXHR) {
+	// Check if valid
+	info = data.data; 
+	if (info == null || info.children.length == 0) {
+		// Not valid - show error prompt
+		$('#noSuchSubredditPrompt').sfPopup('show');
+	}
+	else {
+		// Valid - goto the subreddit
+		page_number = 0;
+		subreddit = "/r/" + temp_subreddit.toUpperCase();
+	    cur_url = "http://www.reddit.com"+subreddit+"/.json";
+	    updatePage(true);
+	}
+}
+
 function onSubredditReplaceSubmit(userAction, userString, id) {
 	switch (userAction) {
     	case 29443:	// Enter Key
-    		// Replace the current entry with new entry
-			subreddit_idx = $('#subredditsList').sfList("getIndex");
-			config_params.subreddits_list[subreddit_idx] = userString.toUpperCase();  
-			$('#subredditsList').sfList({data:config_params.subreddits_list, index:subreddit_idx});
-			updateConfig();
+    		// Verify the subreddit and then replace it
+    		temp_subreddit = userString;
+    		$.getJSON("http://www.reddit.com/r/"+temp_subreddit+"/.json", null, verifyReplaceSubreddit);
+    		break;
     	case 88: 	// return
     	case 45:   	//exit
     	default:
@@ -361,11 +375,9 @@ function onSubredditReplaceSubmit(userAction, userString, id) {
 function onSubredditGotoSubmit(userAction, userString, id) {
 	switch (userAction) {
     	case 29443:	// Enter Key
-    		// Go to the requested subreddit
-    		page_number = 0;
-    		subreddit = "/r/" + userString.toUpperCase();
-    	    cur_url = "http://www.reddit.com"+subreddit+"/.json";
-    	    updatePage(true);
+    		// Verify the subreddit and then go to it
+    		temp_subreddit = userString;
+    		$.getJSON("http://www.reddit.com/r/"+temp_subreddit+"/.json", null, verifyGotoSubreddit);
     		break;
     	case 88: 	// return
     	case 45:   	//exit
@@ -386,6 +398,7 @@ function onSubredditKeypress(userStringSoFar) {
 function verifyLogin(data, textStatus, jqXHR) {
 	if (0 == data.json.errors.length) {
 		// Login success, refresh page
+		$('#loginSuccessPrompt').sfPopup('show');
 		modhash = data.json.data.modhash;
 		$("#userName").text(INFO_LOGIN + username);
 		refreshPage();
@@ -437,11 +450,13 @@ function handleArticle(index, article ) {
     }
     
     // Add permalink to comments
-
-    if (info.subreddit != null) 
+    if (info.subreddit != null) {
     	article.append('<a class="comments" href="http://www.reddit.com/' + 'r/' + info.subreddit + '/comments/' + info.id +'"> </a>');
-    else    	
+    } 	
+    else {
     	article.append('<a class="comments" href="http://www.reddit.com/comments/' + info.id +'"> </a>');
+    }
+    
     // Add the entry
     arr = [];
     arr.push('<div class="entry">');
@@ -777,6 +792,7 @@ function handleArticlesKeydown(keyCode) {
 		case sf.key.RED: // SHOW SUBREDDIT LIST
 			$('#subredditsList').sfList("focus");
 			$("#subredditsList").css("opacity","0.8");
+			$("#subredditsHelp").css("opacity","1");
 			key_state = keystates.SUBREDDITS;
 			break;
 			
@@ -787,23 +803,15 @@ function handleArticlesKeydown(keyCode) {
 			sf.scene.focus('comments');
 			sf.scene.hide("Scene1");
 	    	break;
-	    	
-		case sf.key.YELLOW: // GOTO SLIDESHOW
-			// TODO
-			break;
-			
-		case sf.key.PAUSE: // TOGGLE LEGEND
-		    toggleArticleLegend();
-		    break;
-			
-		case sf.key.BLUE: // TOGGLE LEGEND ITEMS
-			toggleLegendItems();
-			break;
-	    	
-		case sf.key.TOOLS: // OPEN MENU
+	    					
+		case sf.key.YELLOW: // OPEN MENU
 		    $('#menuBox').sfList("focus");
 			$("#menuBox").css("opacity","0.8");
 			key_state = keystates.MENU;
+		    break;
+		    
+		case sf.key.PAUSE: // TOGGLE LEGEND
+		    toggleArticleLegend();
 		    break;
 		    
 		case sf.key.RETURN: // EXIT APPLICATION (with prompt)
@@ -829,6 +837,7 @@ function handleSubredditsKeydown(keyCode) {
 		case sf.key.ENTER: // GOTO SUBREDDIT
 			key_state = keystates.MAIN;
 			$("#subredditsList").css("opacity","0");
+			$("#subredditsHelp").css("opacity","0");
 			
 			subreddit_idx = $('#subredditsList').sfList("getIndex");
 			if (0 == subreddit_idx) {
@@ -861,6 +870,7 @@ function handleSubredditsKeydown(keyCode) {
 		case sf.key.RED: 
 			key_state = keystates.MAIN;
 			$("#subredditsList").css("opacity","0");
+			$("#subredditsHelp").css("opacity","0");
 			break;
 	}
 }
@@ -888,7 +898,7 @@ function handleMenuKeydown(keyCode) {
 	        break;
 	    
 		case sf.key.RETURN: // HIDE MENU
-		case sf.key.TOOLS: 
+		case sf.key.YELLOW: 
 			key_state = keystates.MAIN;
 			$('#menuBox').css("opacity","0");
 			break;
@@ -913,7 +923,7 @@ function handleImageKeydown(keyCode) {
 		    
 		    // Restore article legend
 		    if (config_params.article_legend_shown) {
-		    	$('#mainLegend').sfKeyHelp(legend_items_1);
+		    	$('#mainLegend').sfKeyHelp(legend_items_article);
 		    	$('#mainLegend').sfKeyHelp('show');
 		    }
 		    else {
@@ -959,7 +969,7 @@ function handleVideoKeydown(keyCode) {
 			
 			// Restore article legend
 		    if (config_params.article_legend_shown) {
-		    	$('#mainLegend').sfKeyHelp(legend_items_1);
+		    	$('#mainLegend').sfKeyHelp(legend_items_article);
 		    	$('#mainLegend').sfKeyHelp('show');
 		    }
 		    else {
@@ -1105,6 +1115,12 @@ SceneScene1.prototype.initialize = function () {
 		callback:doExit
 	});
 	
+	$('#noSuchSubredditPrompt').sfPopup({
+		text:PROMPT_NO_SUCH_SUBREDDIT,
+		num:1,
+		buttons:[BUTTON_OK],
+	});
+	
 	// Init menu box
 	$('#menuBox').sfList({data:menu_items.displaynames, index:0});
 	
@@ -1115,28 +1131,32 @@ SceneScene1.prototype.initialize = function () {
 	search_box = new IMEShell_Common();
 	search_box.inputboxID = "searchText";
 	search_box.inputTitle = TITLE_SEARCH;
+	search_box.setMaxlength(100);
 	search_box.onKeyPressFunc = onSearchSubmit;
 	
 	username_box = new IMEShell_Common();
 	username_box.inputboxID = "usernameText";
 	username_box.inputTitle = TITLE_USERNAME;
+	username_box.setMaxlength(50);
 	username_box.onKeyPressFunc = onUsernameSubmit;
 	
 	password_box = new IMEShell_Common();
 	password_box.inputboxID = "passwordText";
 	password_box.inputTitle = TITLE_PASSWORD;
-	password_box.onKeyPressFunc = onPasswordSubmit;
+	password_box.setMaxlength(50);
 	password_box.setPasswordMode(true);
+	password_box.onKeyPressFunc = onPasswordSubmit;
 	
 	subreddit_box = new IMEShell_Common();
 	subreddit_box.inputboxID = "subredditText";
 	subreddit_box.inputTitle = TITLE_SUBREDDIT;
+	subreddit_box.setMaxlength(50);
+	subreddit_box.setBlockSpace(true);
 	subreddit_box.inputDescription = DESC_SUBREDDIT;
 	subreddit_box.onCompleteFunc = onSubredditKeypress;
-	subreddit_box.onKeyPressFunc = onSubredditGotoSubmit;
 		
 	// Init legend
-	$('#mainLegend').sfKeyHelp(legend_items_1);
+	$('#mainLegend').sfKeyHelp(legend_items_article);
 	if (config_params.article_legend_shown) {
 		$('#mainLegend').sfKeyHelp('show');
 	}
