@@ -465,7 +465,7 @@ function handleArticle(index, article ) {
         arr.push('<p class="title"> <a class="title" href="' + info.url + '"> ' + info.title + '</a></p>');   
     
         // Add tagline
-        arr.push('<p class="tagline"> ' + INFO_SUBMITTED_BY + info.author + ', ' + info.num_comments + INFO_COMMENTS + ', ' + type + '</p>');
+        arr.push('<p class="tagline"> ' + INFO_SUBMITTED_BY + info.author + ', ' + type + ', ' + info.num_comments + INFO_COMMENTS + '</p>');
         
     // End the entry
     arr.push('<div class="clearleft"></div>');
@@ -543,10 +543,22 @@ function parseReddit(data, textStatus, jqXHR) {
 		new_size = Math.max(new_size, MIN_FONT_SIZE);
 		$(".link .title").css("font-size",new_size+"px");
 	}
+    
+    // Set tagline direction according to UI language
+    if (isHebrewUi()) {
+    	$(".tagline").css('direction','rtl');
+    }
         
     // Mark first article and update page
     markSelector($('#article0'));
     $("#pageNumber").text(page_number+1);
+}
+
+function isHebrewUi() {
+	if (window.location.search.indexOf('lang=he') != -1) return true;
+	if (window.location.search.indexOf('language=44') != -1) return true;
+	
+	return false;
 }
 
 function markSelector(x) {
