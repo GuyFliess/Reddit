@@ -168,7 +168,7 @@ function doLogout(userAction) {
 
 
 function doExit(userAction) {
-	if (0 != userAction) {
+	if (1 == userAction) {
 		// User cancelled
 		return;
 	}
