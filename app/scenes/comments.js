@@ -338,6 +338,12 @@ function parse_comments(data, textStatus, jqXHR) {
         i++;
     }
 
+    //Set tagline direction according to UI language
+    if (isHebrewUi()) {
+    	$(".titletag").css('direction','rtl');
+    }
+        
+    
     commentsScroll = new IScroll('#wrapper', { mouseWheel: true, scrollbars: true });
 
     // Mark first comment and update page
@@ -359,7 +365,7 @@ function handle_comment( article, level, curret_list_node ) {
     comment.append('<p class="parent"><a name="'+ info.id + '"></a></p>');
     // Add the rank
     
-    // Add the score + voting buttons
+    // Add the voting buttons
     arr = [];
     arr.push('<div class="midcol unvoted">');
     arr.push('<div class="arrow up"></div>');
@@ -374,14 +380,14 @@ function handle_comment( article, level, curret_list_node ) {
     arr = [];
     arr.push('<div class="entry unvoted">');
        
-    // 	Add tagline
-    	arr.push('<p class="tagline2">');
-            arr.push('<a class="author may-blank"> ' + info.author + '</a>');            
-            arr.push('<span class="score dislikes">' + (info.ups - info.downs - 1) + ' points</span>');
-            arr.push('<span class="score unvoted">' + (info.ups - info.downs) + ' points</span>');
-            arr.push('<span class="score likes">' + (info.ups - info.downs + 1) + ' points</span>');           
-            var date = new Date(info.created);//TODO foramt to "3 hours ago"
-        arr.push('</p>');
+    // 	Add tagline2
+	arr.push('<p class="tagline2">');
+        arr.push('<a class="author may-blank"> ' + info.author + '</a>');            
+        arr.push('<span class="score dislikes">' + (info.ups - info.downs - 1)  +'</span>');
+        arr.push('<span class="score unvoted">'   + (info.ups - info.downs) +'</span>');
+        arr.push('<span class="score likes">' + (info.ups - info.downs + 1)  +'</span>');           
+        var date = new Date(info.created);//TODO foramt to "3 hours ago"
+    arr.push('</p>');    
 
 	    //comment body
 	    arr.push('<div class="usertext-body may-blank-within">');
@@ -465,7 +471,6 @@ function handle_title_comment(article_data, index, head)
     else { // Missing - use default
         article.append('<a class="thumbnail default"></a>');
     }
-    
     // Add the entry
     arr = [];
     arr.push('<div class="entry">');
@@ -474,7 +479,7 @@ function handle_title_comment(article_data, index, head)
         arr.push('<p class="title"> <a class="title" href="' + info.url + '"> ' + info.title + '</a></p>');   
     
         // Add tagline
-        arr.push('<p class="tagline2"> submitted by ' + info.author + ', ' + info.num_comments + ' comments</p>');
+        arr.push('<p class="tagline2 titletag"> ' + INFO_SUBMITTED_BY + info.author + ', ' + type + ', ' + info.num_comments + INFO_COMMENTS + '</p>');
         
         alert("info.selftext_html: " + info.selftext_html);
         //Add self text if exsits
