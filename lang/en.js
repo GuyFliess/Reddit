@@ -2,6 +2,7 @@ MENU_LOGIN_LOGOUT = 'Login/Logout';
 MENU_GOTO_SUBREDDIT = 'Goto Subreddit';
 MENU_SEARCH = 'Search';
 MENU_OPEN_IN_BROWSER = 'Open In Browser';
+MENU_SLIDESHOW_VIEW = 'Slideshow View';
 
 LEGEND_SCROLL_PAGE = 'Scroll Page';
 LEGEND_VIEW_ARTICLE = 'View Article';

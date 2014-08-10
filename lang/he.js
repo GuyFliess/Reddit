@@ -2,6 +2,7 @@ MENU_LOGIN_LOGOUT = 'התחבר/התנתק';
 MENU_GOTO_SUBREDDIT = 'מעבר לסאברדיט';
 MENU_SEARCH = 'חיפוש';
 MENU_OPEN_IN_BROWSER = 'פתח בדפדפן';
+MENU_SLIDESHOW_VIEW = 'תצוגת שקופיות';
 
 LEGEND_SCROLL_PAGE = 'דפדוף בדפים';
 LEGEND_VIEW_ARTICLE = 'הצגת מאמר';

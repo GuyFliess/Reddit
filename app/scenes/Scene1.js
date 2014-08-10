@@ -5,6 +5,7 @@ pluginAPI = new Common.API.Plugin();
  * Constants
  *******************************/
 ARTICLES_IN_PAGE = 6;
+MAX_SLIDES_PER_REQUEST = 15;
 SPLASH_FADE_TIME = 1000;
 
 // Some needed URLs
@@ -16,6 +17,7 @@ REDDIT_REGISTER_URL = "http://www.reddit.com/register";
 // Milliseconds before announcing request timeout
 REQUEST_TIMEOUT = 8000;
 PASSWORD_POPUP_TIMEOUT = 1000;
+SLIDESHOW_UPDATE_INTERVAL = 10000;
 
 // Title char count used to fit text to page
 MAX_CHARS_PER_PAGE = 500;
@@ -30,7 +32,8 @@ keystates = {
 		SUBREDDITS:1,
 		MENU:2,
 		IMAGE:3,
-		VIDEO:4
+		VIDEO:4,
+		SLIDESHOW_SUBREDDITS:5
 };
 
 legend_items_article = {
@@ -84,10 +87,16 @@ subreddit_box = null;
 
 var vidplayer;
 var fs;
+
+var slideshow_callback_interval;
+var slideshow_already_started;
+var slideshow_after;
+var slideshow_update_in_progress;
+var slideshow_subreddit = "";
 	
 menu_items = {
-	displaynames: [MENU_LOGIN_LOGOUT,	MENU_GOTO_SUBREDDIT,	MENU_SEARCH,	MENU_OPEN_IN_BROWSER],
-	actions: [		menuLoginLogout,	menuGotoSubreddit, 		menuOpenSearch,	menuOpenInBrowser]
+	displaynames: [MENU_LOGIN_LOGOUT,	MENU_GOTO_SUBREDDIT,	MENU_SEARCH,	MENU_OPEN_IN_BROWSER, 	MENU_SLIDESHOW_VIEW],
+	actions: [		menuLoginLogout,	menuGotoSubreddit, 		menuOpenSearch,	menuOpenInBrowser,		menuSlideshowView]
 };
 
 // These are the default config params (After initial run, they will be read from the config file each time)
@@ -96,7 +105,8 @@ config_params = {
 	comment_legend_shown: 1,
 	image_legend_shown: 1,
 	video_legend_shown: 1,
-	subreddits_list: ["FRONTPAGE", "ALL", "PICS", "FUNNY", "GAMING", "WORLDNEWS"],
+	subreddits_list: ["FRONTPAGE", "ALL", "FUNNY", "SCIENCE", "GAMING", "WORLDNEWS"],
+	slideshow_subreddits_list: ["FRONTPAGE", "PICS", "AWW", "FUNNY", "EARTHPORN", "SPACEPORN"],
 	
 	// Params for user session restore (when coming back from browser)
 	clean_start: true,
@@ -177,6 +187,81 @@ function doExit(userAction) {
 	widgetAPI.sendReturnEvent();
 }
 
+
+function parseSlides(data, textStatus, jqXHR) {
+	slideshow_images = [];
+	
+	// Save next page link
+	slideshow_after = data.data.after;
+
+	if (0 == data.data.children.length) {
+		// No images this time
+		slideshow_update_in_progress = false;
+		return;
+	}
+	
+	// Find and add images from the returned articles
+	for (var i = 0; i < data.data.children.length; i++) {
+		info = data.data.children[i].data;    	
+	    if (isSlideshowUrl(info.url)) {
+	    	slideshow_images.push({url:info.url});
+	    }
+	}
+	
+	// Update the slideshow images and start/resume
+	if (false == slideshow_already_started) {
+		slideshow_already_started = true;
+		sf.service.ImageViewer.SlideShow.setItem(slideshow_images);
+		sf.service.ImageViewer.SlideShow.start();
+	}
+	else {
+		sf.service.ImageViewer.SlideShow.addItem(slideshow_images);
+	}
+	slideshow_update_in_progress = false;
+}
+
+
+
+function getMoreSlideshowImages() {
+	slideshow_url = "http://www.reddit.com"+slideshow_subreddit+"/.json";
+	if (slideshow_after == null) { 
+		getJsonWrapper(slideshow_url, {limit: MAX_SLIDES_PER_REQUEST}, parseSlides);
+	}
+	else {
+		getJsonWrapper(slideshow_url, {after:slideshow_after, limit: MAX_SLIDES_PER_REQUEST}, parseSlides);
+	}
+}
+
+function slideshowCallback() {
+	// Load more pics
+	if (!slideshow_update_in_progress) {
+		slideshow_update_in_progress = true;
+		getMoreSlideshowImages();	
+	}
+}
+
+
+function doSlideshow() {
+	// Init globals
+	slideshow_already_started = false;
+	slideshow_update_in_progress = false;
+	slideshow_after = null;
+	
+	// Create timed callback that will periodically add more slides 
+	slideshow_callback_interval = setInterval(slideshowCallback, SLIDESHOW_UPDATE_INTERVAL);
+	
+	// Crawl the current subreddit for images (will start the slideshow)
+	getMoreSlideshowImages();
+}
+
+function menuSlideshowView() {
+	// Show the slideshow subreddit box
+	$('#slideshowSubredditsList').sfList("focus");
+	$("#slideshowSubredditsList").css("opacity","0.8");
+	$("#slideshowSubredditsHelp").css("opacity","1");
+	key_state = keystates.SLIDESHOW_SUBREDDITS;
+}
+	                    
 
 function menuLoginLogout() {
 	if (username == "") {
@@ -342,6 +427,22 @@ function verifyReplaceSubreddit(data, textStatus, jqXHR) {
 	}
 }
 
+function verifyReplaceSlideshowSubreddit(data, textStatus, jqXHR) {
+	// Check if valid
+	info = data.data; 
+	if (info == null || info.children.length == 0) {
+		// Not valid - show error prompt
+		$('#noSuchSubredditPrompt').sfPopup('show');
+	}
+	else {
+		// Valid - replace the current entry with new entry
+		subreddit_idx = $('#slideshowSubredditsList').sfList("getIndex");
+		config_params.slideshow_subreddits_list[subreddit_idx] = temp_subreddit.toUpperCase();  
+		$('#slideshowSubredditsList').sfList({data:config_params.subreddits_list, index:subreddit_idx});
+		updateConfig();
+	}
+}
+
 function verifyGotoSubreddit(data, textStatus, jqXHR) {
 	// Check if valid
 	info = data.data; 
@@ -355,6 +456,20 @@ function verifyGotoSubreddit(data, textStatus, jqXHR) {
 		subreddit = "/r/" + temp_subreddit.toUpperCase();
 	    cur_url = "http://www.reddit.com"+subreddit+"/.json";
 	    updatePage(true);
+	}
+}
+
+function onSlideshowSubredditReplaceSubmit(userAction, userString, id) {
+	switch (userAction) {
+    	case 29443:	// Enter Key
+    		// Verify the subreddit and then replace it
+    		temp_subreddit = userString;
+    		$.getJSON("http://www.reddit.com/r/"+temp_subreddit+"/.json", null, verifyReplaceSlideshowSubreddit);
+    		break;
+    	case 88: 	// return
+    	case 45:   	//exit
+    	default:
+    		break;
 	}
 }
 
@@ -594,6 +709,13 @@ function isImageUrl(url) {
 	if (endsWith(url,".jpeg")) return true;
 	if (endsWith(url,".jpg")) return true;
 	return false;
+}
+
+function isSlideshowUrl(url) {
+	// Don't allow GIFs
+	if (endsWith(url,".gif")) return false;
+	
+	return isImageUrl(url);
 }
 
 function lstrip(string, pattern) {
@@ -887,6 +1009,56 @@ function handleSubredditsKeydown(keyCode) {
 	}
 }
 
+
+function handleSlideshowSubredditsKeydown(keyCode) {
+	switch (keyCode) {	    
+		case sf.key.UP: // SELECT PREVIOUS
+			$('#slideshowSubredditsList').sfList("prev");
+	        break;
+	        
+		case sf.key.DOWN: // SELECT NEXT
+			$('#slideshowSubredditsList').sfList("next");
+	        break;
+	    
+		case sf.key.ENTER: // START SLIDESHOW
+			key_state = keystates.MAIN;
+			$("#slideshowSubredditsList").css("opacity","0");
+			$("#slideshowSubredditsHelp").css("opacity","0");
+			
+			subreddit_idx = $('#slideshowSubredditsList').sfList("getIndex");
+			if (0 == subreddit_idx) {
+				slideshow_subreddit = "";
+			}
+			else {
+				slideshow_subreddit = "/r/" + config_params.slideshow_subreddits_list[subreddit_idx];
+			}
+			
+		    doSlideshow();
+	        break;
+	        
+		case sf.key.GREEN: 	// SET NEW SUBREDDIT
+			// Check that the first subreddit hasn't been chosen
+			subreddit_idx = $('#slideshowSubredditsList').sfList("getIndex");
+			if (0 == subreddit_idx) {
+				$('#cantEditSubredditPrompt').sfPopup('show');
+				break;
+			}
+			
+			// Show the subreddit chooser
+			subreddit_box.onKeyPressFunc = onSlideshowSubredditReplaceSubmit;
+			subreddit_box.onShow();
+			$('#subredditText').focus();
+			break;
+			
+		case sf.key.RETURN: // HIDE SUBREDDIT LIST
+			key_state = keystates.MAIN;
+			$("#slideshowSubredditsList").css("opacity","0");
+			$("#slideshowSubredditsHelp").css("opacity","0");
+			break;
+	}
+}
+
+
 function handleMenuKeydown(keyCode) {
 	switch (keyCode) {	    
 		case sf.key.UP: // SELECT PREVIOUS
@@ -1024,6 +1196,10 @@ SceneScene1.prototype.handleKeyDown = function (keyCode) {
 		case keystates.VIDEO:
 			handleVideoKeydown(keyCode);
 			break;
+			
+		case keystates.SLIDESHOW_SUBREDDITS:
+			handleSlideshowSubredditsKeydown(keyCode);
+			break;
 	}
 };
 
@@ -1034,7 +1210,7 @@ function fadeSplash() {
 
 // Check if a string ends with some suffix
 function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    return str.indexOf(suffix, str.length - suffix.length) != -1;
 }
 
 //Check if a string ends with some prefix
@@ -1136,8 +1312,9 @@ SceneScene1.prototype.initialize = function () {
 	// Init menu box
 	$('#menuBox').sfList({data:menu_items.displaynames, index:0});
 	
-	// Init subreddits list
+	// Init subreddit lists
 	$('#subredditsList').sfList({data:config_params.subreddits_list, index:0});
+	$('#slideshowSubredditsList').sfList({data:config_params.slideshow_subreddits_list, index:0});
 	
 	// Init IME boxes
 	search_box = new IMEShell_Common();
@@ -1175,6 +1352,14 @@ SceneScene1.prototype.initialize = function () {
 	else {
 		$('#mainLegend').sfKeyHelp('hide');
 	}
+	
+	// Init slideshow viewer
+	sf.service.ImageViewer.SlideShow.init();
+	sf.service.ImageViewer.SlideShow.setKeyHandler(sf.key.RETURN, function () {
+		clearInterval(slideshow_callback_interval);
+		sf.service.ImageViewer.SlideShow.setItemIdx(0);
+	    sf.service.ImageViewer.SlideShow.stop();
+	});
 	
 	// Get the logged-in username info (if any)
 	getJsonWrapper("http://www.reddit.com/api/me.json", null, parseUsername);

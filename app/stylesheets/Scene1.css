@@ -254,6 +254,7 @@ ul.flat-vert {
     background-color: #CEE3F8;
     border-bottom: 1px solid #5F99CF;
     position: relative;
+    z-index: 2;
 }
 #header_img {
     margin-right: 5px;
@@ -7839,12 +7840,43 @@ body.with-listing-chooser.listing-chooser-collapsed .listing-chooser .grippy:aft
   	transition: opacity 0.2s ease-in-out;
 }
 
+#slideshowSubredditsList{
+	position : absolute;
+	top : 50px;
+	left : 50px;
+	width : 220px;
+	height: 350px;
+	background-color : CornflowerBlue;
+    border: 2px solid #5F99CF;
+    opacity:0;
+    -webkit-transition: opacity 0.2s ease-in-out;
+  	-moz-transition: opacity 0.2s ease-in-out;
+  	-o-transition: opacity 0.2s ease-in-out;
+  	transition: opacity 0.2s ease-in-out;
+}
+
+#slideshowSubredditsHelp{
+	position : absolute;
+	top : 350px;
+	left : 70px;
+	width : 220px;
+	height: 50px;
+	color: white;
+	font-size: 24px;
+	vertical-align: middle;
+    opacity:0;
+    -webkit-transition: opacity 0.2s ease-in-out;
+  	-moz-transition: opacity 0.2s ease-in-out;
+  	-o-transition: opacity 0.2s ease-in-out;
+  	transition: opacity 0.2s ease-in-out;
+}
+
 #menuBox{
 	position : absolute;
 	bottom : 0px;
 	left : 0;
 	width : 300px;
-	height: 200px;
+	height: 250px;
 	background-color : #0066CC;
 	border: 1px solid #5F99CF;
     opacity:0;
