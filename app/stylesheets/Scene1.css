@@ -7849,10 +7849,6 @@ body.with-listing-chooser.listing-chooser-collapsed .listing-chooser .grippy:aft
 	background-color : CornflowerBlue;
     border: 2px solid #5F99CF;
     opacity:0;
-    -webkit-transition: opacity 0.2s ease-in-out;
-  	-moz-transition: opacity 0.2s ease-in-out;
-  	-o-transition: opacity 0.2s ease-in-out;
-  	transition: opacity 0.2s ease-in-out;
 }
 
 #slideshowSubredditsHelp{
@@ -7865,10 +7861,6 @@ body.with-listing-chooser.listing-chooser-collapsed .listing-chooser .grippy:aft
 	font-size: 24px;
 	vertical-align: middle;
     opacity:0;
-    -webkit-transition: opacity 0.2s ease-in-out;
-  	-moz-transition: opacity 0.2s ease-in-out;
-  	-o-transition: opacity 0.2s ease-in-out;
-  	transition: opacity 0.2s ease-in-out;
 }
 
 #menuBox{
