@@ -57,21 +57,13 @@ Scenecomments.prototype.initialize = function () {
 	submit_comment_box.inputTitle = COMMENT_ADD_COMMENT;
 	submit_comment_box.onKeyPressFunc = onCommentSubmit;
 	submit_comment_box.setMaxlength(MAXIMUM_LETTERS_IN_COMMENT);
-	
-	
-	//init comment legend
-	// Init legend
-	
-	alert("INIT COMMENTS, config_params.comment_legend_shown: " + config_params.comment_legend_shown + " ");
-	alert("INIT COMMENTS, config_params.legend_shown: " + config_params.legend_shown + " ");
+
 	$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
 	if (config_params.comment_legend_shown) {
 		$('#CommentsLegend').sfKeyHelp('show');
-	//	$("#pageNumber").css("bottom","40px");
 	}
 	else {
 		$('#CommentsLegend').sfKeyHelp('hide');
-		//$("#pageNumber").css("bottom","0px");
 	}
 };
 
@@ -89,14 +81,12 @@ Scenecomments.prototype.handleShow = function (data) {
 	if (config_params.comments_legend_shown) {
 		alert("show legend");
 		$('#CommentsLegend').sfKeyHelp('show');
-	//	$("#pageNumber").css("bottom","40px");
 	}
 	else {
 		alert("hide legend");
 		$('#CommentsLegend').sfKeyHelp('hide');
-		//$("#pageNumber").css("bottom","0px");
 	}
-//	alert(data.Url + ".json");
+//	
 	//some inits
 	 $("#subredditName.comments").text("");
 	 $("#userName.comments").text("");
@@ -563,20 +553,28 @@ Scenecomments.prototype.Scroll = function (offset) {
 //	alert("height of windows: " + $( window ).height());
 	alert("Comment scroll height: " + commentsScroll.scrollerHeight);
 	alert("scroll current height: " +  commentsScroll.y);
+	alert("offset " + offset);
 	//alert(document.height());
 	
 	if (commentsScroll.y + offset > 0 )
 	{ 
 		commentsScroll.scrollTo(0, 0);
+		return;
 	}
-	if (commentsScroll.y + offset <= -commentsScroll.scrollerHeight)
+	if (commentsScroll.y + offset <= -(commentsScroll.scrollerHeight - 100))
+	{		
+		return;
+	}
+	if (commentsScroll.y + offset <= -(commentsScroll.scrollerHeight - 200))
 	{
 		commentsScroll.scrollTo(0, -(commentsScroll.scrollerHeight - 100));
+		return;
 	}	
  	if (commentsScroll.y + offset <= 0 && commentsScroll.y + offset > -commentsScroll.scrollerHeight)  // scrolling is negative, i.e we scroll down to negative y coord
- 		{
- 			commentsScroll.scrollBy(0, offset);
- 		}
+	{
+		commentsScroll.scrollBy(0, offset);
+		return;
+	}	
 	
 };
 
