@@ -39,7 +39,7 @@ function Scenecomments() {
 };
 
 Scenecomments.prototype.initialize = function () {
-	alert("Scenecomments.initialize()");
+//	alert("Scenecomments.initialize()");
 	// this function will be called only once when the scene manager show this scene first time
 	// initialize the scene controls and styles, and initialize your variables here
 	// scene HTML and CSS will be loaded before this function is called
@@ -68,7 +68,7 @@ Scenecomments.prototype.initialize = function () {
 };
 
 Scenecomments.prototype.handleShow = function (data) {
-	alert("Scenecomments.handleShow()");
+//	alert("Scenecomments.handleShow()");
 
 	articleName = data.Url;
 	$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
@@ -122,17 +122,17 @@ Scenecomments.prototype.handleHide = function () {
 };
 
 Scenecomments.prototype.handleFocus = function () {
-	alert("Scenecomments.handleFocus()");
+//	alert("Scenecomments.handleFocus()");
 	// this function will be called when the scene manager focus this scene
 };
 
 Scenecomments.prototype.handleBlur = function () {
-	alert("Scenecomments.handleBlur()");
+//	alert("Scenecomments.handleBlur()");
 	// this function will be called when the scene manager move focus to another scene from this scene
 };
 
 Scenecomments.prototype.handleKeyDown = function (keyCode) {
-	alert("Scenecomments.handleKeyDown(" + keyCode + ")");
+//	alert("Scenecomments.handleKeyDown(" + keyCode + ")");
 	
 	if (keyCode == sf.key.RETURN) {
 		widgetAPI.blockNavigation(event);
@@ -140,12 +140,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	
 	switch (keyCode) {
 	case sf.key.LEFT: //  page down
-		alert("page down");
+//		alert("page down");
 		Scenecomments.prototype.Scroll(($( window ).height() - 150));
     	break;
 	
 	case sf.key.RIGHT: // page up
-		alert("page up");
+//		alert("page up");
 		Scenecomments.prototype.Scroll(-($( window ).height() - 150));
     	break;
     
@@ -296,7 +296,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 };
 
 function parse_comments(data, textStatus, jqXHR) {
-    alert("Pasring comments!");
+//    alert("Pasring comments!");
 
     if (commentsScroll != null) {
 		commentsScroll.destroy();
@@ -430,7 +430,7 @@ function handle_comment( article, level, curret_list_node ) {
 
 function handle_title_comment(article_data, index, head)
 {
-	alert("handle title comment");
+//	alert("handle title comment");
 	info = article_data.data;
     var arr;
         
@@ -551,9 +551,9 @@ function unmarkCommentSelector(x) {
 Scenecomments.prototype.Scroll = function (offset) {
 	//alert("y coordinates: " + commentsScroll.y);
 //	alert("height of windows: " + $( window ).height());
-	alert("Comment scroll height: " + commentsScroll.scrollerHeight);
-	alert("scroll current height: " +  commentsScroll.y);
-	alert("offset " + offset);
+//	alert("Comment scroll height: " + commentsScroll.scrollerHeight);
+//	alert("scroll current height: " +  commentsScroll.y);
+//	alert("offset " + offset);
 	//alert(document.height());
 	
 	if (commentsScroll.y + offset > 0 )
