@@ -1,4 +1,4 @@
-alert('Scenecomments.js loaded');
+//alert('Scenecomments.js loaded');
 
 //Globals
 cur_comment = 0;
@@ -39,7 +39,7 @@ function Scenecomments() {
 };
 
 Scenecomments.prototype.initialize = function () {
-	alert("Scenecomments.initialize()");
+	//alert("Scenecomments.initialize()");
 	// this function will be called only once when the scene manager show this scene first time
 	// initialize the scene controls and styles, and initialize your variables here
 	// scene HTML and CSS will be loaded before this function is called
@@ -62,8 +62,8 @@ Scenecomments.prototype.initialize = function () {
 	//init comment legend
 	// Init legend
 	
-	alert("INIT COMMENTS, config_params.comment_legend_shown: " + config_params.comment_legend_shown + " ");
-	alert("INIT COMMENTS, config_params.legend_shown: " + config_params.legend_shown + " ");
+	//alert("INIT COMMENTS, config_params.comment_legend_shown: " + config_params.comment_legend_shown + " ");
+	//alert("INIT COMMENTS, config_params.legend_shown: " + config_params.legend_shown + " ");
 	$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
 	if (config_params.comment_legend_shown) {
 		$('#CommentsLegend').sfKeyHelp('show');
@@ -76,7 +76,7 @@ Scenecomments.prototype.initialize = function () {
 };
 
 Scenecomments.prototype.handleShow = function (data) {
-	alert("Scenecomments.handleShow()");
+	//alert("Scenecomments.handleShow()");
 
 	articleName = data.Url;
 	$('#CommentsLegend').sfKeyHelp(comment_legend_items_1);
@@ -87,12 +87,12 @@ Scenecomments.prototype.handleShow = function (data) {
 	}
 	
 	if (config_params.comments_legend_shown) {
-		alert("show legend");
+		//alert("show legend");
 		$('#CommentsLegend').sfKeyHelp('show');
 	//	$("#pageNumber").css("bottom","40px");
 	}
 	else {
-		alert("hide legend");
+		//alert("hide legend");
 		$('#CommentsLegend').sfKeyHelp('hide');
 		//$("#pageNumber").css("bottom","0px");
 	}
@@ -121,7 +121,7 @@ function RefreshCommentsPage(url)
 }
 
 Scenecomments.prototype.handleHide = function () {
-	alert("Scenecomments.handleHide()");
+	//alert("Scenecomments.handleHide()");
 	// this function will be called when the scene manager hide this scene
 	if (commentsScroll != null) {
 		commentsScroll.destroy();
@@ -132,17 +132,17 @@ Scenecomments.prototype.handleHide = function () {
 };
 
 Scenecomments.prototype.handleFocus = function () {
-	alert("Scenecomments.handleFocus()");
+	//alert("Scenecomments.handleFocus()");
 	// this function will be called when the scene manager focus this scene
 };
 
 Scenecomments.prototype.handleBlur = function () {
-	alert("Scenecomments.handleBlur()");
+	//alert("Scenecomments.handleBlur()");
 	// this function will be called when the scene manager move focus to another scene from this scene
 };
 
 Scenecomments.prototype.handleKeyDown = function (keyCode) {
-	alert("Scenecomments.handleKeyDown(" + keyCode + ")");
+	//alert("Scenecomments.handleKeyDown(" + keyCode + ")");
 	
 	if (keyCode == sf.key.RETURN) {
 		widgetAPI.blockNavigation(event);
@@ -150,12 +150,12 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	
 	switch (keyCode) {
 	case sf.key.LEFT: //  page down
-		alert("page down");
+		//alert("page down");
 		Scenecomments.prototype.Scroll(($( window ).height() - 150));
     	break;
 	
 	case sf.key.RIGHT: // page up
-		alert("page up");
+		//alert("page up");
 		Scenecomments.prototype.Scroll(-($( window ).height() - 150));
     	break;
     
@@ -181,7 +181,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	    
 	case sf.key.RETURN: // Back to articles
 
-		alert("back to articles");
+		//alert("back to articles");
 		sf.scene.hide('comments');
 		sf.scene.show('Scene1');
 		sf.scene.focus('Scene1');
@@ -200,7 +200,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		break;
 		
 	case sf.key.GREEN: 
-		alert("Post comment");
+		//alert("Post comment");
 		postComment();
 	
     	break;
@@ -299,14 +299,14 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		break;
     	
 	default:
-		alert("handle default key event, key code(" + keyCode + ")");
+		//alert("handle default key event, key code(" + keyCode + ")");
 		break;
 } // END SWITCH
 	
 };
 
 function parse_comments(data, textStatus, jqXHR) {
-    alert("Pasring comments!");
+    //alert("Pasring comments!");
 
     if (commentsScroll != null) {
 		commentsScroll.destroy();
@@ -440,7 +440,7 @@ function handle_comment( article, level, curret_list_node ) {
 
 function handle_title_comment(article_data, index, head)
 {
-	alert("handle title comment");
+	//alert("handle title comment");
 	info = article_data.data;
     var arr;
         
@@ -481,11 +481,11 @@ function handle_title_comment(article_data, index, head)
         // Add tagline
         arr.push('<p class="tagline2 titletag"> ' + INFO_SUBMITTED_BY + info.author + ', ' + type + ', ' + info.num_comments + INFO_COMMENTS + '</p>');
         
-        alert("info.selftext_html: " + info.selftext_html);
+        //alert("info.selftext_html: " + info.selftext_html);
         //Add self text if exsits
         if (info.selftext_html != null)
     	{
-        	alert("adding self.text");
+        	//alert("adding self.text");
     		arr.push('<div class="expando">');    				
     				arr.push('<div class="usertext-body may-blank-within Comment-Title">');
     					
@@ -561,8 +561,8 @@ function unmarkCommentSelector(x) {
 Scenecomments.prototype.Scroll = function (offset) {
 	//alert("y coordinates: " + commentsScroll.y);
 //	alert("height of windows: " + $( window ).height());
-	alert("Comment scroll height: " + commentsScroll.scrollerHeight);
-	alert("scroll current height: " +  commentsScroll.y);
+	//alert("Comment scroll height: " + commentsScroll.scrollerHeight);
+	//alert("scroll current height: " +  commentsScroll.y);
 	//alert(document.height());
 	
 	if (commentsScroll.y + offset > 0 )
@@ -634,27 +634,27 @@ function postComment()
 }
 
 function verifyPostComment(data, textStatus, jqXHR) {
-	alert("Verify post comment");
+	//alert("Verify post comment");
 	if (0 == data.json.errors.length) {
 		// Login success, refresh page
-		alert("post suscess");
+		//alert("post suscess");
 		modhash = data.json.data.modhash;
 		
 		 RefreshCommentsPage(current_url);
 	}
 	else {
 		// Login failed, remove creds
-		alert("Failed to post: "+ data.json.errors[0]);
+		//alert("Failed to post: "+ data.json.errors[0]);
 		//username = "";
 		
 	}	
 }
 
 function onCommentSubmit(userAction, userString, id) {
-	alert("On Comment submit");
+	//alert("On Comment submit");
 	switch (userAction) {	
     	case 29443:	// Enter Key
-    		alert("submit comment");
+    		//alert("submit comment");
     	    $.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: comment_uid, text: userString, uh:modhash}, verifyPostComment);    	    
         	break;
     	case 88: 	// return

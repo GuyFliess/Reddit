@@ -953,7 +953,7 @@ function handleArticlesKeydown(keyCode) {
 			break;
 		    
 		default:
-			alert("handle default key event, key code(" + keyCode + ")");
+			//alert("handle default key event, key code(" + keyCode + ")");
 			break;
 	} // END SWITCH
 }
