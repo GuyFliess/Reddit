@@ -11,8 +11,10 @@ function onDestroy () {
 
 }
 
+
 var PL_NNAVI_STATE_BANNER_VOL = 1;
-window.onShow = function () {
+
+window.onShow = function (e) {
     var NNaviPlugin = caph.platform.dtv.Device.plugin('NNAVI');
     NNaviPlugin.SetBannerState(PL_NNAVI_STATE_BANNER_VOL);
 
