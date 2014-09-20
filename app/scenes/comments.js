@@ -1,4 +1,4 @@
-alert('Scenecomments.js loaded');
+//alert('Scenecomments.js loaded');
 
 //Globals
 cur_comment = 0;
@@ -79,11 +79,11 @@ Scenecomments.prototype.handleShow = function (data) {
 	}
 	
 	if (config_params.comments_legend_shown) {
-		alert("show legend");
+		//alert("show legend");
 		$('#CommentsLegend').sfKeyHelp('show');
 	}
 	else {
-		alert("hide legend");
+		//alert("hide legend");
 		$('#CommentsLegend').sfKeyHelp('hide');
 	}
 //	
@@ -111,7 +111,7 @@ function RefreshCommentsPage(url)
 }
 
 Scenecomments.prototype.handleHide = function () {
-	alert("Scenecomments.handleHide()");
+	//alert("Scenecomments.handleHide()");
 	// this function will be called when the scene manager hide this scene
 	if (commentsScroll != null) {
 		commentsScroll.destroy();
@@ -171,7 +171,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 	    
 	case sf.key.RETURN: // Back to articles
 
-		alert("back to articles");
+		//alert("back to articles");
 		sf.scene.hide('comments');
 		sf.scene.show('Scene1');
 		sf.scene.focus('Scene1');
@@ -190,7 +190,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		break;
 		
 	case sf.key.GREEN: 
-		alert("Post comment");
+		//alert("Post comment");
 		postComment();
 	
     	break;
@@ -289,7 +289,7 @@ Scenecomments.prototype.handleKeyDown = function (keyCode) {
 		break;
     	
 	default:
-		alert("handle default key event, key code(" + keyCode + ")");
+		//alert("handle default key event, key code(" + keyCode + ")");
 		break;
 } // END SWITCH
 	
@@ -471,11 +471,11 @@ function handle_title_comment(article_data, index, head)
         // Add tagline
         arr.push('<p class="tagline2 titletag"> ' + INFO_SUBMITTED_BY + info.author + ', ' + type + ', ' + info.num_comments + INFO_COMMENTS + '</p>');
         
-        alert("info.selftext_html: " + info.selftext_html);
+        //alert("info.selftext_html: " + info.selftext_html);
         //Add self text if exsits
         if (info.selftext_html != null)
     	{
-        	alert("adding self.text");
+        	//alert("adding self.text");
     		arr.push('<div class="expando">');    				
     				arr.push('<div class="usertext-body may-blank-within Comment-Title">');
     					
@@ -632,27 +632,27 @@ function postComment()
 }
 
 function verifyPostComment(data, textStatus, jqXHR) {
-	alert("Verify post comment");
+	//alert("Verify post comment");
 	if (0 == data.json.errors.length) {
 		// Login success, refresh page
-		alert("post suscess");
+		//alert("post suscess");
 		modhash = data.json.data.modhash;
 		
 		 RefreshCommentsPage(current_url);
 	}
 	else {
 		// Login failed, remove creds
-		alert("Failed to post: "+ data.json.errors[0]);
+		//alert("Failed to post: "+ data.json.errors[0]);
 		//username = "";
 		
 	}	
 }
 
 function onCommentSubmit(userAction, userString, id) {
-	alert("On Comment submit");
+	//alert("On Comment submit");
 	switch (userAction) {	
     	case 29443:	// Enter Key
-    		alert("submit comment");
+    //alert("submit comment");
     	    $.post(REDDIT_COMMENT_URL,{api_type: "json", thing_id: comment_uid, text: userString, uh:modhash}, verifyPostComment);    	    
         	break;
     	case 88: 	// return
