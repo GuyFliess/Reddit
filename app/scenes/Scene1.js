@@ -8,6 +8,9 @@ ARTICLES_IN_PAGE = 6;
 MAX_SLIDES_PER_REQUEST = 15;
 SPLASH_FADE_TIME = 1000;
 
+// Note that config file will get automatically deleted on uninstall (because it resides in common folder)
+CONFIG_FILE_PATH = curWidget.id + "/config.json";
+
 // Some needed URLs
 REDDIT_VOTE_URL = "http://www.reddit.com/api/vote";
 REDDIT_LOGIN_URL = "http://www.reddit.com/api/login";
@@ -85,6 +88,8 @@ username_box = null;
 password_box = null;
 subreddit_box = null;
 
+var is_first_launch;
+
 var vidplayer;
 var fs;
 
@@ -120,7 +125,13 @@ config_params = {
  *******************************/
 
 function updateConfig() {
-	configFile = fs.openCommonFile("config.json",'w');
+	// Create our common app dir if needed
+	if (0 == fs.isValidCommonPath(curWidget.id)) {
+		fs.createCommonDir(curWidget.id);
+	}
+
+	// Write the config file
+	configFile = fs.openCommonFile(CONFIG_FILE_PATH, 'w');
 	configFile.writeAll(JSON.stringify(config_params));
 	fs.closeCommonFile(configFile);
 }
@@ -738,16 +749,6 @@ function isYoutubeUrl(url) {
 
 function onYouTubePlayerReady(playerId) {
 	vidplayer = $("#"+playerId);
-	/*
-    onstate = function(state) {
-    	alert("%%%%% onStatechange "  + state); 
-    };
-    onerror = function(code) {
-    	alert("$$$$$$$$$$ " + code);
-    };
-    vidplayer[0].addEventListener("onStateChange", "onstate");
-    vidplayer[0].addEventListener('onError','onerror');
-    */
 }
 
 function getYoutubeVideoId(url) {
@@ -1225,9 +1226,20 @@ function parseUsername(data, textStatus, jqXHR) {
 		username = "";
 	}
 	else {
-		username = data.data.name;
+		// Get the modhash
 		modhash = data.data.modhash;
-		$("#userName").text(INFO_LOGIN + username);
+		
+		if (is_first_launch) {
+			// We are logged in on first launch (cookie persisted after uninstall) - we must logout
+			$.post(REDDIT_LOGOUT_URL, {uh:modhash});
+			modhash = "";
+		}
+		else {
+			// Successfully logged in
+			username = data.data.name;
+			$("#userName").text(INFO_LOGIN + username);
+		}
+		
 	}
 }
 
@@ -1243,16 +1255,18 @@ SceneScene1.prototype.initialize = function () {
 	
 	// Set timeout for splash screen
 	setTimeout(fadeSplash, SPLASH_FADE_TIME);
-		
+	
 	// Read config params from config file
 	fs = new FileSystem();
-	configFile = fs.openCommonFile("config.json",'r');
+	configFile = fs.openCommonFile(CONFIG_FILE_PATH, 'r');
 	if (null == configFile) {
 		// Create config file
+		is_first_launch = true;
 		updateConfig();
 	}
 	else {
 		// Read config params
+		is_first_launch = false;
 		config_params = JSON.parse(configFile.readAll());
 		fs.closeCommonFile(configFile);
 	}
