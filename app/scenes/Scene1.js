@@ -436,6 +436,7 @@ function verifyReplaceSubreddit(data, textStatus, jqXHR) {
 		$('#subredditsList').sfList({data:config_params.subreddits_list, index:subreddit_idx});
 		updateConfig();
 	}
+	$('#subredditsList').sfList('move', subreddit_idx);
 }
 
 function verifyReplaceSlideshowSubreddit(data, textStatus, jqXHR) {
@@ -449,9 +450,10 @@ function verifyReplaceSlideshowSubreddit(data, textStatus, jqXHR) {
 		// Valid - replace the current entry with new entry
 		subreddit_idx = $('#slideshowSubredditsList').sfList("getIndex");
 		config_params.slideshow_subreddits_list[subreddit_idx] = temp_subreddit.toUpperCase();  
-		$('#slideshowSubredditsList').sfList({data:config_params.subreddits_list, index:subreddit_idx});
+		$('#slideshowSubredditsList').sfList({data:config_params.slideshow_subreddits_list, index:subreddit_idx});
 		updateConfig();
 	}
+	$('#slideshowSubredditsList').sfList('move', subreddit_idx);
 }
 
 function verifyGotoSubreddit(data, textStatus, jqXHR) {
